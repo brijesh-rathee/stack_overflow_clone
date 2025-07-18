@@ -1,6 +1,7 @@
 package com.stackclone.stackoverflow_clone.service.Impl;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.QuestionRepository;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 
@@ -14,6 +15,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
+
+    private final UserServiceImpl userServiceImpl;
 
     private final QuestionRepository questionRepository;
 
@@ -46,6 +49,13 @@ public class QuestionServiceImpl implements QuestionService {
         return optionalQuestion.get();
     }
 
+    @Override
+    public List<Question> getQuestionsByUser(Long id) {
+        User user = userServiceImpl.getUserById(id);
+        List<Question> questions = user.getQuestions();
+
+        return questions;
+    }
 }
 
 

@@ -43,4 +43,10 @@ public class QuestionController {
     public void deleteQuestion(@PathVariable Long id){
         questionServiceImpl.deleteQuestion(id);
     }
+
+    @GetMapping("/userId")
+    public List<Question> getQuestionsByUserId(@PathVariable Long userId){
+
+        return questionServiceImpl.getQuestionsByUser(userId);
+    }
 }

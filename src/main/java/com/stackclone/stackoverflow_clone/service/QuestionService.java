@@ -16,4 +16,6 @@ public interface QuestionService {
 
     public void deleteQuestion(Long id);
 
+    public List<Question> getQuestionsByUser(Long id);
+
 }

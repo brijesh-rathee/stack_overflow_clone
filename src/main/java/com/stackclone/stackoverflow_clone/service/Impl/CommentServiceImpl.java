@@ -16,6 +16,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
+    private final UserServiceImpl userServiceImpl;
+
     private final CommentRepository commentRepository;
 
     public List<Comment> getComments(){
@@ -43,4 +45,10 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(commentId);
     }
 
+    public List<Comment> getCommentsByUserId(Long id){
+        User user = userServiceImpl.getUserById(id);
+        List<Comment> comments = user.getComments();
+
+        return comments;
+    }
 }
