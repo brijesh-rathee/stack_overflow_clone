@@ -1,6 +1,8 @@
 package com.stackclone.stackoverflow_clone.service.Impl;
 
+import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Comment;
+import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.CommentRepository;
 import com.stackclone.stackoverflow_clone.service.CommentService;
@@ -17,6 +19,8 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
 
     private final UserServiceImpl userServiceImpl;
+    private final QuestionServiceImpl questionServiceImpl;
+    private final AnswerServiceImpl answerServiceImpl;
 
     private final CommentRepository commentRepository;
 
@@ -45,9 +49,23 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(commentId);
     }
 
-    public List<Comment> getCommentsByUserId(Long id){
-        User user = userServiceImpl.getUserById(id);
+    public List<Comment> getCommentsByUserId(Long userId){
+        User user = userServiceImpl.getUserById(userId);
         List<Comment> comments = user.getComments();
+
+        return comments;
+    }
+
+    public List<Comment> getCommentByQuestionId(Long questionId){
+        Question question = questionServiceImpl.getQuestionById(questionId);
+        List<Comment> comments = question.getComments();
+
+        return comments;
+    }
+
+    public List<Comment> getCommentsByAnswerId(Long answerId){
+        Answer answer = answerServiceImpl.getAnswerById(answerId);
+        List<Comment> comments = answer.getComments();
 
         return comments;
     }

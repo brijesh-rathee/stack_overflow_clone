@@ -6,5 +6,5 @@ public interface UserService {
 
     User getLoggedInUser();
 
-    public User getUserById(Long id);
+     User getUserById(Long id);
 }
