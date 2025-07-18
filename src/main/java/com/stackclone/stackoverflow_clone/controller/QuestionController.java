@@ -10,35 +10,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@Controller("/questiions")
 @RequiredArgsConstructor
 public class QuestionController {
 
     private final QuestionServiceImpl questionServiceImpl;
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public Question getQuestion(@PathVariable Long id){
 
         return questionServiceImpl. getQuestionById(id);
     }
 
-    @GetMapping("/questions")
+    @GetMapping("/")
     public List<Question> getQuestions(){
 
         return questionServiceImpl.getAllQuestions();
     }
 
-    @PostMapping("/questions")
+    @PostMapping("/")
     public void createQuestion( @RequestBody Question question ){
         questionServiceImpl.createQuestion(question);
     }
 
-    @PutMapping("/questions/{id}")
+    @PostMapping("/{id}")
     public void updateQuestion(@RequestBody Question question, @PathVariable Long id){
         questionServiceImpl.updateQuestion(question,id);
     }
 
-    @DeleteMapping("/questions/{id}")
+    @PostMapping("/delete/{id}")
     public void deleteQuestion(@PathVariable Long id){
         questionServiceImpl.deleteQuestion(id);
     }
