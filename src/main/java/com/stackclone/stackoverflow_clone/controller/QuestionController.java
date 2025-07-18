@@ -17,6 +17,11 @@ public class QuestionController {
 
     private final QuestionServiceImpl questionServiceImpl;
 
+    @GetMapping("/ask")
+    public String showAskQuestionForm() {
+        return "question-page";
+    }
+
     @GetMapping("/{id}")
     public Question getQuestion(@PathVariable Long id){
 

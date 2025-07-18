@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{home-page}">
+
+<head>
+    <style>
+        .ask-question-form {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .ask-question-form h1 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .ask-question-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .ask-question-form input[type="text"],
+        .ask-question-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .ask-question-form button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: none;
+            cursor: pointer;
+        }
+
+        .ask-question-form button:hover {
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+<section layout:fragment="content">
+    <form class="ask-question-form" th:action="@{/questions/submit}" method="post">
+        <h1>Ask a New Question</h1>
+
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required />
+
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" rows="6" required></textarea>
+
+        <button type="submit">Submit Question</button>
+    </form>
+</section>
+
+</body>
+</html>
