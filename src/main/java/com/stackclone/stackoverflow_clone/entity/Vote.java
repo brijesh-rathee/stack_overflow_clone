@@ -1,5 +1,6 @@
 package com.stackclone.stackoverflow_clone.entity;
 
+import com.stackclone.stackoverflow_clone.enums.VoteType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,7 @@ public class Vote {
     @Column(name = "id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "vote_type", nullable = false)
     private VoteType voteType;
 
@@ -47,10 +48,4 @@ public class Vote {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
-    public enum VoteType {
-        UP,
-        DOWN
-    }
-
 }

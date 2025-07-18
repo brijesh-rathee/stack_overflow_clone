@@ -1,5 +1,6 @@
 package com.stackclone.stackoverflow_clone.entity;
 
+import com.stackclone.stackoverflow_clone.enums.BadgeType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,16 +26,10 @@ public class Badge {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "badge_type", nullable = false)
     private BadgeType type;
 
     @ManyToMany(mappedBy = "badges")
     private Set<User> users = new HashSet<>();
-
-    public enum BadgeType {
-        BRONZE,
-        SILVER,
-        GOLD
-    }
 }

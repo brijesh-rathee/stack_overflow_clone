@@ -1,5 +1,6 @@
 package com.stackclone.stackoverflow_clone.entity;
 
+import com.stackclone.stackoverflow_clone.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,9 +45,9 @@ public class User {
     @Column(name = "website")
     private String website;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Role role = Role.USER;
+    private UserRole role;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -84,12 +85,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "badge_id")
     )
     private Set<Badge> badges = new HashSet<>();
-
-    public enum Role {
-        USER,
-        MODERATOR,
-        ADMIN
-    }
 
     @PrePersist
     protected void onCreate() {
