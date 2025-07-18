@@ -1,20 +1,35 @@
 package com.stackclone.stackoverflow_clone.controller;
 
+import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.service.BookmarkService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.stackclone.stackoverflow_clone.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/questions")
 public class BookmarkController {
-    private final BookmarkService bookmarkService;
 
-    public BookmarkController(BookmarkService bookmarkService) {
-        this.bookmarkService = bookmarkService;
+    private final BookmarkService bookmarkService;
+    private final UserService userService;
+
+    @PostMapping("/{id}/bookmark")
+    public String bookmarkQuestion(@PathVariable("id") Long questionId) {
+        User currentUser = userService.getLoggedInUser();
+        bookmarkService.bookmark(questionId, currentUser);
+
+        return "redirect:/questions/" + questionId;
     }
 
-    public ResponseEntity<String> bookmark(@PathVariable long questionId){
-      return new ResponseEntity<>("", HttpStatus.OK);
+    @PostMapping("/{id}/unbookmark")
+    public String removeBookmark(@PathVariable("id") Long questionId) {
+        User currentUser = userService.getLoggedInUser();
+        bookmarkService.removeBookmark(questionId, currentUser);
+
+        return "redirect:/questions/" + questionId;
     }
 }
