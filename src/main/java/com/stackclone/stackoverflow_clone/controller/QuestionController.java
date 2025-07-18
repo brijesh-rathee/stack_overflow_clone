@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RestController("/questions")
+@RequestMapping("/question")
 @RequiredArgsConstructor
 public class QuestionController {
 
@@ -29,7 +29,7 @@ public class QuestionController {
         return questionServiceImpl.getAllQuestions();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public void createQuestion( @RequestBody Question question ){
         questionServiceImpl.createQuestion(question);
     }
