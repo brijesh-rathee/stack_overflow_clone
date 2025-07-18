@@ -22,7 +22,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, columnDefinition = "TEXT")
     private String title;
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
