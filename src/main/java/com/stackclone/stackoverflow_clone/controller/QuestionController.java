@@ -23,7 +23,7 @@ public class QuestionController {
         return questionServiceImpl. getQuestionById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Question> getQuestions(){
 
         return questionServiceImpl.getAllQuestions();

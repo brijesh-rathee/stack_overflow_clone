@@ -43,7 +43,7 @@ public class VoteServiceImpl implements VoteService {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new RuntimeException("Answer not found"));
 
-        Optional<Vote> existingVote = answerRepository.findByUserAndAnswer(user, answer);
+        Optional<Vote> existingVote = voteRepository.findByUserAndAnswer(user, answer);
         if (existingVote.isPresent()) {
             Vote vote = existingVote.get();
             if (vote.getVoteType() == VoteType.UP) {

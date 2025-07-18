@@ -4,10 +4,10 @@ import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface AnswerRepository extends JpaRepository<Answer,Long> {
-
-    Optional<Vote> findByUserAndAnswer(User user, Answer answer);
 }
