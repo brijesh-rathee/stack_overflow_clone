@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller("/questiions")
+@Controller
+@RestController("/questions")
 @RequiredArgsConstructor
 public class QuestionController {
 
