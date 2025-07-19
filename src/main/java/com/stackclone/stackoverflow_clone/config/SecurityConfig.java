@@ -34,9 +34,9 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/signin")
+                        .loginPage("/auth/login")
                         .loginProcessingUrl("/authenticateTheUser")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/",true)
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .permitAll()
