@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8" />
     <title>Stack Overflow Clone</title>
@@ -132,7 +133,7 @@
             top: var(--header-height);
             bottom: var(--footer-height);
             overflow-y: auto;
-            border-left: 1px solid var(--border-color);
+            border-right: 2px solid #D9D9D9;
         }
 
         .sidebar ul {
@@ -149,6 +150,7 @@
              text-decoration: none;
              color: var(--text-dark);
              font-weight: 500;
+
          }
 
          .content {
@@ -161,7 +163,7 @@
          }
 
          .sec-container{
-            width: 70%;
+            width: 90%;
          }
 
          .content-header {
@@ -171,9 +173,14 @@
              margin-bottom: 20px;
          }
 
-         .content-header h1 {
-             font-size: 1.5rem;
-             font-weight: bold;
+         .content-header {
+             h1{
+                font-size: 2rem;
+                font-weight: bold;
+             }
+             p{
+                font-size: 1.1rem;
+             }
          }
 
          .ask-btn {
@@ -238,9 +245,14 @@
             <input type="text" placeholder="Search..." />
             <button type="submit">🔍</button>
         </div>
-        <div class="auth-buttons">
+        <div class="auth-buttons" sec:authorize="!isAuthenticated()">
             <a th:href="@{/auth/login}" class="btn">Login</a>
             <a th:href="@{/auth/signup}" class="btn">Sign Up</a>
+        </div>
+        <div class="auth-buttons" sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn">Logout</button>
+            </form>
         </div>
     </div>
 </header>
@@ -258,8 +270,15 @@
 
     <main class="content" >
         <section class="sec-container" layout:fragment="content">
-            <div class="content-header">
+            <div class="content-header" sec:authorize="!isAuthenticated()">
                 <h1>Recently Active Questions</h1>
+                <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
+            </div>
+            <div class="content-header" sec:authorize="isAuthenticated()">
+                <div>
+                    <h1>Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
+                    <p>Find answers to your technical questions and help others answer theirs.</p>
+                </div>
                 <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
             </div>
             <div class="question-card" th:each="question : ${questions}">

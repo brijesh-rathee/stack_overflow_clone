@@ -1,7 +1,9 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
+import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 
     private final QuestionService questionService;
+    private final UserService userService;
 
     private static final String HOME_VIEW = "home-page";
 

@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>StackOverflow Clone</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f6f6f6;
-            margin: 0;
-            padding: 0;
-        }
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{home-page}">
 
+<head>
+    <title>Question Details</title>
+    <style>
         .question-container {
             width: 80%;
             margin: 30px auto;
@@ -63,24 +58,23 @@
         }
     </style>
 </head>
+
 <body>
+<section layout:fragment="content">
+    <div class="question-container" th:object="${question}">
+        <div class="title" th:text="*{title}"></div>
 
-<div class="question-container" th:object="${question}">
-    <div class="title" th:text="${question.title}"></div>
+        <div class="meta">
+            <span class="author" th:text="*{user.username}"></span> |
+            <span class="time" th:text="*{createdAt}"></span>
+        </div>
 
-    <div class="meta">
-        <span class="author" th:text="${question.user.username}"></span> |
-        <span class="time" th:text="${question.createdAt}"></span>
+        <div class="content" th:text="*{content}"></div>
+
+        <div class="tags">
+            <span class="tag" th:each="tag : *{tags}" th:text="${tag}"></span>
+        </div>
     </div>
-
-    <div class="content" th:text="${question.content}">
-
-    </div>
-
-    <div class="tags">
-        <span class="tag">null</span>
-    </div>
-</div>
-
+</section>
 </body>
 </html>
