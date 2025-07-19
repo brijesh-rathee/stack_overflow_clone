@@ -26,4 +26,5 @@ public interface UserService {
 
     List<Vote> getAllVotesByUser(Long userId);
 
+    User getLoggedInUser();
 }

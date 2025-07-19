@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #000;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input {
+            padding: 6px;
+            margin-top: 5px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            border: 1px solid black;
+            font-size: 15px;
+            border-radius: 4px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .error {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .link-button {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+
+    <p class="error" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+    <form th:action="@{/auth/sigin}" method="post">
+        <label>Email:</label>
+        <input type="email" name="email" required />
+
+        <label>Password:</label>
+        <input type="password" name="password" required />
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="link-button">
+        <p>Don't have an account? <a th:href="@{/auth/signup}">Sign up</a></p>
+        <form th:action="@{/}" method="get">
+            <button type="submit">Back</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

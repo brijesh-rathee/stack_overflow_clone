@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8" />
     <title>Stack Overflow Clone</title>
@@ -47,9 +48,11 @@
 
          .logo a {
              font-size: 1.8rem;
-             font-weight: bold;
              color: var(--text-dark);
              text-decoration: none;
+             span{
+                font-weight: bold;
+             }
          }
 
          .nav-links ul {
@@ -219,7 +222,7 @@
 <header class="top-nav">
     <div class="nav-left">
         <div class="logo">
-            <a th:href="@{/}">stack overflow</a>
+            <a th:href="@{/}">stack<span>overflow</span></a>
         </div>
         <nav class="nav-links">
             <ul>
@@ -236,8 +239,8 @@
             <button type="submit">🔍</button>
         </div>
         <div class="auth-buttons">
-            <a th:href="@{/login}" class="btn">Login</a>
-            <a th:href="@{/signup}" class="btn">Sign Up</a>
+            <a th:href="@{/auth/login}" class="btn">Login</a>
+            <a th:href="@{/auth/signup}" class="btn">Sign Up</a>
         </div>
     </div>
 </header>

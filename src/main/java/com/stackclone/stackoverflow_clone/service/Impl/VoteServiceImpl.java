@@ -60,8 +60,8 @@ public class VoteServiceImpl implements VoteService {
     }
 
     public long getQuestionIdByAnswerId(Long answerId) {
-        return answerRepository.findById(answerId)
-                .map(a -> a.getQuestion().getId())
-                .orElseThrow(() -> new RuntimeException("Answer or Question not found"));
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new RuntimeException("Answer not found"));
+        return answer.getQuestion().getId();
     }
 }

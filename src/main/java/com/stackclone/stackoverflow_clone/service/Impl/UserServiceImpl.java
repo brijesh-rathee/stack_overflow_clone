@@ -70,4 +70,9 @@ public class UserServiceImpl implements UserService {
 
         return user.getVotes();
     }
+
+    @Override
+    public User getLoggedInUser() {
+        return null;
+    }
 }
