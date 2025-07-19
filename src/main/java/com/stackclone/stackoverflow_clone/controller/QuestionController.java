@@ -1,12 +1,11 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
-import com.stackclone.stackoverflow_clone.service.Impl.QuestionServiceImpl;
 
 import com.stackclone.stackoverflow_clone.service.QuestionService;
+
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -22,6 +21,7 @@ public class QuestionController {
 
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
+    private static final String QUESTION_INFO_VIEW = "question-view";
     private static final String REDIRECT_HOME_VIEW = "redirect:/questions/";
 
     @GetMapping("/ask")
@@ -29,13 +29,13 @@ public class QuestionController {
         return QUESTION_VIEW;
     }
 
-    @GetMapping("/view/{id}")
+    @GetMapping("/{id}")
     public String getQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionService.getQuestionById(id));
-        return "question-view";
+        Question currentQuestion = questionService.getQuestionById(id);
+        model.addAttribute("question", currentQuestion);
+
+        return QUESTION_INFO_VIEW;
     }
-
-
 
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question) {

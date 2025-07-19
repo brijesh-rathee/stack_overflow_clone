@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>StackOverflow Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .question-container {
+            width: 80%;
+            margin: 30px auto;
+            background-color: white;
+            padding: 25px 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0077cc;
+            margin-bottom: 10px;
+        }
+
+        .meta {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .tags {
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #e1ecf4;
+            color: #39739d;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-right: 5px;
+            font-size: 13px;
+        }
+
+        .content {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .author {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .time {
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="question-container" th:object="${question}">
+    <div class="title" th:text="${question.title}"></div>
+
+    <div class="meta">
+        <span class="author" th:text="${question.user.username}"></span> |
+        <span class="time" th:text="${question.createdAt}"></span>
+    </div>
+
+    <div class="content" th:text="${question.content}">
+
+    </div>
+
+    <div class="tags">
+        <span class="tag">null</span>
+    </div>
+</div>
+
+</body>
+</html>

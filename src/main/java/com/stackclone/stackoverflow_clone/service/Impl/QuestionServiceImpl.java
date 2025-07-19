@@ -37,7 +37,7 @@ public class QuestionServiceImpl implements QuestionService {
     public void createQuestion(Question question) {
         User loggedInUser = userService.getLoggedInUser();
         question.setUser(loggedInUser);
-//        question.setViewCount(0);
+
         questionRepository.save(question);
     }
 
