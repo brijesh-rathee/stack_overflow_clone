@@ -5,7 +5,6 @@ import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.QuestionRepository;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 
-import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -21,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     private final QuestionRepository questionRepository;
 
@@ -35,10 +34,6 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     public void createQuestion(Question question) {
-        User user = userService.getLoggedInUser();
-        question.setUser(user);
-        question.setViewCount(0);
-
         questionRepository.save(question);
     }
 
@@ -60,7 +55,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> getQuestionsByUser(Long id) {
-        User user = userService.getUserById(id);
+        User user = userServiceImpl.getUserById(id);
         List<Question> questions = user.getQuestions();
 
         return questions;

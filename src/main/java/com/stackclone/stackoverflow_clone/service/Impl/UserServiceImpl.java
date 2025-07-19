@@ -9,8 +9,6 @@ import com.stackclone.stackoverflow_clone.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -71,13 +69,5 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow();
 
         return user.getVotes();
-    }
-
-    @Override
-    public User getLoggedInUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User userDetails = (User) authentication.getPrincipal();
-
-        return userDetails;
     }
 }

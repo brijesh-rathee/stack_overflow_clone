@@ -50,6 +50,7 @@ public class QuestionController {
 
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question) {
+        System.out.println("controller...");
         questionServiceImpl.createQuestion(question);
 
         return REDIRECT_HOME_VIEW;
