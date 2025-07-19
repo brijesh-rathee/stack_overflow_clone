@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(configurer ->
                         configurer
                                 .requestMatchers("/auth/**","/", "/home").permitAll()
-                                .requestMatchers("/user/**").hasAnyAuthority(UserRole.USER.name())
+                                .requestMatchers("/user/**", "/questions/**").hasAnyAuthority(UserRole.USER.name())
                                 .requestMatchers("/moderator/**").hasAnyAuthority(UserRole.ADMIN.name(),UserRole.MODERATOR.name())
                                 .requestMatchers("/admin/**").hasAnyAuthority(UserRole.ADMIN.name())
                                 .anyRequest().authenticated()

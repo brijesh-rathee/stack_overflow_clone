@@ -264,7 +264,7 @@
             </div>
             <div class="question-card" th:each="question : ${questions}">
                 <h2 th:text="${question.title}">Question Title</h2>
-                <p th:text="${question.description}">Question description...</p>
+                <p th:text="${question.content}">Question description...</p>
                 <a th:href="@{/questions/{id}(id=${question.id})}">View Details</a>
             </div>
         </section>
