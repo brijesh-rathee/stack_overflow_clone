@@ -4,6 +4,7 @@ import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.service.Impl.AnswerServiceImpl;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
+import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ public class AnswerController {
 
     private final AnswerServiceImpl answerService;
     private final QuestionService questionService;
+    private final UserService userService;
 
     @GetMapping("/user/{userId}")
     public String getAllAnswersByUser(@PathVariable Long userId, Model model){
@@ -48,13 +50,18 @@ public class AnswerController {
     public String saveAnswer(@PathVariable Long questionId, @ModelAttribute("answer") Answer answer){
         Question question = questionService.getQuestionById(questionId);
         answer.setQuestion(question);
+        answer.setUser(userService.getLoggedInUser());
         answerService.createAnswer(answer);
         return "";
     }
-    @GetMapping("/{id}")
+    @GetMapping("/{answerId}")
     public String getAnswerById(@PathVariable Long answerId,Model model){
         Answer answer = answerService.getAnswerById(answerId);
         model.addAttribute("answer",answer);
         return "";
+    }
+    @PostMapping("/{answerId}/delete")
+    public void deleteAnswer(@PathVariable Long answerId){
+        answerService.deleteAnswer(answerId);
     }
 }
