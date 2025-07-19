@@ -21,6 +21,7 @@ public class QuestionController {
 
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
+    private static final String REDIRECT_HOME_VIEW = "redirect:/questions/";
 
     @GetMapping("/ask")
     public String showAskQuestionForm() {
@@ -31,7 +32,7 @@ public class QuestionController {
     public String getQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionServiceImpl.getQuestionById(id));
 
-        return "";
+        return "redirect:/questions/view/" + id;   //RETURN TO TEHE SPECIFIC QUESTION
     }
 
     @GetMapping("/")
@@ -51,21 +52,21 @@ public class QuestionController {
     public String createQuestion(@ModelAttribute Question question) {
         questionServiceImpl.createQuestion(question);
 
-        return "redirect:/questions/";
+        return REDIRECT_HOME_VIEW;
     }
 
     @PostMapping("/update/{id}")
     public String updateQuestion(@ModelAttribute Question question, @PathVariable Long id) {
         questionServiceImpl.updateQuestion(question, id);
 
-        return "redirect:/questions/";
+        return REDIRECT_HOME_VIEW;
     }
 
     @PostMapping("/delete/{questionId}")
     public String deleteQuestion(@PathVariable Long questionId) {
         questionServiceImpl.deleteQuestion(questionId);
 
-        return "redirect:/questions/";
+        return REDIRECT_HOME_VIEW;
     }
 
     @GetMapping("/user/{userId}")
