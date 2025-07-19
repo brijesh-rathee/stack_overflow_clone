@@ -3,6 +3,7 @@ package com.stackclone.stackoverflow_clone.controller;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.service.Impl.QuestionServiceImpl;
 
+import com.stackclone.stackoverflow_clone.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionController {
 
-    private final QuestionServiceImpl questionServiceImpl;
+    private final QuestionService questionService;
 
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
@@ -30,49 +31,36 @@ public class QuestionController {
 
     @GetMapping("/view/{id}")
     public String getQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionServiceImpl.getQuestionById(id));
-
-        return "redirect:/questions/view/" + id;   //RETURN TO TEHE SPECIFIC QUESTION
+        model.addAttribute("question", questionService.getQuestionById(id));
+        return "question-view";
     }
 
-    @GetMapping("/")
-    public String showHomePage(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "5") int size,
-                               Model model) {
-        Page<Question> paginatedQuestions = questionServiceImpl.getPaginatedQuestions(page, size);
-        model.addAttribute("questions", paginatedQuestions.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
-
-        return HOME_VIEW;
-    }
 
 
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question) {
-        System.out.println("controller...");
-        questionServiceImpl.createQuestion(question);
+        questionService.createQuestion(question);
 
         return REDIRECT_HOME_VIEW;
     }
 
     @PostMapping("/update/{id}")
     public String updateQuestion(@ModelAttribute Question question, @PathVariable Long id) {
-        questionServiceImpl.updateQuestion(question, id);
+        questionService.updateQuestion(question, id);
 
         return REDIRECT_HOME_VIEW;
     }
 
     @PostMapping("/delete/{questionId}")
     public String deleteQuestion(@PathVariable Long questionId) {
-        questionServiceImpl.deleteQuestion(questionId);
+        questionService.deleteQuestion(questionId);
 
         return REDIRECT_HOME_VIEW;
     }
 
     @GetMapping("/user/{userId}")
     public String getQuestionsByUserId(@PathVariable Long userId, Model model) {
-        List<Question> userQuestions = questionServiceImpl.getQuestionsByUser(userId);
+        List<Question> userQuestions = questionService.getQuestionsByUser(userId);
         model.addAttribute("questions", userQuestions);
 
         return HOME_VIEW;
