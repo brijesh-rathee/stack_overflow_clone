@@ -7,6 +7,10 @@ import com.stackclone.stackoverflow_clone.service.QuestionService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +46,7 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findAll();
     }
 
-
+    @Override
     public Question getQuestionById(Long id) {
         Optional<Question> optionalQuestion = questionRepository.findById(id);
 
@@ -56,6 +60,13 @@ public class QuestionServiceImpl implements QuestionService {
 
         return questions;
     }
+
+    @Override
+    public Page<Question> getPaginatedQuestions(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return questionRepository.findAll(pageable);
+    }
+
 }
 
 

@@ -5,6 +5,7 @@ import com.stackclone.stackoverflow_clone.service.Impl.QuestionServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -34,12 +35,17 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String showHomePage(Model model) {
-        List<Question> questions = questionServiceImpl.getAllQuestions();
-        model.addAttribute("questions", questions);
+    public String showHomePage(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               Model model) {
+        Page<Question> paginatedQuestions = questionServiceImpl.getPaginatedQuestions(page, size);
+        model.addAttribute("questions", paginatedQuestions.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
 
         return HOME_VIEW;
     }
+
 
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question) {

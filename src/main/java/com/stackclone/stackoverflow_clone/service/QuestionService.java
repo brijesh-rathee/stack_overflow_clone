@@ -1,6 +1,7 @@
 package com.stackclone.stackoverflow_clone.service;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -17,5 +18,7 @@ public interface QuestionService {
     void deleteQuestion(Long id);
 
     List<Question> getQuestionsByUser(Long id);
+
+    Page<Question> getPaginatedQuestions(int page, int size);
 
 }
