@@ -5,10 +5,8 @@ import com.stackclone.stackoverflow_clone.service.Impl.QuestionServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -19,61 +17,41 @@ public class QuestionController {
 
     private final QuestionServiceImpl questionServiceImpl;
 
-    private static final String HOME_VIEW = "home-page";
-    private static final String QUESTION_VIEW = "question-page";
-
     @GetMapping("/ask")
     public String showAskQuestionForm() {
-        return QUESTION_VIEW;
+        return "question-page";
     }
 
-    @GetMapping("/view/{id}")
-    public String getQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionServiceImpl.getQuestionById(id));
+    @GetMapping("/{id}")
+    public Question getQuestion(@PathVariable Long id){
 
-        return "";
+        return questionServiceImpl. getQuestionById(id);
     }
 
-    @GetMapping("/")
-    public String showHomePage(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "5") int size,
-                               Model model) {
-        Page<Question> paginatedQuestions = questionServiceImpl.getPaginatedQuestions(page, size);
-        model.addAttribute("questions", paginatedQuestions.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
+    @GetMapping
+    public List<Question> getQuestions(){
 
-        return HOME_VIEW;
+        return questionServiceImpl.getAllQuestions();
     }
 
-
-    @PostMapping("/submit")
-    public String createQuestion(@ModelAttribute Question question) {
+    @PostMapping
+    public void createQuestion( @RequestBody Question question ){
         questionServiceImpl.createQuestion(question);
-
-        return "redirect:/questions/";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateQuestion(@ModelAttribute Question question, @PathVariable Long id) {
-        questionServiceImpl.updateQuestion(question, id);
-
-        return "redirect:/questions/";
+    @PostMapping("/{id}")
+    public void updateQuestion(@RequestBody Question question, @PathVariable Long id){
+        questionServiceImpl.updateQuestion(question,id);
     }
 
-    @PostMapping("/delete/{questionId}")
-    public String deleteQuestion(@PathVariable Long questionId) {
-        questionServiceImpl.deleteQuestion(questionId);
-
-        return "redirect:/questions/";
+    @PostMapping("/delete/{id}")
+    public void deleteQuestion(@PathVariable Long id){
+        questionServiceImpl.deleteQuestion(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public String getQuestionsByUserId(@PathVariable Long userId, Model model) {
-        List<Question> userQuestions = questionServiceImpl.getQuestionsByUser(userId);
-        model.addAttribute("questions", userQuestions);
+    @GetMapping("/userId")
+    public List<Question> getQuestionsByUserId(@PathVariable Long userId){
 
-        return HOME_VIEW;
+        return questionServiceImpl.getQuestionsByUser(userId);
     }
 }
-
