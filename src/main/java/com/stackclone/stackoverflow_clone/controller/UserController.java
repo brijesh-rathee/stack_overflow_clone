@@ -5,7 +5,9 @@ import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import com.stackclone.stackoverflow_clone.service.UserService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,23 +26,28 @@ public class UserController {
     public String viewUserById(@PathVariable Long userId, Model model){
         User user = userService.getUserById(userId);
         model.addAttribute("user",user);
+
         return "";
     }
+
     @GetMapping("/registerForm")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
+
         return "";
     }
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user) {
         userService.registerUser(user);
+
         return "";
     }
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long userId){
         userService.deleteUser(userId);
+
         return "";
     }
 
@@ -48,6 +55,7 @@ public class UserController {
     public String viewAllUsers(Model model){
         List<User> aLlUsers = userService.getAllUsers();
         model.addAttribute("allUsers",aLlUsers);
+
         return "";
     }
 
@@ -55,6 +63,7 @@ public class UserController {
     public String updateForm(@PathVariable Long userId , Model model){
         User user = userService.getUserById(userId);
         model.addAttribute("existingUser",user);
+
         return "";
     }
 
@@ -74,6 +83,7 @@ public class UserController {
     public String viewUserVotes(@PathVariable Long userId, Model model){
         List<Vote> allVotes = userService.getAllVotesByUser(userId);
         model.addAttribute("votes",allVotes);
+
         return "";
     }
 
@@ -81,6 +91,7 @@ public class UserController {
     public String getAllBadges(@PathVariable Long userId, Model model){
         Set<Badge> allBadges = userService.getAllBadgesByUser(userId);
         model.addAttribute("allBadges",allBadges);
+
         return "";
     }
 }
