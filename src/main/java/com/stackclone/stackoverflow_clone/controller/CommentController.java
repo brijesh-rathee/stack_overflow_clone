@@ -1,8 +1,10 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Comment;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
 import com.stackclone.stackoverflow_clone.service.Impl.CommentServiceImpl;
 
+import com.stackclone.stackoverflow_clone.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import java.util.List;
 public class CommentController {
 
     private final CommentServiceImpl commentServiceImpl;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @GetMapping("/")
     public String getComments(Model model){
@@ -27,11 +31,22 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public String addComment(@RequestBody Comment comment){
-        commentServiceImpl.addComment(comment);
+    public String addComment(@RequestParam(required = false) Long questionId,
+                             @RequestParam(required = false) Long answerId,
+                             @RequestParam String comment) {
 
-        return "redirect:/questions/" + comment.getQuestion().getId();
+        if (questionId != null) {
+            commentServiceImpl.addCommentToQuestion(questionId, comment);
+            return "redirect:/questions/" + questionId;
+        } else if (answerId != null) {
+            var answer = answerService.getAnswerById(answerId); // just to get the question ID for redirect
+            commentServiceImpl.addCommentToAnswer(answerId, comment);
+            return "redirect:/questions/" + answer.getQuestion().getId();
+        }
+
+        throw new IllegalArgumentException("Either questionId or answerId must be provided.");
     }
+
 
     @PostMapping("/update/{id}")
     public String updateComment(@PathVariable Long id, @RequestBody Comment comment){
@@ -46,4 +61,5 @@ public class CommentController {
 
         return "redirect:/questions/" + questionId;
     }
+
 }

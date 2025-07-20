@@ -1,14 +1,8 @@
 package com.stackclone.stackoverflow_clone.controller;
 
-import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.*;
 
-import com.stackclone.stackoverflow_clone.entity.Tag;
-import com.stackclone.stackoverflow_clone.entity.User;
-import com.stackclone.stackoverflow_clone.service.QuestionService;
-
-import com.stackclone.stackoverflow_clone.service.QuestionViewService;
-import com.stackclone.stackoverflow_clone.service.TagService;
-import com.stackclone.stackoverflow_clone.service.UserService;
+import com.stackclone.stackoverflow_clone.service.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/questions")
@@ -27,7 +23,9 @@ public class QuestionController {
     private final QuestionService questionService;
     private final TagService tagService;
     private final UserService userService;
+    private final AnswerService answerService;
     private final QuestionViewService questionViewService;
+    private final CommentService commentService;
 
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
@@ -52,7 +50,22 @@ public class QuestionController {
             User user = userService.getLoggedInUser();
             questionViewService.recordView(user, currentQuestion);
         }
+
+        List<Answer> answers = answerService.getAllAnswersByQuestionId(id);
+        List<Comment> comments = commentService.getCommentByQuestionId(id);
+
+        List<Long> answerIds = new ArrayList<>();
+        for (Answer answer : answers) {
+            answerIds.add(answer.getId());
+        }
+
+        Map<Long, List<Comment>> answerCommentsMap = commentService.getCommentsGroupedByAnswerIds(answerIds);
+
         model.addAttribute("question", currentQuestion);
+        model.addAttribute("answers",answers);
+        model.addAttribute("questionComments",comments);
+        model.addAttribute("answerCommentsMap", answerCommentsMap);
+        model.addAttribute("newAnswer", new Answer());
 
         return QUESTION_INFO_VIEW;
     }
@@ -74,7 +87,7 @@ public class QuestionController {
         model.addAttribute("question", question);
         model.addAttribute("tags", tags);
 
-        return "";
+        return QUESTION_VIEW;
     }
 
     @PostMapping("/update/{id}")
@@ -98,5 +111,5 @@ public class QuestionController {
 
         return HOME_VIEW;
     }
-}
 
+}

@@ -5,6 +5,7 @@ import com.stackclone.stackoverflow_clone.entity.Comment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface CommentService {
@@ -13,7 +14,9 @@ public interface CommentService {
 
     Comment getComment(Long commentId);
 
-    void addComment(Comment comment);
+    void addCommentToQuestion(Long questionId, String commentText);
+
+    void addCommentToAnswer(Long answerId, String commentText);
 
     void updateComment(Long commentId, Comment comment);
 
@@ -23,5 +26,7 @@ public interface CommentService {
 
     List<Comment> getCommentByQuestionId(Long questionId);
 
-    List<Comment> getCommentsByAnswerId(Long answerId);
+    Map<Long, List<Comment>> getCommentsGroupedByAnswerIds(List<Long> answerIds);
+
+
 }

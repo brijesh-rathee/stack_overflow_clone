@@ -5,24 +5,25 @@ import com.stackclone.stackoverflow_clone.entity.Comment;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.CommentRepository;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
 import com.stackclone.stackoverflow_clone.service.CommentService;
 
+import com.stackclone.stackoverflow_clone.service.QuestionService;
+import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
-    private final UserServiceImpl userServiceImpl;
-    private final QuestionServiceImpl questionServiceImpl;
-    private final AnswerServiceImpl answerServiceImpl;
-
+    private final UserService userService;
+    private final QuestionService questionService;
     private final CommentRepository commentRepository;
+    private final AnswerService answerService;
 
     public List<Comment> getComments(){
 
@@ -35,7 +36,22 @@ public class CommentServiceImpl implements CommentService {
         return comment.get();
     }
 
-    public void addComment(Comment comment){
+    public void addCommentToQuestion(Long questionId, String commentText) {
+        Comment comment = new Comment();
+        comment.setComment(commentText);
+        comment.setUser(userService.getLoggedInUser());
+        comment.setQuestion(questionService.getQuestionById(questionId));
+
+        commentRepository.save(comment);
+    }
+
+    public void addCommentToAnswer(Long answerId, String commentText) {
+        Comment comment = new Comment();
+        comment.setComment(commentText);
+        comment.setUser(userService.getLoggedInUser());
+        var answer = answerService.getAnswerById(answerId);
+        comment.setAnswer(answer);
+
         commentRepository.save(comment);
     }
     public void updateComment(Long commentId, Comment comment){
@@ -50,23 +66,34 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public List<Comment> getCommentsByUserId(Long userId){
-        User user = userServiceImpl.getUserById(userId);
+        User user = userService.getUserById(userId);
         List<Comment> comments = user.getComments();
 
         return comments;
     }
 
     public List<Comment> getCommentByQuestionId(Long questionId){
-        Question question = questionServiceImpl.getQuestionById(questionId);
+        Question question = questionService.getQuestionById(questionId);
         List<Comment> comments = question.getComments();
 
         return comments;
     }
 
-    public List<Comment> getCommentsByAnswerId(Long answerId){
-        Answer answer = answerServiceImpl.getAnswerById(answerId);
-        List<Comment> comments = answer.getComments();
+    @Override
+    public Map<Long, List<Comment>> getCommentsGroupedByAnswerIds(List<Long> answerIds) {
+        List<Comment> comments = commentRepository.findByAnswerIdIn(answerIds);
 
-        return comments;
+        Map<Long, List<Comment>> answerCommentsMap = new HashMap<>();
+
+        for (Comment comment : comments) {
+            Long answerId = comment.getAnswer().getId();
+            if (!answerCommentsMap.containsKey(answerId)) {
+                answerCommentsMap.put(answerId, new ArrayList<>());
+            }
+            answerCommentsMap.get(answerId).add(comment);
+        }
+
+        return answerCommentsMap;
     }
+
 }
