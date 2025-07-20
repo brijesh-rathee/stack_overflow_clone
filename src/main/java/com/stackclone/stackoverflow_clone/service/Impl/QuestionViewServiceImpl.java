@@ -5,6 +5,7 @@ import com.stackclone.stackoverflow_clone.entity.QuestionView;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.QuestionRepository;
 import com.stackclone.stackoverflow_clone.repository.QuestionViewRepository;
+import com.stackclone.stackoverflow_clone.service.BadgeService;
 import com.stackclone.stackoverflow_clone.service.QuestionViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class QuestionViewServiceImpl implements QuestionViewService {
     private final QuestionViewRepository questionViewRepository;
     private final QuestionRepository questionRepository;
+    private final BadgeService badgeService;
+
 
     @Override
     public void recordView(User user, Question question) {
@@ -28,6 +31,7 @@ public class QuestionViewServiceImpl implements QuestionViewService {
             questionViewRepository.save(view);
 
             question.setViewCount(question.getViewCount() + 1);
+            badgeService.checkAndAssignViewBadges(question);
             questionRepository.save(question);
         }
     }
