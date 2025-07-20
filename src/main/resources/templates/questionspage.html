@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Newest Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .main {
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #6a737c;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tab.selected {
+            background: #e3ecf7;
+            border-color: #379fef;
+            font-weight: bold;
+        }
+
+        .badge {
+            background-color: #0077cc;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.75em;
+        }
+
+        .filter-btn {
+            margin-left: auto;
+            padding: 6px 12px;
+            background: #e1ecf4;
+            border: 1px solid #b3d3ea;
+            border-radius: 5px;
+        }
+
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stats {
+            float: left;
+            width: 100px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #6a737c;
+        }
+
+        .summary {
+            margin-left: 110px;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            color: #0074cc;
+            text-decoration: none;
+        }
+
+        .excerpt {
+            font-size: 0.9em;
+            color: #3b4045;
+            margin: 5px 0;
+        }
+
+        .tags-and-user {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .tags .tag {
+            background: #e1ecf4;
+            color: #39739d;
+            padding: 5px 8px;
+            margin-right: 5px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+
+        .user-info {
+            font-size: 0.75em;
+            color: #6a737c;
+        }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <div class="main">
+        <h1>Newest Questions</h1>
+        <p class="subtitle" th:text="''+${totalQuestions}+' questions'">24,214,557 questions</p>
+
+        <div class="tabs">
+            <button class="tab selected">Newest</button>
+            <button class="tab">Active</button>
+            <button class="tab">Bountied <span class="badge">35</span></button>
+            <button class="tab">Unanswered</button>
+            <button class="filter-btn">Filter</button>
+        </div>
+
+        <!-- Questions List -->
+        <div class="question-list" th:each="question : ${questions}">
+            <div class="stats">
+                <div><strong th:text="${question.votes}">0</strong> votes</div>
+                <div><strong th:text="${question.answers}">0</strong> answers</div>
+                <div><strong th:text="${question.views}">0</strong> views</div>
+            </div>
+            <div class="summary">
+                <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">
+                    Question Title
+                </a>
+                <p class="excerpt" th:text="${question.excerpt}">Question excerpt here...</p>
+                <div class="tags-and-user">
+                    <div class="tags">
+                        <span th:each="tag : ${question.tags}" class="tag" th:text="${tag}">java</span>
+                    </div>
+                    <div class="user-info">
+                        <span th:text="${question.username}">username</span>
+                        <span th:text="${question.askedTime}">asked 2 mins ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

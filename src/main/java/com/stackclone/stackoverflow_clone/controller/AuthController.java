@@ -2,7 +2,9 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.dto.SignUpRequest;
 import com.stackclone.stackoverflow_clone.service.AuthService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

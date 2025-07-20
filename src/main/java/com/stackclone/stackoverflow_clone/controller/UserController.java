@@ -22,7 +22,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private static final String USER_PROFILE_VIEW = "userpofile-page";
+    private static final String USER_PROFILE_VIEW = "userprofile-page";
 
     @GetMapping("/{userid}")
     public String viewUserById(@PathVariable Long userId, Model model){

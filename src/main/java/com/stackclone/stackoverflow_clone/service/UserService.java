@@ -27,4 +27,7 @@ public interface UserService {
     List<Vote> getAllVotesByUser(Long userId);
 
     User getLoggedInUser();
+
+    User getUserByEmail(String email);
+
 }

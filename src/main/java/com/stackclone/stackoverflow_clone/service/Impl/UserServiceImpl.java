@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,5 +80,11 @@ public  class UserServiceImpl implements UserService {
         User userDeatails = (User) authentication.getPrincipal();
 
         return userDeatails;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 }

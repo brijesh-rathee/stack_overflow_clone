@@ -250,6 +250,9 @@
             <a th:href="@{/auth/signup}" class="btn">Sign Up</a>
         </div>
         <div class="auth-buttons" sec:authorize="isAuthenticated()">
+            <a th:if="${user != null}" th:href="@{'/users/' + ${user.id}}" class="btn btn-primary">
+                View Profile
+            </a>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="btn">Logout</button>
             </form>
