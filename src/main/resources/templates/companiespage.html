@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{home-page}">
 <head>
     <title>Companies - StackClone</title>
     <link rel="stylesheet" th:href="@{/css/companies.css}">
@@ -115,7 +116,7 @@ body{
     </style>
 </head>
 <body>
-
+<section layout:fragment="content">
 <div class="container">
     <h1>Companies</h1>
     <p>Learn about what it's like to work at companies</p>
@@ -153,6 +154,6 @@ body{
         </div>
     </div>
 </div>
-
+</section>
 </body>
 </html>

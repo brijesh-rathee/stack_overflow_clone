@@ -1,19 +1,16 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
-import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -47,5 +44,10 @@ public class HomeController {
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
 
         return "questionslistpage";
+    }
+
+    @GetMapping("/companies")
+    public String getCompanies(){
+        return "companiespage";
     }
 }
