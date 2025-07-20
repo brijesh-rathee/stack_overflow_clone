@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{home-page}">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags Page</title>
+    <style>
+        .tag-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .tag-container h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .tag-container p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .tag-box {
+            display: inline-block;
+            padding: 8px 14px;
+            background-color: #e1ecf4;
+            color: #39739d;
+            margin: 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="tag-container">
+        <h1>Tags</h1>
+        <p>
+            A tag is a keyword or label that categorizes your question with other, similar questions.
+            Using the right tags makes it easier for others to find and answer your question.
+        </p>
+
+        <div class="tags-list" th:each="tag : ${tags}">
+            <span class="tag-box" th:text="${tag.name}">Tag Name</span>
+        </div>
+    </div>
+</section>
+</body>
+</html>

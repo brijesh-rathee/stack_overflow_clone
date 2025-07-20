@@ -22,9 +22,9 @@ public class UserController {
 
     private final UserService userService;
 
-    private static final String USER_PROFILE_VIEW = "userpofile-page";
+    private static final String USER_PROFILE_VIEW = "userprofile-page";
 
-    @GetMapping("/{userid}")
+    @GetMapping("/{userId}")
     public String viewUserById(@PathVariable Long userId, Model model){
         User user = userService.getUserById(userId);
         model.addAttribute("user",user);

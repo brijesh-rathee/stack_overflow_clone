@@ -21,7 +21,7 @@ public class TagController {
         List<Tag> tags = tagService.getAllTags();
 
         model.addAttribute("tags", tags);
-        return "tag/list";
+        return "tags-page";
     }
 
     @GetMapping("/create")

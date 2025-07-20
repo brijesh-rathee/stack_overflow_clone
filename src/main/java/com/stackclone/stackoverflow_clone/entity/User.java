@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "reputation", nullable = false)
-    private int reputation = 0;
+    private int reputation;
 
     @Column(name = "bio")
     private String bio;
