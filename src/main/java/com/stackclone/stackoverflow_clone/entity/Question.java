@@ -40,6 +40,9 @@ public class Question {
     @Column(name = "view_count", nullable = false)
     private int viewCount = 0;
 
+    @Column(name = "votes")
+    private int voteCount = 0;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

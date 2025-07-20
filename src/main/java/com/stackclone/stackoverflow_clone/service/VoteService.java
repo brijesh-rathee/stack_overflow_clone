@@ -7,4 +7,5 @@ public interface VoteService {
     void voteQuestion(Long questionId, VoteType voteType);
 
     void voteAnswer(Long answerId, VoteType voteType);
+
 }

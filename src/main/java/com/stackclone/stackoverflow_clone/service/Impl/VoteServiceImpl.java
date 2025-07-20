@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -39,25 +40,48 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     @Transactional
-    public void voteQuestion(Long questionId, VoteType voteType) {
+    public void voteQuestion(Long questionId, VoteType newVoteType) {
         User currentUser = userService.getLoggedInUser();
         Question question = questionService.getQuestionById(questionId);
 
-        Optional<Vote> existingVote = voteRepository.findByUserAndQuestion(currentUser, question);
-        if (existingVote.isPresent()) {
-            throw new IllegalStateException("You have already voted on this question.");
+        Optional<Vote> existingVoteOpt = voteRepository.findByUserAndQuestion(currentUser, question);
+
+        if (existingVoteOpt.isPresent()) {
+            Vote existingVote = existingVoteOpt.get();
+
+            if (existingVote.getVoteType() == newVoteType) {
+                return;
+            }
+
+            if (existingVote.getVoteType() == VoteType.UP) {
+                question.setVoteCount(question.getVoteCount() - 1);
+                question.getUser().setReputation(question.getUser().getReputation() - 10);
+            } else {
+                question.setVoteCount(question.getVoteCount() + 1);
+                question.getUser().setReputation(question.getUser().getReputation() + 5);
+            }
+
+            existingVote.setVoteType(newVoteType);
+            voteRepository.save(existingVote);
+        } else {
+            Vote newVote = Vote.builder()
+                    .user(currentUser)
+                    .question(question)
+                    .voteType(newVoteType)
+                    .build();
+
+            voteRepository.save(newVote);
         }
 
-        Vote vote = Vote.builder()
-                .user(currentUser)
-                .question(question)
-                .voteType(voteType)
-                .build();
-
-        voteRepository.save(vote);
-
-        updateReputation(question.getUser(), voteType);
+        if (newVoteType == VoteType.UP) {
+            question.setVoteCount(question.getVoteCount() + 1);
+            question.getUser().setReputation(question.getUser().getReputation() + 10);
+        } else {
+            question.setVoteCount(question.getVoteCount() - 1);
+            question.getUser().setReputation(question.getUser().getReputation() - 5);
+        }
     }
+
 
     @Override
     public void voteAnswer(Long answerId, VoteType voteType) {

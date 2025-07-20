@@ -2,6 +2,7 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.*;
 
+import com.stackclone.stackoverflow_clone.enums.VoteType;
 import com.stackclone.stackoverflow_clone.service.*;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class QuestionController {
     private final AnswerService answerService;
     private final QuestionViewService questionViewService;
     private final CommentService commentService;
+    private final VoteService voteService;
 
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
@@ -110,6 +112,18 @@ public class QuestionController {
         model.addAttribute("questions", userQuestions);
 
         return HOME_VIEW;
+    }
+
+    @PostMapping("/upvote/{id}")
+    public String upvoteQuestion(@PathVariable Long id) {
+        voteService.voteQuestion(id, VoteType.UP);
+        return "redirect:/questions/" + id;
+    }
+
+    @PostMapping("/downvote/{id}")
+    public String downvoteQuestion(@PathVariable Long id) {
+        voteService.voteQuestion(id, VoteType.DOWN);
+        return "redirect:/questions/" + id;
     }
 
 }

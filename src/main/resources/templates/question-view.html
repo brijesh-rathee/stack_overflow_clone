@@ -93,16 +93,25 @@
         </div>
 
         <div class="vote-box">
-            <form th:action="@{'/questions/upvote/' + ${question.id}}" method="post">
-                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" th:disabled="${#authentication.name == null}">▲</button>
-            </form>
-            <div th:text="${question.votes}">0</div>
-            <form th:action="@{'/questions/downvote/' + ${question.id}}" method="post">
-                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" th:disabled="${#authentication.name == null}">▼</button>
-            </form>
+            <div>
+                <!-- Upvote -->
+                <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
+                    <input type="hidden" name="voteType" value="UP" />
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit">⬆️</button>
+                </form>
+
+                <div th:text="${question.voteCount}">0</div>
+
+                <!-- Downvote -->
+                <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
+                    <input type="hidden" name="voteType" value="DOWN" />
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit">⬇️</button>
+                </form>
+            </div>
         </div>
+
 
         <div class="content-box">
             <p th:utext="${question.content}">Question content goes here</p>

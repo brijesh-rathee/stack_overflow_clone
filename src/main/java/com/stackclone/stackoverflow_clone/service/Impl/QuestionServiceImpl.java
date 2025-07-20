@@ -78,6 +78,12 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findAll(pageable);
     }
 
+    @Override
+    public void saveQuestion(Question question) {
+        questionRepository.save(question);
+    }
+
+
 }
 
 
