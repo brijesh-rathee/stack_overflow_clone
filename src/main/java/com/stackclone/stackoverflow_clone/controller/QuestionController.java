@@ -2,14 +2,20 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
 
+import com.stackclone.stackoverflow_clone.entity.Tag;
+import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 
+import com.stackclone.stackoverflow_clone.service.QuestionViewService;
+import com.stackclone.stackoverflow_clone.service.TagService;
+import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -18,6 +24,9 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final TagService tagService;
+    private final UserService userService;
+    private final QuestionViewService questionViewService;
 
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
@@ -25,13 +34,23 @@ public class QuestionController {
     private static final String REDIRECT_HOME_VIEW = "redirect:/questions/";
 
     @GetMapping("/ask")
-    public String showAskQuestionForm() {
+    public String showAskQuestionForm(Model model) {
+        Question question = new Question();
+
+        model.addAttribute("question", question);
+        model.addAttribute("tags", tagService.getAllTags());
+
         return QUESTION_VIEW;
     }
 
     @GetMapping("/{id}")
-    public String getQuestion(@PathVariable Long id, Model model) {
+    public String getQuestion(@PathVariable Long id, Model model, Principal principal) {
         Question currentQuestion = questionService.getQuestionById(id);
+
+        if (principal != null) {
+            User user = userService.getLoggedInUser();
+            questionViewService.recordView(user, currentQuestion);
+        }
         model.addAttribute("question", currentQuestion);
 
         return QUESTION_INFO_VIEW;
@@ -39,9 +58,22 @@ public class QuestionController {
 
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question) {
+        User user = userService.getLoggedInUser();
+        question.setUser(user);
         questionService.createQuestion(question);
 
         return REDIRECT_HOME_VIEW;
+    }
+
+    @GetMapping("/update/{id}")
+    public String showEditForm (@PathVariable Long id, Model model) {
+        Question question = questionService.getQuestionById(id);
+        List<Tag> tags = tagService.getAllTags();
+
+        model.addAttribute("question", question);
+        model.addAttribute("tags", tags);
+
+        return "";
     }
 
     @PostMapping("/update/{id}")
