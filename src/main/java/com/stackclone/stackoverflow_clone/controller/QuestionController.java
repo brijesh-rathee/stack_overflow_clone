@@ -72,8 +72,6 @@ public class QuestionController {
 
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question, @RequestParam List<Long> tagIds ) {
-        User user = userService.getLoggedInUser();
-        question.setUser(user);
         questionService.createQuestion(question, tagIds);
 
         return REDIRECT_HOME_VIEW;
