@@ -7,46 +7,115 @@
     <title>Tags Page</title>
     <style>
         .tag-container {
-            max-width: 900px;
-            margin: 40px auto;
             padding: 0 20px;
         }
 
-        .tag-container h1 {
-            font-size: 2rem;
+        .top-section {
+            margin-bottom: 30px;
+        }
+
+        .top-section h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
             margin-bottom: 10px;
         }
 
-        .tag-container p {
-            font-size: 1rem;
+        .top-section p {
+            font-size: 1.2rem;
             margin-bottom: 20px;
             color: #555;
         }
 
+        .bottom-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .filters {
+            margin-left: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filters span {
+            background-color: #f2f2f2;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .tags-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
         .tag-box {
-            display: inline-block;
             padding: 8px 14px;
             background-color: #e1ecf4;
             color: #39739d;
-            margin: 6px;
             border-radius: 4px;
             font-size: 14px;
+            text-align: center;
         }
-
     </style>
 </head>
 <body>
 <section layout:fragment="content">
     <div class="tag-container">
-        <h1>Tags</h1>
-        <p>
-            A tag is a keyword or label that categorizes your question with other, similar questions.
-            Using the right tags makes it easier for others to find and answer your question.
-        </p>
 
-        <div class="tags-list" th:each="tag : ${tags}">
-            <span class="tag-box" th:text="${tag.name}">Tag Name</span>
+        <div class="top-section">
+            <h1>Tags</h1>
+            <p>
+                A tag is a keyword or label that categorizes your question with other, similar questions.
+                Using the right tags makes it easier for others to find and answer your question.
+            </p>
         </div>
+
+        <div class="bottom-section">
+
+            <div class="bottom-header">
+                <div class="search-box">
+                    <input type="text" placeholder="Search tags..." />
+                </div>
+                <div class="filters">
+                    <span>Popular</span>
+                    <span>Newest</span>
+                    <span>Trending</span>
+                    <span>Alphabetical</span>
+                </div>
+            </div>
+
+            <div class="tags-grid" th:each="tag : ${tags}">
+                <div class="tag-box" th:text="${tag.name}">Tag Name</div>
+            </div>
+
+        </div>
+
     </div>
 </section>
 </body>

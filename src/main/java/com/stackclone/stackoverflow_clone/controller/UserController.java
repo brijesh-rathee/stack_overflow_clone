@@ -58,7 +58,7 @@ public class UserController {
         List<User> aLlUsers = userService.getAllUsers();
         model.addAttribute("allUsers",aLlUsers);
 
-        return "";
+        return "user-page";
     }
 
     @GetMapping("/edit/{userId}")
