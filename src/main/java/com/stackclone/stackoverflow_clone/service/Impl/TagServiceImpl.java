@@ -3,7 +3,9 @@ package com.stackclone.stackoverflow_clone.service.Impl;
 import com.stackclone.stackoverflow_clone.entity.Tag;
 import com.stackclone.stackoverflow_clone.repository.TagRepository;
 import com.stackclone.stackoverflow_clone.service.TagService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +53,10 @@ public class TagServiceImpl implements TagService {
                 .orElseThrow(() -> new RuntimeException("Tag not Found"));
 
         return tag;
+    }
+
+    @Override
+    public List<Tag> getTagsByIds(List<Long> tagIds) {
+        return tagRepository.findAllById(tagIds);
     }
 }

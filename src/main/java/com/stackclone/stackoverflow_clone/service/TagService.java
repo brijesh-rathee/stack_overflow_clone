@@ -14,4 +14,6 @@ public interface TagService {
     void deleteTag(Long id);
 
     Tag getTagById(Long id);
+
+    List<Tag> getTagsByIds(List<Long> tagIds);
 }

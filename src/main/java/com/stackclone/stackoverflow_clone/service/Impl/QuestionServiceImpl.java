@@ -1,11 +1,14 @@
 package com.stackclone.stackoverflow_clone.service.Impl;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.Tag;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.QuestionRepository;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 
+import com.stackclone.stackoverflow_clone.service.TagService;
 import com.stackclone.stackoverflow_clone.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +26,7 @@ import java.util.Optional;
 public class QuestionServiceImpl implements QuestionService {
 
     private final UserService userService;
+    private final TagService tagService;
 
     private final QuestionRepository questionRepository;
 
@@ -34,9 +39,11 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.save(question);
     }
 
-    public void createQuestion(Question question) {
+    public void createQuestion(Question question,List<Long> tagIds) {
         User loggedInUser = userService.getLoggedInUser();
+        List<Tag> tags = tagService.getTagsByIds(tagIds);
         question.setUser(loggedInUser);
+        question.setTags(new HashSet<>(tags));
 
         questionRepository.save(question);
     }

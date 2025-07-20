@@ -46,6 +46,21 @@
         .ask-question-form button:hover {
             background-color: #eee;
         }
+        .ask-question-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        .ask-question-form select[multiple] {
+            height: auto;
+            min-height: 100px;
+        }
+
     </style>
 </head>
 
@@ -60,6 +75,15 @@
 
         <label for="content">Description:</label>
         <textarea name="content" id="content" rows="6" required></textarea>
+
+        <label for="tags">Tags:</label>
+        <select name="tagIds" id="tags" multiple>
+            <option th:each="tag : ${tags}"
+                    th:value="${tag.id}"
+                    th:text="${tag.name}">
+            </option>
+        </select>
+
 
         <button type="submit">Submit Question</button>
     </form>

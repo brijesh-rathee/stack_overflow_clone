@@ -31,7 +31,7 @@ public class QuestionController {
     private static final String HOME_VIEW = "home-page";
     private static final String QUESTION_VIEW = "question-page";
     private static final String QUESTION_INFO_VIEW = "question-view";
-    private static final String REDIRECT_HOME_VIEW = "redirect:/questions/";
+    private static final String REDIRECT_HOME_VIEW = "redirect:/";
 
     @GetMapping("/ask")
     public String showAskQuestionForm(Model model) {
@@ -57,10 +57,10 @@ public class QuestionController {
     }
 
     @PostMapping("/submit")
-    public String createQuestion(@ModelAttribute Question question) {
+    public String createQuestion(@ModelAttribute Question question, @RequestParam List<Long> tagIds ) {
         User user = userService.getLoggedInUser();
         question.setUser(user);
-        questionService.createQuestion(question);
+        questionService.createQuestion(question, tagIds);
 
         return REDIRECT_HOME_VIEW;
     }
