@@ -7,7 +7,6 @@ import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,5 +34,18 @@ public class HomeController {
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
 
         return HOME_VIEW;
+    }
+
+    @GetMapping("/questionslist")
+    public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "5") int size,
+                                    Model model){
+        Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
+        model.addAttribute("questions", paginatedQuestions.getContent());
+        model.addAttribute("totalQuestions",paginatedQuestions.getTotalElements());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
+
+        return "questionslistpage";
     }
 }

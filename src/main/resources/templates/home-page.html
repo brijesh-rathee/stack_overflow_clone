@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
     <title>Stack Overflow Clone</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
              --header-height: 60px;
@@ -47,14 +48,13 @@
              gap: 30px;
          }
 
-         .logo a {
-             font-size: 1.8rem;
-             color: var(--text-dark);
-             text-decoration: none;
-             span{
-                font-weight: bold;
-             }
-         }
+         .logo img {
+            height: 200px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
 
          .nav-links ul {
              list-style: none;
@@ -220,6 +220,25 @@
              margin-bottom: 20px;
              border-radius: 6px;
          }
+      .auth-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .auth-buttons .profile-icon {
+            font-size: 24px; /* Increased icon size */
+            color: var(--text-dark);
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .auth-buttons .profile-icon:hover {
+            background-color: #D9D9D9;
+            color: black;
+        }
 
 
     </style>
@@ -229,14 +248,14 @@
 <header class="top-nav">
     <div class="nav-left">
         <div class="logo">
-            <a th:href="@{/}">stack<span>overflow</span></a>
+            <img src="https://imgs.search.brave.com/laSkhqapQSNsKJePEnNSPhgzKWy1Hkv_lXY-W3K10qY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nby53aW5lL2Ev/bG9nby9TdGFja19P/dmVyZmxvdy9TdGFj/a19PdmVyZmxvdy1M/b2dvLndpbmUuc3Zn" alt="logo">
         </div>
         <nav class="nav-links">
-            <ul>
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/about}">About</a></li>
-                <li><a th:href="@{/contact}">Contact</a></li>
-            </ul>
+<!--            <ul>-->
+<!--                <li><a th:href="@{/}">Home</a></li>-->
+<!--                <li><a th:href="@{/about}">About</a></li>-->
+<!--                <li><a th:href="@{/contact}">Contact</a></li>-->
+<!--            </ul>-->
         </nav>
     </div>
 
@@ -250,10 +269,10 @@
             <a th:href="@{/auth/signup}" class="btn">Sign Up</a>
         </div>
         <div class="auth-buttons" sec:authorize="isAuthenticated()">
-            <a th:if="${user != null}" th:href="@{'/users/' + ${user.id}}" class="btn btn-primary">
-                View Profile
+            <a th:href="@{/users/{userId}(userId=${#authentication.principal.id})}" class="profile-icon">
+                <i class="fa-regular fa-user"></i>
             </a>
-            <form th:action="@{/logout}" method="post">
+            <form th:action="@{/logout}" method="post" style="display:inline;">
                 <button type="submit" class="btn">Logout</button>
             </form>
         </div>
@@ -266,8 +285,9 @@
         <ul>
             <li><a th:href="@{/}">Home</a></li>
             <li><a th:href="@{/tags}">Tags</a></li>
-            <li><a th:href="@{/users}">Users</a></li>
+            <li><a th:href="@{/users/all}">Users</a></li>
             <li><a th:href="@{/companies}">Companies</a></li>
+            <li><a th:href="@{/questionslist}">Questions</a></li>
         </ul>
     </aside>
 

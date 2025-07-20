@@ -120,7 +120,7 @@
 <div class="page-container">
     <div class="main">
         <h1>Newest Questions</h1>
-        <p class="subtitle" th:text="''+${totalQuestions}+' questions'">24,214,557 questions</p>
+        <p class="subtitle" th:text="'Total: ' + ${totalQuestions} + ' questions'">24,214,557 questions</p>
 
         <div class="tabs">
             <button class="tab selected">Newest</button>
@@ -134,21 +134,25 @@
         <div class="question-list" th:each="question : ${questions}">
             <div class="stats">
                 <div><strong th:text="${question.votes}">0</strong> votes</div>
-                <div><strong th:text="${question.answers}">0</strong> answers</div>
-                <div><strong th:text="${question.views}">0</strong> views</div>
+                <div><strong th:text="${question.answerCount}">0</strong> answers</div>
+                <div><strong th:text="${question.viewCount}">0</strong> views</div>
             </div>
             <div class="summary">
                 <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">
                     Question Title
                 </a>
-                <p class="excerpt" th:text="${question.excerpt}">Question excerpt here...</p>
+                <p class="excerpt" th:text="${question.content != null ? #strings.abbreviate(question.content, 100) : 'No content'}">
+                    Question excerpt...
+                </p>
                 <div class="tags-and-user">
-                    <div class="tags">
-                        <span th:each="tag : ${question.tags}" class="tag" th:text="${tag}">java</span>
+                    <div class="tags" th:if="${question.tags != null and !question.tags.empty}">
+                        <span th:each="tag : ${question.tags}" class="tag" th:text="${tag.name}">java</span>
                     </div>
-                    <div class="user-info">
-                        <span th:text="${question.username}">username</span>
-                        <span th:text="${question.askedTime}">asked 2 mins ago</span>
+                    <div class="user-info" th:if="${question.user != null}">
+                        <span th:text="${question.user.username}">username</span>
+                        <span th:text="${question.createdAt != null ? #temporals.format(question.createdAt, 'dd MMM yyyy') : ''}">
+                            asked 2 mins ago
+                        </span>
                     </div>
                 </div>
             </div>

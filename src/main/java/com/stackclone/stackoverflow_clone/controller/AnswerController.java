@@ -2,7 +2,7 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Question;
-import com.stackclone.stackoverflow_clone.service.Impl.AnswerServiceImpl;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/answers")
 public class AnswerController {
 
-    private final AnswerServiceImpl answerService;
+    private final AnswerService answerService;
     private final QuestionService questionService;
     private final UserService userService;
 
@@ -27,15 +27,21 @@ public class AnswerController {
         model.addAttribute("allAnswer",answerList);
         return "";
     }
+
     @GetMapping("/edit/{id}")
     public String updateAnswerForm(@PathVariable Long answerId, Model model){
         Answer answer = answerService.getAnswerById(answerId);
+
         model.addAttribute(answer);
+
         return "";
     }
+
     @PostMapping("/save/{answerId}")
     public String saveUpdatedAnswer(@ModelAttribute("answer") Answer answer,@PathVariable Long answerId){
+
         answerService.updateAnswer(answer,answerId);
+
         return "";
     }
 
@@ -54,12 +60,16 @@ public class AnswerController {
         answerService.createAnswer(answer);
         return "";
     }
+
     @GetMapping("/{answerId}")
     public String getAnswerById(@PathVariable Long answerId,Model model){
         Answer answer = answerService.getAnswerById(answerId);
+
         model.addAttribute("answer",answer);
+
         return "";
     }
+
     @PostMapping("/{answerId}/delete")
     public void deleteAnswer(@PathVariable Long answerId){
         answerService.deleteAnswer(answerId);

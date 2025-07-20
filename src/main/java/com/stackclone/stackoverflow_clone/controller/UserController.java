@@ -24,7 +24,7 @@ public class UserController {
 
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
-    @GetMapping("/{userid}")
+    @GetMapping("/{userId}")
     public String viewUserById(@PathVariable Long userId, Model model){
         User user = userService.getUserById(userId);
         model.addAttribute("user",user);
@@ -58,7 +58,7 @@ public class UserController {
         List<User> aLlUsers = userService.getAllUsers();
         model.addAttribute("allUsers",aLlUsers);
 
-        return "";
+        return "user-page";
     }
 
     @GetMapping("/edit/{userId}")

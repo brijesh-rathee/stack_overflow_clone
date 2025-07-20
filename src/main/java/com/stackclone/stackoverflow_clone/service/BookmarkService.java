@@ -1,10 +1,15 @@
 package com.stackclone.stackoverflow_clone.service;
 
+import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
+
+import java.util.List;
 
 public interface BookmarkService {
 
-    void bookmark(Long questionId, User user);
+    void toggleBookmark(User user, Question question);
 
-    void removeBookmark(Long questionId, User currentUser);
+    boolean isBookmarked(User user, Question question);
+
+    List<Question> getBookmarkedQuestion(User user);
 }
