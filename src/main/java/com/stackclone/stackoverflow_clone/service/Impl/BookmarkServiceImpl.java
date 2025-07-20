@@ -9,6 +9,8 @@ import com.stackclone.stackoverflow_clone.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,30 +18,38 @@ import java.util.Optional;
 public class BookmarkServiceImpl implements BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
-    private final QuestionRepository questionRepository;
 
-    public void bookmark(Long questionId, User user) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new RuntimeException("Question not found"));
+    @Override
+    public void toggleBookmark(User user, Question question) {
+        Bookmark bookmark = bookmarkRepository.findByUserAndQuestion(user, question)
+                .orElse(null);
 
-        boolean alreadyBookmarked = bookmarkRepository.existsByUserAndQuestion(user, question);
+        if (bookmark != null) {
+            bookmarkRepository.delete(bookmark);
+        } else {
+            Bookmark newBookmark = Bookmark.builder()
+                    .user(user)
+                    .question(question)
+                    .build();
 
-        if (!alreadyBookmarked) {
-            Bookmark bookmark = new Bookmark();
-            bookmark.setUser(user);
-            bookmark.setQuestion(question);
             bookmarkRepository.save(bookmark);
         }
     }
 
-    public void removeBookmark(Long questionId, User user) {
+    @Override
+    public boolean isBookmarked(User user, Question question) {
+        return bookmarkRepository.findByUserAndQuestion(user, question).isPresent();
+    }
 
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new RuntimeException("Question not found"));
+    @Override
+    public List<Question> getBookmarkedQuestion(User user) {
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
+        List<Question> questions = new ArrayList<>();
 
-        Optional<Bookmark> bookmarkOpt = bookmarkRepository.findByUserAndQuestion(user, question);
-        if (bookmarkOpt.isPresent()) {
-            bookmarkRepository.delete(bookmarkOpt.get());
+        for (Bookmark bookmark : bookmarks) {
+            questions.add(bookmark.getQuestion());
         }
+
+        return questions;
     }
 }
