@@ -1,163 +1,121 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{home-page}">
 <head>
-    <title>Newest Questions</title>
+    <meta charset="UTF-8">
+    <title>All Questions</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f8f9f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        .page-container {
-            max-width: 800px;
-            margin: 20px auto;
+            background-color: #f8f9fa;
             padding: 20px;
         }
 
-        .main {
-            width: 100%;
+        .questions-container {
+            max-width: 900px;
+            margin: auto;
         }
 
-        h1 {
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: #6a737c;
+        .question-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            background: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .tab.selected {
-            background: #e3ecf7;
-            border-color: #379fef;
-            font-weight: bold;
-        }
-
-        .badge {
-            background-color: #0077cc;
-            color: white;
-            border-radius: 10px;
-            padding: 2px 8px;
-            font-size: 0.75em;
-        }
-
-        .filter-btn {
-            margin-left: auto;
-            padding: 6px 12px;
-            background: #e1ecf4;
-            border: 1px solid #b3d3ea;
-            border-radius: 5px;
-        }
-
-        .question-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .stats {
-            float: left;
-            width: 100px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #6a737c;
-        }
-
-        .summary {
-            margin-left: 110px;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #6c757d;
         }
 
         .question-title {
-            font-size: 1.1rem;
-            color: #0074cc;
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
             text-decoration: none;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .question-title:hover {
+            text-decoration: underline;
         }
 
         .excerpt {
-            font-size: 0.9em;
-            color: #3b4045;
-            margin: 5px 0;
+            color: #333;
+            margin-bottom: 10px;
         }
 
-        .tags-and-user {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
+        .tags {
+            margin-bottom: 10px;
         }
 
-        .tags .tag {
-            background: #e1ecf4;
+        .tag {
+            background-color: #e1ecf4;
             color: #39739d;
-            padding: 5px 8px;
+            border: 1px solid #d0e3f1;
+            border-radius: 3px;
+            padding: 3px 6px;
+            font-size: 12px;
             margin-right: 5px;
-            border-radius: 4px;
-            font-size: 0.8em;
+            display: inline-block;
         }
 
         .user-info {
-            font-size: 0.75em;
-            color: #6a737c;
+            font-size: 13px;
+            color: #555;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eaeaea;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-<div class="page-container">
-    <div class="main">
-        <h1>Newest Questions</h1>
-        <p class="subtitle" th:text="'Total: ' + ${totalQuestions} + ' questions'">24,214,557 questions</p>
+<section layout:fragment="content">
+<div class="questions-container">
+    <h1>All Questions</h1>
 
-        <div class="tabs">
-            <button class="tab selected">Newest</button>
-            <button class="tab">Active</button>
-            <button class="tab">Bountied <span class="badge">35</span></button>
-            <button class="tab">Unanswered</button>
-            <button class="filter-btn">Filter</button>
+    <div th:each="question : ${questions}" class="question-box">
+
+        <div class="stats">
+            <div><strong th:text="${question.votes != null ? question.votes : 0}">0</strong> votes</div>
+            <!--<div><strong th:text="${question.answerCount != null ? question.answerCount : 0}">0</strong> answers</div>-->
+            <div><strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong> views</div>
         </div>
 
-        <!-- Questions List -->
-        <div class="question-list" th:each="question : ${questions}">
-            <div class="stats">
-                <div><strong th:text="${question.votes}">0</strong> votes</div>
-                <div><strong th:text="${question.answerCount}">0</strong> answers</div>
-                <div><strong th:text="${question.viewCount}">0</strong> views</div>
-            </div>
-            <div class="summary">
-                <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">
-                    Question Title
-                </a>
-                <p class="excerpt" th:text="${question.content != null ? #strings.abbreviate(question.content, 100) : 'No content'}">
-                    Question excerpt...
-                </p>
-                <div class="tags-and-user">
-                    <div class="tags" th:if="${question.tags != null and !question.tags.empty}">
-                        <span th:each="tag : ${question.tags}" class="tag" th:text="${tag.name}">java</span>
-                    </div>
-                    <div class="user-info" th:if="${question.user != null}">
-                        <span th:text="${question.user.username}">username</span>
-                        <span th:text="${question.createdAt != null ? #temporals.format(question.createdAt, 'dd MMM yyyy') : ''}">
-                            asked 2 mins ago
-                        </span>
-                    </div>
-                </div>
-            </div>
+        <a class="question-title"
+           th:href="@{'/questions/' + ${question.id}}"
+           th:text="${question.title != null ? question.title : 'Untitled'}">
+            Question Title
+        </a>
+
+        <p class="excerpt"
+           th:text="${question.content != null ? #strings.abbreviate(question.content, 150) : 'No content available'}">
+            Question excerpt...
+        </p>
+
+        <div class="tags" th:if="${question.tags != null}">
+            <span th:each="tag : ${question.tags}" class="tag" th:text="${tag.name != null ? tag.name : 'tag'}">tag</span>
+        </div>
+
+        <div class="user-info">
+            asked by
+            <span th:text="${question.user != null && question.user.username != null ? question.user.username : 'Anonymous'}">Anonymous</span>
+            <span th:text="${question.createdAt != null ? #temporals.format(question.createdAt, 'dd MMM yyyy') : 'recently'}">
+                    recently
+                </span>
         </div>
     </div>
 </div>
+</section>
 </body>
 </html>
