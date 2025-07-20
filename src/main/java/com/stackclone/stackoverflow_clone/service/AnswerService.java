@@ -9,15 +9,15 @@ import java.util.List;
 @Service
 public interface AnswerService {
 
-    public void createAnswer(Answer answer);
+    void createAnswer(Answer answer);
 
-    public void deleteAnswer(Long answerId);
+    void deleteAnswer(Long answerId);
 
-    public List<Answer> getAllAnswersByQuestionId(Long questionId);
+    List<Answer> getAllAnswersByQuestionId(Long questionId);
 
-    public void updateAnswer(Answer answer, Long answerId);
+    void updateAnswer(Answer answer, Long answerId);
 
-    public Answer getAnswerById(Long answerId);
+    Answer getAnswerById(Long answerId);
 
-    public List<Answer> getAnswerByUserId(Long userId);
+    List<Answer> getAnswerByUserId(Long userId);
 }

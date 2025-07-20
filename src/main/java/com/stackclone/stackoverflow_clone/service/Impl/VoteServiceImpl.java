@@ -1,12 +1,16 @@
 package com.stackclone.stackoverflow_clone.service.Impl;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
+import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import com.stackclone.stackoverflow_clone.enums.VoteType;
-import com.stackclone.stackoverflow_clone.repository.AnswerRepository;
 import com.stackclone.stackoverflow_clone.repository.VoteRepository;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
+import com.stackclone.stackoverflow_clone.service.QuestionService;
+import com.stackclone.stackoverflow_clone.service.UserService;
 import com.stackclone.stackoverflow_clone.service.VoteService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,52 +20,63 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService {
 
-    private final AnswerRepository answerRepository;
     private final VoteRepository voteRepository;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
+    private final UserService userService;
 
-    public void upvoteAnswer(Long answerId, User user) {
-        Answer answer = answerRepository.findById(answerId)
-                .orElseThrow(() -> new RuntimeException("Answer not found"));
+    private void updateReputation (User user, VoteType voteType) {
+        int delta = 0;
 
-        Optional<Vote> existingVote = voteRepository.findByUserAndAnswer(user, answer);
-        if (existingVote.isPresent()) {
-            Vote vote = existingVote.get();
-            if (vote.getVoteType() == VoteType.DOWN) {
-                vote.setVoteType(VoteType.UP);
-                voteRepository.save(vote);
-            }
-        } else {
-            Vote vote = new Vote();
-            vote.setUser(user);
-            vote.setAnswer(answer);
-            vote.setVoteType(VoteType.UP);
-            voteRepository.save(vote);
+        if (voteType == VoteType.UP) {
+            delta = 10;
+        } else if (voteType == VoteType.DOWN) {
+            delta = -5;
         }
+
+        user.setReputation(user.getReputation() + delta);
     }
 
-    public void downvoteAnswer(Long answerId, User user) {
-        Answer answer = answerRepository.findById(answerId)
-                .orElseThrow(() -> new RuntimeException("Answer not found"));
+    @Override
+    @Transactional
+    public void voteQuestion(Long questionId, VoteType voteType) {
+        User currentUser = userService.getLoggedInUser();
+        Question question = questionService.getQuestionById(questionId);
 
-        Optional<Vote> existingVote = voteRepository.findByUserAndAnswer(user, answer);
+        Optional<Vote> existingVote = voteRepository.findByUserAndQuestion(currentUser, question);
         if (existingVote.isPresent()) {
-            Vote vote = existingVote.get();
-            if (vote.getVoteType() == VoteType.UP) {
-                vote.setVoteType(VoteType.DOWN);
-                voteRepository.save(vote);
-            }
-        } else {
-            Vote vote = new Vote();
-            vote.setUser(user);
-            vote.setAnswer(answer);
-            vote.setVoteType(VoteType.DOWN);
-            voteRepository.save(vote);
+            throw new IllegalStateException("You have already voted on this question.");
         }
+
+        Vote vote = Vote.builder()
+                .user(currentUser)
+                .question(question)
+                .voteType(voteType)
+                .build();
+
+        voteRepository.save(vote);
+
+        updateReputation(question.getUser(), voteType);
     }
 
-    public long getQuestionIdByAnswerId(Long answerId) {
-        Answer answer = answerRepository.findById(answerId)
-                .orElseThrow(() -> new RuntimeException("Answer not found"));
-        return answer.getQuestion().getId();
+    @Override
+    public void voteAnswer(Long answerId, VoteType voteType) {
+        User currentUser = userService.getLoggedInUser();
+        Answer answer = answerService.getAnswerById(answerId);
+
+        Optional<Vote> existingVote = voteRepository.findByUserAndAnswer(currentUser, answer);
+        if (existingVote.isPresent()) {
+            throw new IllegalStateException("You have already voted on this answer.");
+        }
+
+        Vote vote = Vote.builder()
+                .user(currentUser)
+                .answer(answer)
+                .voteType(voteType)
+                .build();
+
+        voteRepository.save(vote);
+
+        updateReputation(answer.getUser(), voteType);
     }
 }
