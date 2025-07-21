@@ -65,12 +65,18 @@ public class UserController {
         return "";
     }
 
-    @GetMapping("/all")
-    public String viewAllUsers(Model model){
+    @GetMapping
+    public String viewAllUsers(Model model) {
         List<User> aLlUsers = userService.getAllUsers();
-        model.addAttribute("allUsers",aLlUsers);
+        model.addAttribute("allUsers", aLlUsers);
 
         return "user-page";
+    }
+
+    @GetMapping("/search")
+    public String searchUsers(@RequestParam String query, Model model) {
+        model.addAttribute("users", userService.searchBasic(query));
+        return "fragments/user-list :: userList";
     }
 
     @GetMapping("/edit/{userId}")
