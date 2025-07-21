@@ -158,6 +158,25 @@
             margin-top: 5px;
             font-size: 0.85rem;
         }
+        .bookmark-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+         }
+
+    .bookmark-button .star {
+        font-size: 2.2rem; /* Increase size here */
+        color: #ccc;
+        transition: color 0.3s ease;
+    }
+    .bookmark-button .star.filled {
+        color: #f4c150; /* Gold-like color */
+    }
+    .bookmark-button:hover .star {
+        color: #f4c150;
+    }
+
     </style>
 </head>
 <body>
@@ -185,6 +204,15 @@
                     <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <button type="submit">▼</button>
                 </form>
+                <form th:action="@{/bookmarks/{id}/toggle(id=${question.id})}" method="post" style="margin-top: 12px;">
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" th:disabled="${#authentication.name == null}" class="bookmark-button" title="Bookmark this question">
+                        <span th:if="${isBookmarkedByUser}" class="star filled">&#9733;</span> <!-- ★ -->
+                        <span th:unless="${isBookmarkedByUser}" class="star">&#9734;</span>    <!-- ☆ -->
+                    </button>
+                </form>
+
+
             </div>
 
             <div class="content-box">

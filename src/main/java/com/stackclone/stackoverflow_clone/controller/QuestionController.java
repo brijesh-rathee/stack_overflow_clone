@@ -48,12 +48,12 @@ public class QuestionController {
     public String getQuestion(@PathVariable Long id, Model model, Principal principal) {
         Question currentQuestion = questionService.getQuestionById(id);
         int questionScore = voteService.getQuestionScore(currentQuestion);
-        boolean bookmarked = false;
+        boolean isBookmarkedByUser = false;
 
         if (principal != null) {
             User user = userService.getLoggedInUser();
             questionViewService.recordView(user, currentQuestion);
-            bookmarked = bookmarkService.isBookmarked(user, currentQuestion);
+            isBookmarkedByUser = bookmarkService.isBookmarked(user, currentQuestion);
         }
 
         List<Answer> answers = answerService.getAllAnswersByQuestionId(id);
@@ -71,6 +71,7 @@ public class QuestionController {
         model.addAttribute("questionScore", questionScore);
         model.addAttribute("answerScores", answerScores);
         model.addAttribute("questionComments",comments);
+        model.addAttribute("isBookmarkedByUser", isBookmarkedByUser);
         model.addAttribute("answerCommentsMap", answerCommentsMap);
         model.addAttribute("newAnswer", new Answer());
 

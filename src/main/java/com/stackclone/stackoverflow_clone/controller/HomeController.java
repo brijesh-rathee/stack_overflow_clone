@@ -56,8 +56,17 @@ public class HomeController {
                                     Model model){
         Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
         List<Tag> tags = tagService.getAllTags();
+        List<Question> questions = paginatedQuestions.getContent();
+
+        Map<Long, Integer> answerCounts = new HashMap<>();
+        for (Question question : questions) {
+            int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
+            answerCounts.put(question.getId(), count);
+        }
+
         model.addAttribute("questions", paginatedQuestions.getContent());
         model.addAttribute("tags",tags);
+        model.addAttribute("answerCounts", answerCounts);
         model.addAttribute("totalQuestions",paginatedQuestions.getTotalElements());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
