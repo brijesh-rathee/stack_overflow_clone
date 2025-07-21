@@ -1,9 +1,9 @@
 package com.stackclone.stackoverflow_clone.controller;
 
-import com.stackclone.stackoverflow_clone.entity.Badge;
-import com.stackclone.stackoverflow_clone.entity.Bookmark;
-import com.stackclone.stackoverflow_clone.entity.User;
-import com.stackclone.stackoverflow_clone.entity.Vote;
+import com.stackclone.stackoverflow_clone.entity.*;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
+import com.stackclone.stackoverflow_clone.service.BadgeService;
+import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,13 +21,25 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
+    private final BadgeService badgeService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
     @GetMapping("/{userId}")
     public String viewUserById(@PathVariable Long userId, Model model){
         User user = userService.getUserById(userId);
+        long questionCount = user.getQuestions().size();
+        long answerCount = user.getAnswers().size();
+        List<Badge> badges = badgeService.getUserBadges(user);
+
         model.addAttribute("user",user);
+        model.addAttribute("badges", badges);
+        model.addAttribute("questionCount", questionCount);
+        model.addAttribute("answerCount", answerCount);
+        model.addAttribute("followedTags", user.getFollowedTags());
+
 
         return  USER_PROFILE_VIEW;
     }
@@ -74,6 +86,25 @@ public class UserController {
         userService.updateUser(user,userId);
         return "";
     }
+
+    @GetMapping("/{userId}/questions")
+    public String listUserQuestions(@PathVariable Long userId, Model model) {
+        List<Question> questions = questionService.getQuestionsByUser(userId);
+
+        model.addAttribute("questions", questions);
+
+        return "user/questions";
+    }
+
+    @GetMapping("/{userId}/answers")
+    public String listUserAnswers(@PathVariable Long userId, Model model) {
+        List<Answer> answers = answerService.getAnswerByUserId(userId);
+
+        model.addAttribute("answers", answers);
+
+        return "user/answers";
+    }
+
     @GetMapping("/{userId}/bookmarks")
     public String viewUserBookmarks(@PathVariable Long userId, Model model){
         List<Bookmark> allBookMarks = userService.getAllBookMarks(userId);
