@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorate="~{home-page}">
 <head>
     <meta charset="UTF-8">
@@ -222,7 +222,7 @@
                     <span th:each="tag : ${question.tags}" th:text="${tag.name}">tag</span>
                 </div>
 
-                <div class="action-links" th:if="${#authentication.name == question.user.username}">
+                <div class="action-links" sec:authorize="isAuthenticated()">
                     <a th:href="@{/questions/update/{id}(id=${question.id})}">Edit</a> |
                     <form th:action="@{/questions/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
                         <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -297,7 +297,6 @@
                 </div>
             </div>
         </div>
-        <!-- Add/Edit Answer Form -->
         <div class="form-area">
             <label for="answer" th:text="${editMode} ? 'Edit Your Answer' : 'Your Answer'"></label>
             <form th:action="@{'/answers/save/' + ${question.id}}" method="post" th:object="${newAnswer}">
