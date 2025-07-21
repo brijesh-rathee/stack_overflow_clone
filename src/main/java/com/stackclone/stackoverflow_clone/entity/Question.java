@@ -22,11 +22,17 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "question_id", unique = true)
+    private Long questionId;
+
     @Column(name = "title", nullable = false, columnDefinition = "TEXT")
     private String title;
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    @Column(name="scores")
+    private int scores;
 
     @Column(name = "link", columnDefinition = "TEXT")
     private String link;
@@ -39,6 +45,9 @@ public class Question {
 
     @Column(name = "view_count", nullable = false)
     private int viewCount = 0;
+
+    @Column(name = "votes")
+    private int voteCount = 0;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

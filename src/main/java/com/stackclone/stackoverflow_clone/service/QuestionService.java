@@ -21,4 +21,5 @@ public interface QuestionService {
 
     Page<Question> getPaginatedQuestions(int page, int size);
 
+    void saveQuestion(Question question);
 }

@@ -160,6 +160,9 @@
              overflow-y: auto;
              margin-bottom: var(--footer-height);
              color: var(--text-dark);
+             h1{
+                font-size: 2rem;
+             }
          }
 
          .sec-container{
@@ -175,11 +178,11 @@
 
          .content-header {
              h1{
-                font-size: 2rem;
+                font-size: 2.5rem;
                 font-weight: bold;
              }
              p{
-                font-size: 1.1rem;
+                font-size: 1.5rem;
              }
          }
 
@@ -268,7 +271,7 @@
         </div>
         <div class="auth-buttons" sec:authorize="!isAuthenticated()">
             <a th:href="@{/auth/login}" class="btn">Login</a>
-            <a th:href="@{/auth/signup}" class="btn">Sign Up</a>
+            <a th:href="@{/auth/signup}" class="btn">SignUp</a>
         </div>
         <div class="auth-buttons" sec:authorize="isAuthenticated()">
             <a th:href="@{/users/{userId}(userId=${#authentication.principal.id})}" class="profile-icon">
@@ -294,6 +297,7 @@
     </aside>
 
     <main class="content" >
+
         <section class="sec-container" layout:fragment="content">
             <div class="content-header" sec:authorize="!isAuthenticated()">
                 <h1>Recently Active Questions</h1>
@@ -306,6 +310,7 @@
                 </div>
                 <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
             </div>
+            <h1>Interesting posts for you</h1>
             <div class="question-card" th:each="question : ${questions}">
                 <h2 th:text="${question.title}">Question Title</h2>
                 <p th:text="${question.content}">Question description...</p>
