@@ -16,12 +16,12 @@
 
         .top-section h1 {
             font-size: 2.5rem;
-            font-weight: 400;
+            font-weight: 500;
             margin-bottom: 10px;
         }
 
         .top-section p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 20px;
             color: #555;
         }
@@ -70,17 +70,39 @@
 
         .tags-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
         }
 
         .tag-box {
-            padding: 8px 14px;
-            background-color: #e1ecf4;
-            color: #39739d;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
+            background-color: #F5F5F5;
+            border: 1px solid #D9D9D9;
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tag-name {
+            background-color: #E3E6E8;
+            color: black;
+            font-size: 18px;
+            padding: 5px 8px;
+            border-radius: 3px;
+            width: fit-content;
+            font-weight: 400;
+        }
+
+        .tag-desc {
+            font-size: 15px;
+            color: #3b4045;
+            line-height: 1.4;
+        }
+
+        .tag-count {
+            font-size: 12px;
+            color: #777;
         }
     </style>
 </head>
@@ -88,6 +110,7 @@
 <section layout:fragment="content">
     <div class="tag-container">
 
+        <!-- Header Section -->
         <div class="top-section">
             <h1>Tags</h1>
             <p>
@@ -96,8 +119,8 @@
             </p>
         </div>
 
+        <!-- Search and Filters -->
         <div class="bottom-section">
-
             <div class="bottom-header">
                 <div class="search-box">
                     <input type="text" placeholder="Search tags..." />
@@ -110,12 +133,15 @@
                 </div>
             </div>
 
-            <div class="tags-grid" th:each="tag : ${tags}">
-                <div class="tag-box" th:text="${tag.name}">Tag Name</div>
+            <!-- Tags Grid -->
+            <div class="tags-grid">
+                <div class="tag-box" th:each="tag : ${tags}">
+                    <div class="tag-name" th:text="${tag.name}">Tag Name</div>
+                    <div class="tag-desc" th:text="${tag.description}">Tag description goes here...</div>
+                    <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
+                </div>
             </div>
-
         </div>
-
     </div>
 </section>
 </body>

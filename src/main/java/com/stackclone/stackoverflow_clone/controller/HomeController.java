@@ -55,6 +55,6 @@ public class HomeController {
 
     @GetMapping("/companies")
     public String getCompanies(){
-        return "companiespage";
+        return "company-page";
     }
 }

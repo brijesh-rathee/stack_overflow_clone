@@ -8,10 +8,10 @@
 //@RequiredArgsConstructor
 //public class DataSeederRunner implements CommandLineRunner {
 //
-//    private final com.stackclone.stackoverflow_clone.service.impl.UserSeederService userSeederService;
+//    private  final com.stackclone.stackoverflow_clone.service.impl.TagSeederService userSeederService;
 //
 //    @Override
 //    public void run(String... args) {
-//        userSeederService.runOnce();
+//        userSeederService.fetchAndSaveTags();
 //    }
 //}
