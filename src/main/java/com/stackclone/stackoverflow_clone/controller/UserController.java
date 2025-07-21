@@ -8,6 +8,8 @@ import com.stackclone.stackoverflow_clone.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +33,15 @@ public class UserController {
     public String viewUserById(@PathVariable Long userId, Model model) {
 
         User user = userService.getUserById(userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = auth.getName();
+        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         List<Question> allQuestions   = user.getQuestions();
         List<Answer> allAnswers     = user.getAnswers();
         Set<Tag>  allTags        = user.getFollowedTags();
 
+        model.addAttribute("isCurrentUser", isCurrentUser);
         model.addAttribute("user", user);
         model.addAttribute("reputation", user.getReputation());
         model.addAttribute("badges", badgeService.getUserBadges(user));
