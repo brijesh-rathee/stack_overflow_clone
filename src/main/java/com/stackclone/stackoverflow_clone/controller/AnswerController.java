@@ -2,9 +2,11 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.enums.VoteType;
 import com.stackclone.stackoverflow_clone.service.Impl.AnswerServiceImpl;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
+import com.stackclone.stackoverflow_clone.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -22,6 +26,7 @@ public class AnswerController {
     private final AnswerServiceImpl answerService;
     private final QuestionService questionService;
     private final UserService userService;
+    private final VoteService voteService;
 
     @GetMapping("/user/{userId}")
     public String getAllAnswersByUser(@PathVariable Long userId, Model model){
@@ -30,31 +35,62 @@ public class AnswerController {
 
         return "";
     }
-    @GetMapping("/edit/{answerid}")
-    public String updateAnswerForm(@PathVariable Long answerId, Model model){
-        Answer answer = answerService.getAnswerById(answerId);
-        model.addAttribute("answerForm",answer);
+    @GetMapping("/edit/{id}")
+    public String showEditAnswerForm(@PathVariable("id") Long id, Model model, Principal principal) {
+        Answer answer = answerService.getAnswerById(id);
 
-        return "redirect:/questions/" + answer.getQuestion().getId();
-    }
-    @PostMapping("/edit/{id}")
-    public String editAnswer(@PathVariable Long id,
-                             @ModelAttribute Answer answer,
-                             Principal principal) {
-        answerService.updateAnswer(answer, id);
+        if (!answer.getUser().getUsername().equals(principal.getName())) {
+            throw new SecurityException("Unauthorized");
+        }
 
-        return "redirect:/questions/" + answer.getQuestion().getId();
+        Question question = answer.getQuestion();
+        model.addAttribute("question", question);
+        model.addAttribute("answers", question.getAnswers());
+        model.addAttribute("newAnswer", answer);
+        model.addAttribute("editMode", true);
+
+        int questionScore = voteService.getQuestionScore(question);
+        model.addAttribute("questionScore", questionScore);
+
+        model.addAttribute("questionComments", question.getComments());
+
+        Map<Long, Integer> answerScores = new HashMap<>();
+        for (Answer ans : question.getAnswers()) {
+            int score = voteService.getAnswerScore(ans);
+            answerScores.put(ans.getId(), score);
+        }
+        model.addAttribute("answerScores", answerScores);
+
+        Map<Long, List<?>> answerCommentsMap = new HashMap<>();
+        for (Answer ans : question.getAnswers()) {
+            answerCommentsMap.put(ans.getId(), ans.getComments());
+        }
+        model.addAttribute("answerCommentsMap", answerCommentsMap);
+
+        return "question-view";
     }
 
     @PostMapping("/save/{questionId}")
-    public String saveAnswer(@PathVariable Long questionId, @ModelAttribute("answer") Answer answer){
-        Question question = questionService.getQuestionById(questionId);
-        answer.setQuestion(question);
-        answer.setUser(userService.getLoggedInUser());
-        answerService.createAnswer(answer);
+    public String saveOrUpdateAnswer(@PathVariable Long questionId,
+                                     @ModelAttribute("newAnswer") Answer answer,
+                                     Principal principal) {
+        if (answer.getId() != null) {
+            Answer existing = answerService.getAnswerById(answer.getId());
+            if (!existing.getUser().getUsername().equals(principal.getName())) {
+                throw new SecurityException("Unauthorized");
+            }
+            existing.setContent(answer.getContent());
+            answerService.updateAnswer(existing, existing.getId());
+        } else {
+            Question question = questionService.getQuestionById(questionId);
+            answer.setQuestion(question);
+            answer.setUser(userService.getLoggedInUser());
+            answerService.createAnswer(answer);
+        }
 
         return "redirect:/questions/" + questionId;
     }
+
     @GetMapping("/{answerId}")
     public String getAnswerById(@PathVariable Long answerId,Model model){
         Answer answer = answerService.getAnswerById(answerId);
@@ -69,4 +105,18 @@ public class AnswerController {
 
         return "redirect:/questions/" + questionId;
     }
+    @PostMapping("/{answerId}/upvote")
+    public String upvoteAnswer(@PathVariable Long answerId) {
+        voteService.voteAnswer(answerId, VoteType.UP);
+        Long questionId = answerService.getAnswerById(answerId).getQuestion().getId();
+        return "redirect:/questions/" + questionId;
+    }
+
+    @PostMapping("/{answerId}/downvote")
+    public String downvoteAnswer(@PathVariable Long answerId) {
+        voteService.voteAnswer(answerId, VoteType.DOWN);
+        Long questionId = answerService.getAnswerById(answerId).getQuestion().getId();
+        return "redirect:/questions/" + questionId;
+    }
+
 }

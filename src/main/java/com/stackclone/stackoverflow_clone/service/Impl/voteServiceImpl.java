@@ -14,12 +14,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class VoteServiceImpl implements VoteService {
+public class voteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
     private final QuestionService questionService;
@@ -82,33 +81,31 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
-
     @Override
-    public void voteAnswer(Long answerId, VoteType voteType) {
+    @Transactional
+    public void voteAnswer(Long answerId, VoteType newVoteType) {
         User currentUser = userService.getLoggedInUser();
         Answer answer = answerService.getAnswerById(answerId);
 
-        Optional<Vote> existingVote = voteRepository.findByUserAndAnswer(currentUser, answer);
-        if (existingVote.isPresent()) {
-            throw new IllegalStateException("You have already voted on this answer.");
+        Optional<Vote> existingVoteOpt = voteRepository.findByUserAndAnswer(currentUser, answer);
+
+        if (existingVoteOpt.isPresent()) {
+            Vote existingVote = existingVoteOpt.get();
+
+            if (existingVote.getVoteType() == newVoteType) {
+                return;
+            }
+
+            existingVote.setVoteType(newVoteType);
+            voteRepository.save(existingVote);
+        } else {
+            Vote newVote = Vote.builder()
+                    .user(currentUser)
+                    .answer(answer)
+                    .voteType(newVoteType)
+                    .build();
+            voteRepository.save(newVote);
         }
-
-        Vote vote = Vote.builder()
-                .user(currentUser)
-                .answer(answer)
-                .voteType(voteType)
-                .build();
-
-        voteRepository.save(vote);
-
-        updateReputation(answer.getUser(), voteType);
-    }
-
-    @Override
-    public int getQuestionScore(Question question) {
-        long upvotes = voteRepository.countByQuestionAndVoteType(question, VoteType.UP);
-        long downvotes = voteRepository.countByQuestionAndVoteType(question, VoteType.DOWN);
-        return (int) (upvotes - downvotes);
     }
 
     @Override
@@ -117,4 +114,12 @@ public class VoteServiceImpl implements VoteService {
         long downvotes = voteRepository.countByAnswerAndVoteType(answer, VoteType.DOWN);
         return (int) (upvotes - downvotes);
     }
+
+    @Override
+    public int getQuestionScore(Question currentQuestion) {
+        long upvotes = voteRepository.countByQuestionAndVoteType(currentQuestion, VoteType.UP);
+        long downvotes = voteRepository.countByQuestionAndVoteType(currentQuestion, VoteType.DOWN);
+        return (int) (upvotes - downvotes);
+    }
+
 }

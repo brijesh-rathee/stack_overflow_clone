@@ -13,7 +13,7 @@
 
         .container {
             max-width: 980px;
-            margin: 40px ;
+            margin: 40px;
             padding: 20px;
             background: #fff;
             border-radius: 6px;
@@ -158,7 +158,6 @@
             margin-top: 5px;
             font-size: 0.85rem;
         }
-
     </style>
 </head>
 <body>
@@ -179,7 +178,7 @@
                     <button type="submit">▲</button>
                 </form>
 
-                <div th:text="${question.voteCount}">0</div>
+                <div th:text="${questionScore}">0</div>
 
                 <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
                     <input type="hidden" name="voteType" value="DOWN"/>
@@ -231,7 +230,9 @@
                             <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <button type="submit" th:disabled="${#authentication.name == null}">▲</button>
                         </form>
-                        <div th:text="${answer.votes}">0</div>
+
+                        <span th:text="${answerScores[answer.id] ?: 0}"></span>
+
                         <form th:action="@{'/answers/' + ${answer.id} + '/downvote'}" method="post">
                             <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <button type="submit" th:disabled="${#authentication.name == null}">▼</button>
@@ -268,14 +269,23 @@
                 </div>
             </div>
         </div>
-
-        <!-- Add Answer -->
+        <!-- Add/Edit Answer Form -->
         <div class="form-area">
-            <label for="answer">Your Answer</label>
+            <label for="answer" th:text="${editMode} ? 'Edit Your Answer' : 'Your Answer'"></label>
             <form th:action="@{'/answers/save/' + ${question.id}}" method="post" th:object="${newAnswer}">
-                <textarea id="answer" th:field="*{content}" required th:disabled="${#authentication.name == null}"></textarea>
-                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit" th:disabled="${#authentication.name == null}">Submit Answer</button>
+        <textarea id="answer" th:field="*{content}" required
+                  th:disabled="${#authentication.name == null}"></textarea>
+                <!-- Hidden field for answer ID (only in edit mode) -->
+                <input type="hidden" th:if="${newAnswer.id != null}" th:field="*{id}" />
+                <!-- CSRF token -->
+                <input type="hidden" th:if="${_csrf != null}"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+               <!-- Submit button -->
+                <button type="submit"
+                        th:text="${editMode} ? 'Update Answer' : 'Submit Answer'"
+                        th:disabled="${#authentication.name == null}">
+                </button>
             </form>
         </div>
 
