@@ -77,7 +77,7 @@
         <textarea name="content" id="content" rows="6" required></textarea>
 
         <label for="tags">Tags:</label>
-        <select name="tagIds" id="tags" multiple required>
+        <select name="tagIds[]" id="tags" multiple required>
             <option th:each="tag : ${tags}"
                     th:value="${tag.id}"
                     th:text="${tag.name}">

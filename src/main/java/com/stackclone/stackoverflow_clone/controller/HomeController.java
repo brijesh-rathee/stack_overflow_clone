@@ -14,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,17 +28,27 @@ public class HomeController {
 
     private static final String HOME_VIEW = "home-page";
 
-    @GetMapping({"/","/home"})
+    @GetMapping({"/", "/home"})
     public String showHomePage(@RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(defaultValue = "10") int size,
                                Model model) {
         Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
-        model.addAttribute("questions", paginatedQuestions.getContent());
+        List<Question> questions = paginatedQuestions.getContent();
+
+        Map<Long, Integer> answerCounts = new HashMap<>();
+        for (Question question : questions) {
+            int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
+            answerCounts.put(question.getId(), count);
+        }
+
+        model.addAttribute("questions", questions);
+        model.addAttribute("answerCounts", answerCounts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
 
         return HOME_VIEW;
     }
+
 
     @GetMapping("/questionslist")
     public String getQusestionsList(@RequestParam(defaultValue = "0") int page,

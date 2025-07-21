@@ -182,6 +182,7 @@
             padding: 30px;
             background-color: var(--bg-dark);
             margin-left: var(--sidebar-width);
+             padding-bottom: 6rem;
         }
 
         .content-header {
@@ -240,15 +241,18 @@
         .question-stats {
             min-width: 80px;
             text-align: center;
-            font-size: 13px;
+            font-size: 15px;
+            justify-content: center;
+            align-items: center;
             color: #6a737c;
         }
 
         .question-stats div {
             margin-bottom: 8px;
+             align-items: center;
         }
 
-        .question-stats strong {
+        .question-stats strong  {
             font-size: 15px;
             color: var(--text-dark);
             display: block;
@@ -268,7 +272,7 @@
 
         .question-title {
             color: var(--question-title-color);
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 500;
             margin-bottom: 8px;
             display: block;
@@ -367,7 +371,39 @@
             color: var(--text-dark);
             font-weight: 600;
         }
+        .user-title{
+        font-weight:27px;
+        }
+        .pagination {
+    margin: 30px 0;
+    text-align: center;
+}
 
+.pagination ul {
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
+    gap: 5px;
+}
+
+.pagination a {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--accent-blue);
+    transition: all 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .active-page {
+    background-color: var(--accent-blue);
+    color: white !important;
+    border-color: var(--accent-blue);
+}
     </style>
 </head>
 <body>
@@ -375,9 +411,11 @@
 <header class="top-nav">
     <div class="nav-container">
         <div class="nav-left">
-            <div class="logo">
-                <img src="https://imgs.search.brave.com/laSkhqapQSNsKJePEnNSPhgzKWy1Hkv_lXY-W3K10qY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nby53aW5lL2Ev/bG9nby9TdGFja19P/dmVyZmxvdy9TdGFj/a19PdmVyZmxvdy1M/b2dvLndpbmUuc3Zn" alt="logo">
-            </div>
+           <a th:href="@{/home}">
+               <div class="logo">
+                   <img src="https://imgs.search.brave.com/laSkhqapQSNsKJePEnNSPhgzKWy1Hkv_lXY-W3K10qY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nby53aW5lL2Ev/bG9nby9TdGFja19P/dmVyZmxvdy9TdGFj/a19PdmVyZmxvdy1M/b2dvLndpbmUuc3Zn" alt="logo">
+               </div>
+           </a>
         </div>
         <span style="color:grey;font-size:15px; font-weight:bold;padding:1rem">Products</span>
         <div class="search-container">
@@ -425,7 +463,7 @@
             <div class="content-header" sec:authorize="isAuthenticated()">
                 <div>
                     <div class="header-wave"></div>
-                    <h1>Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
+                    <h1 class="user-title">Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
                     <p>Find answers to your technical questions and help others answer theirs.</p>
                 </div>
                 <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
@@ -441,14 +479,15 @@
                            <span th:text="${question.voteCount != null ? question.voteCount : 0}">0</span>
                             <span>votes</span>
                         </div>
-                       <!-- <div th:if="${question.answerCount != null && question.answerCount > 0}" class="answer-count">
-                            <strong th:text="${question.answerCount}">0</strong>
+                        <div th:if="${answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
+                            <span th:text="${answerCounts[question.id]}">0</span>
                             <span>answers</span>
-                        </div>-->
-                       <!-- <div th:unless="${question.answerCount != null && question.answerCount > 0}">
-                            <strong th:text="${question.answerCount != null ? question.answerCount : 0}">0</strong>
+                        </div>
+                        <div th:unless="${answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                            <span th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</span>
                             <span>answers</span>
-                        </div>-->
+                        </div>
+
                         <div>
                             <span th:text="${question.viewCount != null ? question.viewCount : 0}">0</span>
                             <span>views</span>
@@ -485,7 +524,27 @@
                     </div>
                 </div>
             </div>
+
         </section>
+        <div th:if="${totalPages > 1}" class="pagination">
+            <ul>
+                <!-- Previous -->
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{/(page=${currentPage - 1})}">Previous</a>
+                </li>
+
+                <!-- Current Page (just highlight) -->
+                <li>
+                    <a class="active-page" th:text="${currentPage + 1}">1</a>
+                </li>
+
+                <!-- Next -->
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/(page=${currentPage + 1})}">Next</a>
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
