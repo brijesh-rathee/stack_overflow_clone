@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class QuestionController {
     private final UserService userService;
     private final AnswerService answerService;
     private final QuestionViewService questionViewService;
+    private final BookmarkService bookmarkService;
     private final CommentService commentService;
     private final VoteService voteService;
 
@@ -47,24 +49,29 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String getQuestion(@PathVariable Long id, Model model, Principal principal) {
         Question currentQuestion = questionService.getQuestionById(id);
+        int questionScore = voteService.getQuestionScore(currentQuestion);
+        boolean bookmarked = false;
 
         if (principal != null) {
             User user = userService.getLoggedInUser();
             questionViewService.recordView(user, currentQuestion);
+            bookmarked = bookmarkService.isBookmarked(user, currentQuestion);
         }
 
         List<Answer> answers = answerService.getAllAnswersByQuestionId(id);
         List<Comment> comments = commentService.getCommentByQuestionId(id);
 
-        List<Long> answerIds = new ArrayList<>();
+        Map<Long, Integer> answerScores = new HashMap<>();
         for (Answer answer : answers) {
-            answerIds.add(answer.getId());
+            answerScores.put(answer.getId(), voteService.getAnswerScore(answer));
         }
 
-        Map<Long, List<Comment>> answerCommentsMap = commentService.getCommentsGroupedByAnswerIds(answerIds);
+        Map<Long, List<Comment>> answerCommentsMap = commentService.getCommentsGroupedByAnswerIds(new ArrayList<>(answerScores.keySet()));
 
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers",answers);
+        model.addAttribute("questionScore", questionScore);
+        model.addAttribute("answerScores", answerScores);
         model.addAttribute("questionComments",comments);
         model.addAttribute("answerCommentsMap", answerCommentsMap);
         model.addAttribute("newAnswer", new Answer());

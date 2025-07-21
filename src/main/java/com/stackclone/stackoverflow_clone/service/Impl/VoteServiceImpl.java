@@ -103,4 +103,18 @@ public class VoteServiceImpl implements VoteService {
 
         updateReputation(answer.getUser(), voteType);
     }
+
+    @Override
+    public int getQuestionScore(Question question) {
+        long upvotes = voteRepository.countByQuestionAndVoteType(question, VoteType.UP);
+        long downvotes = voteRepository.countByQuestionAndVoteType(question, VoteType.DOWN);
+        return (int) (upvotes - downvotes);
+    }
+
+    @Override
+    public int getAnswerScore(Answer answer) {
+        long upvotes = voteRepository.countByAnswerAndVoteType(answer, VoteType.UP);
+        long downvotes = voteRepository.countByAnswerAndVoteType(answer, VoteType.DOWN);
+        return (int) (upvotes - downvotes);
+    }
 }
