@@ -29,7 +29,7 @@ public class UserController {
 
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
-    @GetMapping("/{userId}")
+    @GetMapping({"/{userId}", "/{userId}/activity"})
     public String viewUserById(@PathVariable Long userId, Model model) {
 
         User user = userService.getUserById(userId);
@@ -50,10 +50,29 @@ public class UserController {
         model.addAttribute("tags", allTags.stream().limit(5).toList());
         model.addAttribute("questionCount", allQuestions.size());
         model.addAttribute("answerCount",   allAnswers.size());
+        model.addAttribute("activeTab", "activity");
 
         return USER_PROFILE_VIEW;
     }
+    @GetMapping("/{id}/profile")
+    public String getProfilePage(@PathVariable Long id, Model model) {
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("activeTab", "profile");
+        return USER_PROFILE_VIEW;
+    }
 
+    @GetMapping("/{userId}/bookmarks")
+    public String viewUserBookmarks(@PathVariable Long userId, Model model) {
+        User user = userService.getUserById(userId); // Get the user
+        List<Bookmark> allBookMarks = userService.getAllBookMarks(userId); // Get bookmarks
+
+        model.addAttribute("user", user);
+        model.addAttribute("bookmarks", allBookMarks);
+        model.addAttribute("activeTab", "saves");
+
+        return USER_PROFILE_VIEW;
+    }
     @GetMapping("/registerForm")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
@@ -121,12 +140,7 @@ public class UserController {
         return "user/answers";
     }
 
-    @GetMapping("/{userId}/bookmarks")
-    public String viewUserBookmarks(@PathVariable Long userId, Model model){
-        List<Bookmark> allBookMarks = userService.getAllBookMarks(userId);
-        model.addAttribute("bookmarks",allBookMarks);
-        return "";
-    }
+
 
     @GetMapping("/{userId}/allVotes")
     public String viewUserVotes(@PathVariable Long userId, Model model){
