@@ -1,7 +1,9 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.Tag;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
+import com.stackclone.stackoverflow_clone.service.TagService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -12,12 +14,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
     private final QuestionService questionService;
     private final UserService userService;
+    private final TagService tagService;
 
     private static final String HOME_VIEW = "home-page";
 
@@ -38,7 +43,9 @@ public class HomeController {
                                     @RequestParam(defaultValue = "5") int size,
                                     Model model){
         Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
+        List<Tag> tags = tagService.getAllTags();
         model.addAttribute("questions", paginatedQuestions.getContent());
+        model.addAttribute("tags",tags);
         model.addAttribute("totalQuestions",paginatedQuestions.getTotalElements());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());

@@ -14,6 +14,7 @@
 
         .questions-container {
             max-width: 900px;
+            margin: 0 auto;
         }
 
         .question-box {
@@ -71,50 +72,107 @@
             color: #555;
         }
 
-        hr {
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-form select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .filter-form button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
             border: none;
-            border-top: 1px solid #eaeaea;
-            margin: 20px 0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .filter-form button:hover {
+            background-color: #0069d9;
+        }
+
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-form {
+                width: 100%;
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
 <section layout:fragment="content">
-<div class="questions-container">
-    <h1>All Questions</h1>
+    <div class="questions-container">
+        <div class="filter-container">
+            <h1>All Questions</h1>
+            <form method="get" th:action="@{/questions/search}" class="filter-form">
+                <input type="hidden" name="keyword" th:value="${keyword}" /> <!-- hidden input for search keyword -->
 
-    <div th:each="question : ${questions}" class="question-box">
+                <select name="tagId" th:value="${tagId}">
+                    <option value="">All Tags</option>
+                    <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}">Tag</option>
+                </select>
 
-        <div class="stats">
-            <div><strong th:text="${question.votes != null ? question.votes : 0}">0</strong> votes</div>
-            <!--<div><strong th:text="${question.answerCount != null ? question.answerCount : 0}">0</strong> answers</div>-->
-            <div><strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong> views</div>
+                <select name="sort" th:value="${sort}">
+                    <option value="newest">Newest</option>
+                    <option value="views">Most Viewed</option>
+                    <option value="votes">Most Voted</option>
+                </select>
+
+                <button type="submit">Apply Filter</button>
+            </form>
+
         </div>
 
-        <a class="question-title"
-           th:href="@{'/questions/' + ${question.id}}"
-           th:text="${question.title != null ? question.title : 'Untitled'}">
-            Question Title
-        </a>
+        <div th:each="question : ${questions}" class="question-box">
+            <div class="stats">
+                <div><strong th:text="${question.votes != null ? question.votes : 0}">0</strong> votes</div>
+                <div><strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong> views</div>
+            </div>
 
-        <p class="excerpt"
-           th:text="${question.content != null ? #strings.abbreviate(question.content, 150) : 'No content available'}">
-            Question excerpt...
-        </p>
+            <a class="question-title"
+               th:href="@{'/questions/' + ${question.id}}"
+               th:text="${question.title != null ? question.title : 'Untitled'}">
+                Question Title
+            </a>
 
-        <div class="tags" th:if="${question.tags != null}">
-            <span th:each="tag : ${question.tags}" class="tag" th:text="${tag.name != null ? tag.name : 'tag'}">tag</span>
-        </div>
+            <p class="excerpt"
+               th:text="${question.content != null ? #strings.abbreviate(question.content, 150) : 'No content available'}">
+                Question excerpt...
+            </p>
 
-        <div class="user-info">
-            asked by
-            <span th:text="${question.user != null && question.user.username != null ? question.user.username : 'Anonymous'}">Anonymous</span>
-            <span th:text="${question.createdAt != null ? #temporals.format(question.createdAt, 'dd MMM yyyy') : 'recently'}">
+            <div class="tags" th:if="${question.tags != null}">
+                <span th:each="tag : ${question.tags}" class="tag" th:text="${tag.name != null ? tag.name : 'tag'}">tag</span>
+            </div>
+
+            <div class="user-info">
+                asked by
+                <span th:text="${question.user != null && question.user.username != null ? question.user.username : 'Anonymous'}">Anonymous</span>
+                <span th:text="${question.createdAt != null ? #temporals.format(question.createdAt, 'dd MMM yyyy') : 'recently'}">
                     recently
                 </span>
+            </div>
         </div>
     </div>
-</div>
 </section>
 </body>
 </html>

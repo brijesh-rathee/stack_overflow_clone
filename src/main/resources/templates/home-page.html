@@ -261,8 +261,10 @@
 
     <div class="nav-right">
         <div class="search-bar">
-            <input type="text" placeholder="Search..." />
-            <button type="submit">🔍</button>
+            <form th:action="@{/questions/search}" method="get" style="display: flex;" class="search-bar">
+                <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}" />
+                <button type="submit">🔍</button>
+            </form>
         </div>
         <div class="auth-buttons" sec:authorize="!isAuthenticated()">
             <a th:href="@{/auth/login}" class="btn">Login</a>
