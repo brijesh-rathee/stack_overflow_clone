@@ -1,7 +1,9 @@
 package com.stackclone.stackoverflow_clone.entity;
 
 import com.stackclone.stackoverflow_clone.enums.VoteType;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 
 import java.time.LocalDateTime;

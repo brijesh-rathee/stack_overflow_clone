@@ -145,7 +145,7 @@
 
         <div th:each="question : ${questions}" class="question-box">
             <div class="stats">
-                <div><strong th:text="${question.votes != null ? question.votes : 0}">0</strong> votes</div>
+                <div><strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong> votes</div>
                 <div><strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong> views</div>
             </div>
 
