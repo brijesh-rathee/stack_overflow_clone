@@ -119,6 +119,25 @@ public class QuestionController {
         return HOME_VIEW;
     }
 
+    @PostMapping("/{questionId}/accept-answer/{answerId}")
+    public String acceptAnswer(@PathVariable Long questionId, @PathVariable Long answerId, Principal principal) {
+        Question question = questionService.getQuestionById(questionId);
+        Answer answer = answerService.getAnswerById(answerId);
+
+        if (!question.getUser().getUsername().equals(principal.getName())) {
+            return "redirect:/questions/" + questionId;
+        }
+        if (question.getAcceptedAnswer() != null && question.getAcceptedAnswer().getId().equals(answerId)) {
+            question.setAcceptedAnswer(null);
+        } else {
+            question.setAcceptedAnswer(answer);
+        }
+
+        questionService.saveQuestion(question);
+
+        return "redirect:/questions/" + questionId;
+    }
+
     @PostMapping("/upvote/{id}")
     public String upvoteQuestion(@PathVariable Long id) {
         voteService.voteQuestion(id, VoteType.UP);

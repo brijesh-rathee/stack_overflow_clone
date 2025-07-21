@@ -320,7 +320,7 @@
 
         .question-title {
             color: var(--question-title-color);
-            font-size: 16px;
+            font-size: 25px;
             font-weight: 500;
             margin-bottom: 8px;
             display: block;
@@ -333,7 +333,7 @@
 
         .question-title h2 {
             margin: 0;
-            font-size: 16px;
+            font-size: 25px;
             color: inherit;
         }
 
@@ -541,20 +541,15 @@
                                 <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
                                 <span>votes</span>
                             </div>
-                            <div th:if="${answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
-                                <strong th:text="${answerCounts[question.id]}">0</strong>
-                                <span>answers</span>
-                            </div>
-                            <div th:unless="${answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                            <div class="answer-count">
                                 <strong th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
-                                <span>answers</span>
+                                <span><span th:if="${question.acceptedAnswer != null}" style="color: green; font-weight: bold;">✔</span>answers</span>
                             </div>
                             <div>
                                 <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
                                 <span>views</span>
                             </div>
                         </div>
-
                         <div class="question-content">
                             <a th:href="@{/questions/{id}(id=${question.id})}" class="question-title">
                                 <h2 th:text="${question.title}">Question Title</h2>
