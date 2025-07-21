@@ -28,20 +28,24 @@ public class UserController {
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
     @GetMapping("/{userId}")
-    public String viewUserById(@PathVariable Long userId, Model model){
+    public String viewUserById(@PathVariable Long userId, Model model) {
+
         User user = userService.getUserById(userId);
-        long questionCount = user.getQuestions().size();
-        long answerCount = user.getAnswers().size();
-        List<Badge> badges = badgeService.getUserBadges(user);
 
-        model.addAttribute("user",user);
-        model.addAttribute("badges", badges);
-        model.addAttribute("questionCount", questionCount);
-        model.addAttribute("answerCount", answerCount);
-        model.addAttribute("followedTags", user.getFollowedTags());
+        List<Question> allQuestions   = user.getQuestions();
+        List<Answer> allAnswers     = user.getAnswers();
+        Set<Tag>  allTags        = user.getFollowedTags();
 
+        model.addAttribute("user", user);
+        model.addAttribute("reputation", user.getReputation());
+        model.addAttribute("badges", badgeService.getUserBadges(user));
+        model.addAttribute("questions", allQuestions.stream().limit(5).toList());
+        model.addAttribute("answers", allAnswers.stream().limit(5).toList());
+        model.addAttribute("tags", allTags.stream().limit(5).toList());
+        model.addAttribute("questionCount", allQuestions.size());
+        model.addAttribute("answerCount",   allAnswers.size());
 
-        return  USER_PROFILE_VIEW;
+        return USER_PROFILE_VIEW;
     }
 
     @GetMapping("/registerForm")
