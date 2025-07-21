@@ -133,13 +133,16 @@
                 </div>
             </div>
 
-            <!-- Tags Grid -->
             <div class="tags-grid">
-                <div class="tag-box" th:each="tag : ${tags}">
-                    <div class="tag-name" th:text="${tag.name}">Tag Name</div>
-                    <div class="tag-desc" th:text="${tag.description}">Tag description goes here...</div>
-                    <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
-                </div>
+                <a th:each="tag : ${tags}"
+                   th:href="@{/tags/{tagName}(tagName=${tag.name})}"
+                   style="text-decoration: none; color: inherit;">
+                    <div class="tag-box">
+                        <div class="tag-name" th:text="${tag.name}">Tag Name</div>
+                        <div class="tag-desc" th:text="${tag.description}">Tag description goes here...</div>
+                        <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

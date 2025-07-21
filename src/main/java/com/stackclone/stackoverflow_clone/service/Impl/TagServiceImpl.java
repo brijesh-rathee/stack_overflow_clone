@@ -49,8 +49,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagById(Long id) {
-        Tag tag = tagRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tag not Found"));
+        Tag tag = tagRepository.findById(id).orElseThrow();
 
         return tag;
     }
@@ -58,5 +57,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getTagsByIds(List<Long> tagIds) {
         return tagRepository.findAllById(tagIds);
+    }
+
+    public Tag findByName(String name) {
+        return tagRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Tag not found"));
     }
 }

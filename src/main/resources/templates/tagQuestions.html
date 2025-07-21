@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{home-page}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Questions tagged [' + ${tag.name} + ']'">Questions by Tag</title>
+    <style>
+        .questions-container { width: 90%; margin: 0 auto; }
+        .question-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .question-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stats {
+            min-width: 80px;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            color: #6a737c;
+            font-size: 14px;
+            gap: 6px;
+        }
+
+        .stats div {
+            line-height: 1.2;
+        }
+
+        .answer-count {
+            border: 1px solid #5eba7d;
+            border-radius: 4px;
+            color: #5eba7d;
+            padding: 4px 0;
+        }
+
+        .question-title {
+            color: #1da1f2;
+            font-size: 20px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .question-title:hover {
+            text-decoration: underline;
+        }
+
+        .excerpt {
+            color: #3b4045;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .tags {
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: #e1f0fa;
+            color: #39739d;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+        .tag:hover {
+            background-color: #d1e5f1;
+        }
+
+        .user-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6a737c;
+            margin-top: 12px;
+        }
+
+        .username {
+            color: #0077cc;
+            font-weight: 500;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+        .username:hover {
+            text-decoration: underline;
+        }
+
+        .reputation {
+            color: #333;
+        }
+
+        .timestamp {
+            white-space: nowrap;
+            color: #999;
+        }
+
+        .pagination ul {
+            list-style: none;
+            display: flex;
+            gap: 5px;
+            padding-left: 0;
+        }
+
+        .pagination a {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #0077cc;
+        }
+
+        .active-page {
+            font-weight: bold;
+            background-color: #0077cc;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="questions-container">
+        <h1 th:text="'Questions tagged with ' + ${tag.name}">Tagged Questions</h1>
+
+        <div th:if="${questions.isEmpty()}">
+            <p>No questions found for this tag.</p>
+        </div>
+
+        <div th:each="question : ${questions}" class="question-box">
+            <div class="question-container">
+                <div class="stats">
+                    <div>
+                        <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
+                        <div>votes</div>
+                    </div>
+                    <div th:if="${answerCounts[question.id] > 0}" class="answer-count">
+                        <strong th:text="${answerCounts[question.id]}">0</strong>
+                        <div>answers</div>
+                    </div>
+                    <div th:unless="${answerCounts[question.id] > 0}">
+                        <strong th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
+                        <div>answers</div>
+                    </div>
+                    <div>
+                        <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
+                        <div>views</div>
+                    </div>
+                </div>
+
+                <div class="question-content-wrapper" style="flex: 1;">
+                    <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">Question Title</a>
+                    <p class="excerpt" th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content'}">Content</p>
+
+                    <div class="tags">
+                        <a th:each="tag : ${question.tags}"
+                           th:href="@{'/tags/' + ${tag.name}}"
+                           class="tag"
+                           th:text="${tag.name}">tag</a>
+                    </div>
+
+                    <div class="user-info-row">
+                        <div>
+                            <a th:href="@{/users/{userId}(userId=${question.user.id})}"
+                               class="username"
+                               th:text="${question.user.username}">Username</a>
+                            <span th:if="${question.user.reputation}" class="reputation"
+                                  th:text="'• ' + ${question.user.reputation}"> • 0</span>
+                        </div>
+                        <div class="timestamp"
+                             th:if="${question.createdAt}"
+                             th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">timestamp</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${totalPages > 1}" class="pagination">
+            <ul>
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{|/tags/${tag.name}?page=${currentPage - 1}|}">Previous</a>
+                </li>
+
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a th:href="@{|/tags/${tag.name}?page=${i}|}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == currentPage} ? 'active-page'">1</a>
+                </li>
+
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{|/tags/${tag.name}?page=${currentPage + 1}|}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+</body>
+</html>
