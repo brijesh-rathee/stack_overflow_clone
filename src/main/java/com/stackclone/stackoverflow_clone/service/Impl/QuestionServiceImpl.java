@@ -30,13 +30,17 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    public void updateQuestion(Question question,Long questionId) {
+    public void updateQuestion(Question question,Long questionId, List<Long> tagIds) {
         Question existingQuestion = questionRepository.findById(questionId).orElseThrow();
         existingQuestion.setContent(question.getContent());
         existingQuestion.setTitle(question.getTitle());
-        existingQuestion.setTags(question.getTags());
 
-        questionRepository.save(question);
+        if (tagIds != null && !tagIds.isEmpty()) {
+            List<Tag> tags = tagService.getTagsByIds(tagIds);
+            existingQuestion.setTags(new HashSet<>(tags));
+        }
+
+        questionRepository.save(existingQuestion);
     }
 
     public void createQuestion(Question question,List<Long> tagIds) {

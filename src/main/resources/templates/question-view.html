@@ -6,143 +6,217 @@
     <meta charset="UTF-8">
     <title th:text="${question.title}">Question</title>
     <style>
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
         }
+
+        .container {
+            max-width: 980px;
+            margin: 40px ;
+            padding: 20px;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-header {
+            margin-bottom: 10px;
+        }
+
         .title {
             font-size: 1.8rem;
             font-weight: 700;
+            margin-bottom: 5px;
         }
-        .meta, .tags {
-            color: #777;
+
+        .meta {
             font-size: 0.9rem;
+            color: #6c757d;
         }
-        .tags span {
-            background-color: #e1ecf4;
-            color: #39739d;
-            padding: 4px 6px;
-            margin-right: 5px;
-            border-radius: 3px;
-            font-size: 0.85rem;
+
+        .post-box {
+            display: flex;
+            margin-top: 20px;
         }
+
         .vote-box {
-            float: left;
             margin-right: 20px;
             text-align: center;
             font-size: 1.2rem;
         }
-        .vote-box form {
-            margin: 5px 0;
+
+        .vote-box button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
         }
+
+        .vote-box div {
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
         .content-box {
-            overflow: hidden;
+            flex: 1;
         }
+
+        .tags {
+            margin-top: 10px;
+        }
+
+        .tags span {
+            display: inline-block;
+            background-color: #e1ecf4;
+            color: #39739d;
+            padding: 5px 8px;
+            margin: 2px 4px 0 0;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+
         .action-links {
             margin-top: 10px;
+            font-size: 0.85rem;
         }
+
+        .action-links a, .action-links button {
+            color: #0077cc;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-weight: bold;
+        }
+
         .comment-list {
             margin-top: 15px;
+            padding-left: 15px;
+            border-left: 2px solid #e1e1e1;
             font-size: 0.9rem;
-            border-left: 2px solid #eee;
-            padding-left: 10px;
-        }
-        .comment-list li {
-            margin-bottom: 5px;
-        }
-        .answer {
-            margin-top: 40px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
-        }
-        .form-area, .comment-form {
-            margin-top: 20px;
-        }
-        .form-area textarea, .comment-form input[type="text"] {
-            width: 100%;
-            min-height: 100px;
-            padding: 10px;
-        }
-        .form-area label, .comment-form label {
-            font-size: 0.8rem; /* Smaller label for comments and answers */
             color: #444;
-            margin-bottom: 5px;
-            display: block;
         }
-        .form-area button, .comment-form button {
+
+        .comment-form {
             margin-top: 10px;
-            padding: 5px 10px;
-            background-color: #0095ff;
+        }
+
+        .comment-form input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-area {
+            margin-top: 40px;
+        }
+
+        .form-area textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .form-area button, .comment-form button {
+            margin-top: 8px;
+            background-color: #0a95ff;
             color: white;
             border: none;
-            border-radius: 3px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
+
         .form-area button:hover, .comment-form button:hover {
             background-color: #0077cc;
         }
+
+        .answer {
+            border-top: 1px solid #ddd;
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+
+        .nav {
+            margin-top: 30px;
+        }
+
+        .nav a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .answer .meta {
+            margin-top: 5px;
+            font-size: 0.85rem;
+        }
+
     </style>
 </head>
 <body>
 <section layout:fragment="content">
     <div class="container">
+
         <!-- Question Section -->
-        <div>
+        <div class="question-header">
             <div class="title" th:text="${question.title}">Question Title</div>
-            <div class="meta">Asked by <strong th:text="${question.user.username}">Username</strong></div>
+            <div class="meta">Asked by <strong th:text="${question.user.username}">User</strong></div>
         </div>
 
-        <div class="vote-box">
-            <div>
-                <!-- Upvote -->
+        <div class="post-box">
+            <div class="vote-box">
                 <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
-                    <input type="hidden" name="voteType" value="UP" />
-                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit">⬆️</button>
+                    <input type="hidden" name="voteType" value="UP"/>
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit">▲</button>
                 </form>
 
                 <div th:text="${question.voteCount}">0</div>
 
-                <!-- Downvote -->
                 <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
-                    <input type="hidden" name="voteType" value="DOWN" />
-                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit">⬇️</button>
-                </form>
-            </div>
-        </div>
-
-
-        <div class="content-box">
-            <p th:utext="${question.content}">Question content goes here</p>
-            <div class="tags">
-                <span th:each="tag : ${question.tags}" th:text="${tag.name}">tag</span>
-            </div>
-
-            <div class="action-links" th:if="${#authentication.name == question.user.username}">
-                <a th:href="@{/questions/update/{id}(id=${question.id})}">Edit</a> |
-                <form th:action="@{/questions/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
-                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit">Delete</button>
+                    <input type="hidden" name="voteType" value="DOWN"/>
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit">▼</button>
                 </form>
             </div>
 
-            <!-- Question Comments -->
-            <ul class="comment-list" th:if="${questionComments}">
-                <li th:each="comment : ${questionComments}">
-                    <span th:text="${comment.comment}"></span> — <em th:text="${comment.user.username}"></em>
-                </li>
-            </ul>
+            <div class="content-box">
+                <p th:utext="${question.content}">Question content...</p>
 
-            <!-- Add Comment on Question -->
-            <div class="comment-form">
-                <label for="questionComment">Comment:</label>
-                <form th:action="@{/comments/add}" method="post">
-                    <input type="hidden" name="questionId" th:value="${question.id}" />
-                    <input id="questionComment" type="text" name="comment" placeholder="Add a comment" required th:disabled="${#authentication.name == null}" />
-                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" th:disabled="${#authentication.name == null}">Add Comment</button>
-                </form>
+                <div class="tags">
+                    <span th:each="tag : ${question.tags}" th:text="${tag.name}">tag</span>
+                </div>
+
+                <div class="action-links" th:if="${#authentication.name == question.user.username}">
+                    <a th:href="@{/questions/update/{id}(id=${question.id})}">Edit</a> |
+                    <form th:action="@{/questions/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
+                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+
+                <ul class="comment-list" th:if="${questionComments}">
+                    <li th:each="comment : ${questionComments}">
+                        <span th:text="${comment.comment}"></span> — <em th:text="${comment.user.username}"></em>
+                    </li>
+                </ul>
+
+                <div class="comment-form">
+                    <form th:action="@{/comments/add}" method="post">
+                        <input type="hidden" name="questionId" th:value="${question.id}"/>
+                        <input type="text" name="comment" placeholder="Add a comment" required th:disabled="${#authentication.name == null}"/>
+                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" th:disabled="${#authentication.name == null}">Comment</button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -150,65 +224,63 @@
         <div class="answer">
             <h2 th:text="'Answers (' + ${#lists.size(answers)} + ')'">Answers</h2>
 
-            <div th:each="answer : ${answers}" style="margin-bottom:30px;">
-                <div class="vote-box">
-                    <form th:action="@{'/answers/' + ${answer.id} + '/upvote'}" method="post">
-                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" th:disabled="${#authentication.name == null}">▲</button>
-                    </form>
-                    <div th:text="${answer.votes}">0</div>
-                    <form th:action="@{'/answers/' + ${answer.id} + '/downvote'}" method="post">
-                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" th:disabled="${#authentication.name == null}">▼</button>
-                    </form>
-                </div>
-
-                <div class="content-box">
-                    <p th:utext="${answer.content}">Answer content here...</p>
-                    <div class="meta">Answered by <strong th:text="${answer.user.username}">AnswerUser</strong></div>
-
-                    <div class="action-links" th:if="${#authentication.name == answer.user.username}">
-                        <a th:href="@{'/answers/edit/' + ${answer.id}}">Edit</a> |
-                        <form th:action="@{'/answers/' + ${answer.id} + '/delete'}" method="post" style="display:inline;">
-                            <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <button type="submit">Delete</button>
+            <div th:each="answer : ${answers}" style="margin-bottom: 30px;">
+                <div class="post-box">
+                    <div class="vote-box">
+                        <form th:action="@{'/answers/' + ${answer.id} + '/upvote'}" method="post">
+                            <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" th:disabled="${#authentication.name == null}">▲</button>
+                        </form>
+                        <div th:text="${answer.votes}">0</div>
+                        <form th:action="@{'/answers/' + ${answer.id} + '/downvote'}" method="post">
+                            <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" th:disabled="${#authentication.name == null}">▼</button>
                         </form>
                     </div>
 
-                    <!-- Answer Comments -->
-                    <ul class="comment-list" th:if="${answerCommentsMap[answer.id]}">
-                        <li th:each="comment : ${answerCommentsMap[answer.id]}">
-                            <span th:text="${comment.comment}"></span> — <em th:text="${comment.user.username}"></em>
-                        </li>
-                    </ul>
+                    <div class="content-box">
+                        <p th:utext="${answer.content}">Answer content...</p>
+                        <div class="meta">Answered by <strong th:text="${answer.user.username}">User</strong></div>
 
-                    <!-- Add Comment on Answer -->
-                    <div class="comment-form">
-                        <label for="answerComment_${answer.id}">Comment:</label>
-                        <form th:action="@{/comments/add}" method="post">
-                            <input type="hidden" name="answerId" th:value="${answer.id}" />
-                            <input id="answerComment_${answer.id}" type="text" name="comment" placeholder="Add a comment" required th:disabled="${#authentication.name == null}" />
-                            <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <button type="submit" th:disabled="${#authentication.name == null}">Add Comment</button>
-                        </form>
+                        <div class="action-links" th:if="${#authentication.name == answer.user.username}">
+                            <a th:href="@{'/answers/edit/' + ${answer.id}}">Edit</a> |
+                            <form th:action="@{'/answers/' + ${answer.id} + '/delete'}" method="post" style="display:inline;">
+                                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+
+                        <ul class="comment-list" th:if="${answerCommentsMap[answer.id]}">
+                            <li th:each="comment : ${answerCommentsMap[answer.id]}">
+                                <span th:text="${comment.comment}"></span> — <em th:text="${comment.user.username}"></em>
+                            </li>
+                        </ul>
+
+                        <div class="comment-form">
+                            <form th:action="@{/comments/add}" method="post">
+                                <input type="hidden" name="answerId" th:value="${answer.id}"/>
+                                <input type="text" name="comment" placeholder="Add a comment" required th:disabled="${#authentication.name == null}"/>
+                                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" th:disabled="${#authentication.name == null}">Comment</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Add Answer Form -->
+        <!-- Add Answer -->
         <div class="form-area">
-            <label for="answer">Your Answer:</label>
+            <label for="answer">Your Answer</label>
             <form th:action="@{'/answers/save/' + ${question.id}}" method="post" th:object="${newAnswer}">
                 <textarea id="answer" th:field="*{content}" required th:disabled="${#authentication.name == null}"></textarea>
-                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <button type="submit" th:disabled="${#authentication.name == null}">Submit Answer</button>
             </form>
         </div>
 
-        <!-- Navigation -->
-        <div class="nav" style="margin-top:20px;">
-            <a href="/">Back to Home</a>
+        <div class="nav">
+            <a href="/">← Back to Home</a>
         </div>
     </div>
 </section>

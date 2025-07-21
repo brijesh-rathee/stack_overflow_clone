@@ -38,9 +38,7 @@ public class QuestionController {
 
     @GetMapping("/ask")
     public String showAskQuestionForm(Model model) {
-        Question question = new Question();
-
-        model.addAttribute("question", question);
+        model.addAttribute("question", new Question());
         model.addAttribute("tags", tagService.getAllTags());
 
         return QUESTION_VIEW;
@@ -100,9 +98,10 @@ public class QuestionController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateQuestion(@ModelAttribute Question question, @PathVariable Long id) {
-        questionService.updateQuestion(question, id);
-
+    public String updateQuestion(@ModelAttribute Question question,
+                                 @PathVariable Long id,
+                                 @RequestParam List<Long> tagIds) {
+        questionService.updateQuestion(question, id, tagIds);
         return REDIRECT_HOME_VIEW;
     }
 
