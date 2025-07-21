@@ -6,72 +6,145 @@
     <meta charset="UTF-8">
     <title>All Questions</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+        /* Make sure these styles override the base template */
+        .content {
             padding: 20px;
+            width: 100%;
         }
 
         .questions-container {
-            max-width: 1000px;
-
+            width: 90%;
+            margin: 0 auto;
         }
 
+        /* Updated question box to match home page styling */
         .question-box {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 16px;
             margin-bottom: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        .stats {
+        .question-box:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Match home page container layout */
+        .question-container {
             display: flex;
-            gap: 15px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #6c757d;
+            gap: 20px;
         }
 
-        .question-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #007bff;
-            text-decoration: none;
+        /* Updated stats to match home page */
+        .stats {
+            min-width: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 15px;
+            color: #6a737c;
+            text-align: center;
+        }
+
+        .stats > div {
             margin-bottom: 8px;
+        }
+
+        .stats strong {
+            font-size: 15px;
+            color: #111111;
+            display: block;
+        }
+
+        /* Green answer count styling like home page */
+        .answer-count {
+            border: 1px solid #5eba7d;
+            border-radius: 4px;
+            color: #5eba7d;
+            padding: 2px 5px;
             display: inline-block;
+        }
+
+        /* Question content wrapper */
+        .question-content-wrapper {
+            flex: 1;
+        }
+
+        /* Updated question title styling */
+        .question-title {
+            color: #1da1f2;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            text-decoration: none;
         }
 
         .question-title:hover {
             text-decoration: underline;
         }
 
+        /* Updated excerpt styling */
         .excerpt {
-            color: #333;
+            color: #3b4045;
+            font-size: 14px;
             margin-bottom: 10px;
+            line-height: 1.4;
         }
 
+        /* Updated tags styling to match home page */
         .tags {
+            margin-top: 10px;
             margin-bottom: 10px;
         }
 
         .tag {
-            background-color: #e1ecf4;
+            display: inline-block;
+            background-color: #e1f0fa;
             color: #39739d;
-            border: 1px solid #d0e3f1;
+            padding: 4px 8px;
             border-radius: 3px;
-            padding: 3px 6px;
             font-size: 12px;
             margin-right: 5px;
-            display: inline-block;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
         }
 
+        .tag:hover {
+            background-color: #d1e5f1;
+        }
+
+        /* Updated user info styling */
         .user-info {
+            display: flex;
+            align-items: center;
             font-size: 13px;
-            color: #555;
+            color: #6a737c;
+            margin-top: 12px;
         }
 
+        .user-info .username {
+            color: #0077cc;
+            font-weight: 500;
+            margin-right: 6px;
+            text-decoration: none;
+        }
+
+        .user-info .username:hover {
+            text-decoration: underline;
+        }
+
+        .user-info .reputation {
+            font-weight: bold;
+            color: #535a60;
+        }
+
+        /* Filter container styling */
         .filter-container {
             display: flex;
             justify-content: space-between;
@@ -79,6 +152,12 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 15px;
+        }
+
+        .filter-container h1 {
+            font-size: 22px;
+            color: #111111;
+            font-weight: 600;
         }
 
         .filter-form {
@@ -90,52 +169,26 @@
         .filter-form select {
             padding: 8px;
             border-radius: 4px;
-            border: 1px solid #ddd;
+            border: 1px solid #cccccc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .filter-form button {
             padding: 8px 16px;
-            background-color: #007bff;
+            background-color: #0077cc;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.2s ease;
         }
 
         .filter-form button:hover {
             background-color: #0069d9;
         }
-        .pagination {
-    margin: 30px 0;
-    text-align: center;
-}
 
-.pagination ul {
-    display: inline-flex;
-    list-style: none;
-    padding: 0;
-    gap: 5px;
-}
-
-.pagination a {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-decoration: none;
-    color: var(--accent-blue);
-    transition: all 0.2s;
-}
-
-.pagination a:hover {
-    background-color: #f0f0f0;
-}
-
-.pagination .active-page {
-    background-color: var(--accent-blue);
-    color: white !important;
-    border-color: var(--accent-blue);
-}
-
+        /* Responsive design */
         @media (max-width: 768px) {
             .filter-container {
                 flex-direction: column;
@@ -145,6 +198,18 @@
             .filter-form {
                 width: 100%;
                 flex-wrap: wrap;
+            }
+
+            .question-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .stats {
+                flex-direction: row;
+                justify-content: space-between;
+                min-width: auto;
+                text-align: left;
             }
         }
     </style>
@@ -170,58 +235,89 @@
 
                 <button type="submit">Apply Filter</button>
             </form>
-
         </div>
 
         <div th:each="question : ${questions}" class="question-box">
-            <div class="stats">
-                <div><strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong> votes</div>
-                <div><strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong> views</div>
+            <div class="question-container">
+                <!-- Stats Column (matching home page) -->
+                <div class="stats">
+                    <div>
+                        <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
+                        <span>votes</span>
+                    </div>
+
+                    <!-- Show answer count with green styling if > 0 -->
+                    <div th:if="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
+                        <strong th:text="${answerCounts[question.id]}">0</strong>
+                        <span>answers</span>
+                    </div>
+                    <div th:unless="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                        <strong th:text="${answerCounts != null and answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
+                        <span>answers</span>
+                    </div>
+
+                    <div>
+                        <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
+                        <span>views</span>
+                    </div>
+                </div>
+
+                <!-- Question Content (matching home page) -->
+                <div class="question-content-wrapper">
+                    <a class="question-title"
+                       th:href="@{'/questions/' + ${question.id}}"
+                       th:text="${question.title != null ? question.title : 'Untitled'}">
+                        Question Title
+                    </a>
+
+                    <p class="excerpt"
+                       th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
+                        Question excerpt...
+                    </p>
+
+                    <!-- Tags (matching home page styling) -->
+                    <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
+                        <a th:each="tag : ${question.tags}"
+                           th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                           class="tag"
+                           th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
+                    </div>
+
+                    <!-- User Info and Timestamp (matching home page) -->
+                    <div class="user-info">
+                        <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
+                           th:text="${question.user.username}">Username</a>
+                        <span th:if="${question.user.reputation != null}" class="reputation"
+                              th:text="${question.user.reputation}">123</span>
+                        <span class="timestamp" th:if="${question.createdAt}"
+                              th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">
+                            2 mins ago
+                        </span>
+                    </div>
+                </div>
             </div>
-
-            <a class="question-title"
-               th:href="@{'/questions/' + ${question.id}}"
-               th:text="${question.title != null ? question.title : 'Untitled'}">
-                Question Title
-            </a>
-
-            <p class="excerpt"
-               th:text="${question.content != null ? #strings.abbreviate(question.content, 150) : 'No content available'}">
-                Question excerpt...
-            </p>
-
-            <div class="tags" th:if="${question.tags != null}">
-                <span th:each="tag : ${question.tags}" class="tag" th:text="${tag.name != null ? tag.name : 'tag'}">tag</span>
-            </div>
-
-            <div class="user-info">
-                <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
-                   th:text="${question.user.username}">Username</a>
-                <span th:if="${question.user.reputation != null}" class="reputation"
-                      th:text="${question.user.reputation}">123</span>
-            </div>
-
         </div>
-    </div>
-    <div th:if="${totalPages > 1}" class="pagination">
-        <ul>
-            <!-- Previous -->
-            <li th:if="${currentPage > 0}">
-                <a th:href="@{/questionslist(page=${currentPage - 1})}">Previous</a>
-            </li>
 
-            <!-- Page Numbers -->
-            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:href="@{/questionslist(page=${i})}"
-                   th:text="${i + 1}"
-                   th:classappend="${i == currentPage} ? 'active-page'">1</a>
-            </li>
+        <div th:if="${totalPages > 1}" class="pagination">
+            <ul>
+                <!-- Previous -->
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{/questionslist(page=${currentPage - 1})}">Previous</a>
+                </li>
 
-            <!-- Next -->
-            <li th:if="${currentPage < totalPages - 1}">
-                <a th:href="@{/questionslist(page=${currentPage + 1})}">Next</a>
-            </li>
-        </ul>
+                <!-- Page Numbers -->
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a th:href="@{/questionslist(page=${i})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == currentPage} ? 'active-page'">1</a>
+                </li>
+
+                <!-- Next -->
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/questionslist(page=${currentPage + 1})}">Next</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </section>
 </body>
