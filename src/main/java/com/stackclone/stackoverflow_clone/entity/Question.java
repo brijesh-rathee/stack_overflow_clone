@@ -32,7 +32,7 @@ public class Question {
     private String content;
 
     @Column(name="scores")
-    private int scores = 0;
+    private int scores=0;
 
     @Column(name = "link", columnDefinition = "TEXT")
     private String link;

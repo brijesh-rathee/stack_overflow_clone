@@ -1,6 +1,7 @@
 package com.stackclone.stackoverflow_clone.service;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.Tag;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface QuestionService {
 
     Question getQuestionById(Long id);
 
-    void updateQuestion(Question question, Long id);
+    void updateQuestion(Question question, Long id, List<Long> tagIds);
 
     void deleteQuestion(Long id);
 

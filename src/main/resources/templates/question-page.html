@@ -2,90 +2,120 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{home-page}">
-
 <head>
     <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+        }
+
         .ask-question-form {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
+            max-width: 800px;
+            margin: 40px;
+            padding: 30px;
+            background-color: #ffffff;
+            border: 1px solid #d6d9dc;
             border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .ask-question-form h1 {
-            margin-bottom: 20px;
             font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 24px;
+            color: #2d2d2d;
         }
 
         .ask-question-form label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
         }
 
         .ask-question-form input[type="text"],
         .ask-question-form textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .ask-question-form button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: 1px solid #333;
-            border-radius: 4px;
-            background: none;
-            cursor: pointer;
-        }
-
-        .ask-question-form button:hover {
-            background-color: #eee;
-        }
-        .ask-question-form select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
+            padding: 12px;
+            margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 1rem;
             background-color: #fff;
         }
 
-        .ask-question-form select[multiple] {
-            height: auto;
-            min-height: 100px;
+        .ask-question-form textarea {
+            resize: vertical;
+            min-height: 150px;
         }
 
+        /* Enhanced Tag Select Box */
+        .ask-question-form .tag-select-box {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #fefefe;
+        }
+
+        .tag-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .tag-option input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .ask-question-form button {
+            background-color: #0a95ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .ask-question-form button:hover {
+            background-color: #0074cc;
+        }
     </style>
 </head>
 
 <body>
 
 <section layout:fragment="content">
-    <form class="ask-question-form" th:action="@{/questions/submit}" method="post">
-        <h1>Ask a New Question</h1>
+    <form class="ask-question-form"
+          th:action="${question.id} != null ? @{/questions/update/{id}(id=${question.id})} : @{/questions/submit}"
+          th:object="${question}"
+          method="post">
 
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="title" required />
+        <h1 th:text="${question.id} != null ? 'Edit Your Question' : 'Ask a Public Question'">Ask a Public Question</h1>
 
-        <label for="content">Description:</label>
-        <textarea name="content" id="content" rows="6" required></textarea>
+        <label for="title">Title</label>
+        <input type="text" id="title" th:field="*{title}" placeholder="e.g. How do I solve a NullPointerException in Java?" required />
 
-        <label for="tags">Tags:</label>
-        <select name="tagIds[]" id="tags" multiple required>
-            <option th:each="tag : ${tags}"
-                    th:value="${tag.id}"
-                    th:text="${tag.name}">
-            </option>
-        </select>
+        <label for="content">What are the details of your problem?</label>
+        <textarea id="content" th:field="*{content}" placeholder="Describe what you’ve tried and what you expected to happen…" required></textarea>
 
+        <label>Tags</label>
+        <div class="tag-select-box">
+            <div class="tag-option" th:each="tag : ${tags}">
+                <input type="checkbox" name="tagIds"
+                       th:value="${tag.id}"
+                       th:checked="${question.tags != null and question.tags.contains(tag)}" />
+                <span th:text="${tag.name}">Java</span>
+            </div>
+        </div>
 
-        <button type="submit">Submit Question</button>
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <button type="submit" th:text="${question.id} != null ? 'Update Your Question' : 'Post Your Question'">Post Your Question</button>
     </form>
 </section>
 

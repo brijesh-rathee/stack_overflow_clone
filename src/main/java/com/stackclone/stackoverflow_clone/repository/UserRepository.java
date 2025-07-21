@@ -19,4 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u.username FROM User u")
     List<String> findAllUsernames();
+
+    @Query("""
+       SELECT u FROM User u
+       WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :query, '%'))
+          OR LOWER(COALESCE(u.location,'')) LIKE LOWER(CONCAT('%', :query, '%'))
+      """)
+    List<User> searchBasic(String query);
 }
