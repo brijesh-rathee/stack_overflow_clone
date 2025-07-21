@@ -9,131 +9,154 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
-             --header-height: 60px;
-             --sidebar-width: 300px;
-             --footer-height: 60px;
-             --bg-light: #ffffff;
-             --bg-dark: #f5f5f5;
-             --text-dark: #111111;
-             --text-light: #ffffff;
-             --border-color: #cccccc;
-         }
-
-         * {
-             margin: 0;
-             padding: 0;
-             box-sizing: border-box;
-         }
-
-         .top-nav {
-             position: fixed;
-             top: 0;
-             left: 0;
-             height: var(--header-height);
-             width: 100%;
-             background-color: var(--bg-dark);
-             color: var(--text-dark);
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
-             padding: 0 20px;
-             border-bottom: 1px solid var(--border-color);
-             z-index: 1000;
-         }
-
-         .nav-left {
-             display: flex;
-             flex: 4;
-             align-items: center;
-             gap: 30px;
-         }
-
-         .logo img {
-            height: 200px;
-            width: auto;
-            object-fit: contain;
-            display: block;
+            --header-height: 60px;
+            --sidebar-width: 200px;
+            --footer-height: 60px;
+            --bg-light: #ffffff;
+            --bg-dark: #f5f5f5;
+            --text-dark: #242729;
+            --text-light: #ffffff;
+            --border-color: #e1e2e5;
+            --accent-blue: #0077cc;
+            --sky-blue: #1da1f2;
+            --tag-bg: #e1f0fa;
+            --tag-color: #39739d;
+            --question-title-color: #1da1f2;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-         .nav-links ul {
-             list-style: none;
-             display: flex;
-             gap: 20px;
-         }
-
-         .nav-links a {
-             font-size: 20px;
-             color: var(--text-dark);
-             text-decoration: none;
-             font-weight: 600;
-         }
-
-         .nav-right {
-             display: flex;
-             flex: 8;
-             align-items: center;
-             gap: 20px;
-         }
-
-         .search-bar {
-             display: flex;
-             flex: 5;
-             align-items: center;
-             gap: 5px;
-             flex: 1;
-         }
-
-         .search-bar input {
-             width: 90%;
-             padding: 5px 10px;
-             height: 40px;
-             border: 1px solid var(--border-color);
-             border-radius: 4px;
-         }
-
-         .search-bar button {
-             padding: 5px 10px;
-             height: 40px;
-             border: 1px solid var(--border-color);
-             background-color: var(--bg-dark);
-             color: var(--text-dark);
-             border-radius: 4px;
-             cursor: pointer;
-         }
-
-         .auth-buttons .btn {
-            flex: 3;
-             text-decoration: none;
-             color: var(--text-dark);
-             font-weight: 500;
-             border: 1px solid var(--border-color);
-             padding: 5px 10px;
-             border-radius: 4px;
-             transition: 0.3s;
-         }
-
-         .auth-buttons .btn:hover {
-             background-color: #D9D9D9;
-             color: black;
-         }
-
-         .layout {
-             display: flex;
-             margin-top: var(--header-height);
-             min-height: calc(100vh - var(--header-height) - var(--footer-height));
-             background-color: var(--bg-light);
-         }
-
-       .sidebar {
-            width: var(--sidebar-width);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: var(--header-height);
+            width: 100%;
+            background-color: #ffffff;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .logo img {
+            height: 150px;
+            width: auto;
+            object-fit: contain;
+            margin-left: 10px;
+        }
+
+        .nav-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .search-container {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--accent-blue);
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .auth-buttons .btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: transparent;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .auth-buttons .btn:hover {
+            background-color: #e1e2e5;
+        }
+
+        .auth-buttons .profile-icon {
+            font-size: 20px;
+            color: var(--text-dark);
+        }
+
+        .layout {
+            display: flex;
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height) - var(--footer-height));
+        }
+
+        /* Friend's Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #f8f9f9;
             padding: 20px;
+            height: calc(100vh - var(--header-height));
             position: fixed;
             top: var(--header-height);
-            bottom: var(--footer-height);
-            overflow-y: auto;
-            border-right: 2px solid #D9D9D9;
+            left: 0;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar ul {
@@ -142,15 +165,16 @@
             flex-direction: column;
             gap: 20px;
             padding: 0;
-            margin: 40px;
+            margin: 40px 0;
         }
 
         .sidebar li {
             display: flex;
             align-items: center;
+            width: 100%;
         }
 
-       .sidebar a {
+        .sidebar a {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -164,148 +188,285 @@
             width: 100%;
         }
 
-        .sidebar li {
-            width: 100%;
-        }
-
         .sidebar a:hover {
             background-color: #d0d0d0;
             color: black;
         }
 
+        /* Your Content Styling */
+        .content {
+            flex: 1;
+            padding: 30px;
+            background-color: var(--bg-dark);
+            margin-left: var(--sidebar-width);
+            padding-bottom: 6rem;
+        }
 
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-         .content {
-             margin-left: var(--sidebar-width);
-             padding: 20px;
-             flex: 1;
-             overflow-y: auto;
-             margin-bottom: var(--footer-height);
-             color: var(--text-dark);
-             h1{
-                font-size: 2rem;
-             }
-         }
+        .content-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
 
-         .sec-container{
-            width: 90%;
-         }
+        .content-header p {
+            font-size: 16px;
+            color: #6a737c;
+            margin-top: 5px;
+        }
 
-         .content-header {
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
-             margin-bottom: 20px;
-         }
+        .ask-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--accent-blue);
+            background-color: var(--accent-blue);
+            color: white;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 14px;
+        }
 
-         .content-header {
-             h1{
-                font-size: 2.5rem;
-                font-weight: bold;
-             }
-             p{
-                font-size: 1.5rem;
-             }
-         }
+        .ask-btn:hover {
+            background-color: #0064b4;
+        }
 
-         .ask-btn {
-             padding: 8px 16px;
-             text-decoration: none;
-             border: 1px solid var(--text-dark);
-             background-color: transparent;
-             color: var(--text-dark);
-             border-radius: 4px;
-             font-weight: 500;
-             transition: background-color 0.2s ease;
-         }
+        .question-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: block;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
 
-         .ask-btn:hover {
-             background-color: #D9D9D9;
-             color: black;
-         }
+        .question-card:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-         .footer {
-             position: fixed;
-             bottom: 0;
-             left: 0;
-             height: var(--footer-height);
-             width: 100%;
-             background-color: var(--bg-dark);
-             color: var(--text-dark);
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             border-top: 1px solid var(--border-color);
-         }
-
-         .question-card {
-             background-color: var(--bg-light);
-             border: 1px solid var(--border-color);
-             padding: 16px;
-             margin-bottom: 20px;
-             border-radius: 6px;
-         }
-      .auth-buttons {
+        .question-container {
             display: flex;
             gap: 20px;
+        }
+
+        .question-stats {
+            min-width: 80px;
+            text-align: center;
+            font-size: 15px;
+            justify-content: center;
+            align-items: center;
+            color: #6a737c;
+        }
+
+        .question-stats div {
+            margin-bottom: 8px;
             align-items: center;
         }
 
-        .auth-buttons .profile-icon {
-            font-size: 24px; /* Increased icon size */
+        .question-stats strong {
+            font-size: 15px;
             color: var(--text-dark);
+            display: block;
+        }
+
+        .answer-count {
+            border: 1px solid #5eba7d;
+            border-radius: 4px;
+            color: #5eba7d;
+            padding: 2px 5px;
+            display: inline-block;
+        }
+
+        .question-content {
+            flex: 1;
+        }
+
+        .question-title {
+            color: var(--question-title-color);
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .question-title:hover {
+            text-decoration: underline;
+        }
+
+        .question-excerpt {
+            color: #3b4045;
+            font-size: 14px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .tags {
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--tag-bg);
+            color: var(--tag-color);
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background-color: #d1e5f1;
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #6a737c;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .username {
+            color: var(--accent-blue);
+            font-weight: 500;
+            margin-right: 6px;
+        }
+
+        .username:hover {
+            text-decoration: underline;
+        }
+
+        .reputation {
+            font-weight: bold;
+            color: #535a60;
+        }
+
+        .timestamp {
+            color: #6a737c;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: var(--footer-height);
+            width: 100%;
+            background-color: #ffffff;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #6a737c;
+            z-index: 1000;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .user-title {
+            font-weight: bold;
+            font-size: 27px;
+        }
+
+        /* Your Pagination Styling */
+        .pagination {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .pagination ul {
+            display: inline-flex;
+            list-style: none;
+            padding: 0;
+            gap: 5px;
+        }
+
+        .pagination a {
             padding: 8px 12px;
-            border-radius: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
+            color: var(--accent-blue);
+            transition: all 0.2s;
         }
 
-        .auth-buttons .profile-icon:hover {
-            background-color: #D9D9D9;
-            color: black;
+        .pagination a:hover {
+            background-color: #f0f0f0;
         }
 
-
+        .pagination .active-page {
+            background-color: var(--accent-blue);
+            color: white !important;
+            border-color: var(--accent-blue);
+        }
     </style>
 </head>
 <body>
 
 <header class="top-nav">
-    <div class="nav-left">
-        <div class="logo">
-            <img src="https://imgs.search.brave.com/laSkhqapQSNsKJePEnNSPhgzKWy1Hkv_lXY-W3K10qY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nby53aW5lL2Ev/bG9nby9TdGFja19P/dmVyZmxvdy9TdGFj/a19PdmVyZmxvdy1M/b2dvLndpbmUuc3Zn" alt="logo">
-        </div>
-        <nav class="nav-links">
-<!--            <ul>-->
-<!--                <li><a th:href="@{/}">Home</a></li>-->
-<!--                <li><a th:href="@{/about}">About</a></li>-->
-<!--                <li><a th:href="@{/contact}">Contact</a></li>-->
-<!--            </ul>-->
-        </nav>
-    </div>
-
-    <div class="nav-right">
-        <div class="search-bar">
-            <input type="text" placeholder="Search..." />
-            <button type="submit">🔍</button>
-        </div>
-        <div class="auth-buttons" sec:authorize="!isAuthenticated()">
-            <a th:href="@{/auth/login}" class="btn">Login</a>
-            <a th:href="@{/auth/signup}" class="btn">SignUp</a>
-        </div>
-        <div class="auth-buttons" sec:authorize="isAuthenticated()">
-            <a th:href="@{/users/{userId}(userId=${#authentication.principal.id})}" class="profile-icon">
-                <i class="fa-regular fa-user"></i>
+    <div class="nav-container">
+        <div class="nav-left">
+            <a th:href="@{/home}">
+                <div class="logo">
+                    <img src="https://imgs.search.brave.com/laSkhqapQSNsKJePEnNSPhgzKWy1Hkv_lXY-W3K10qY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nby53aW5lL2Ev/bG9nby9TdGFja19P/dmVyZmxvdy9TdGFj/a19PdmVyZmxvdy1M/b2dvLndpbmUuc3Zn" alt="logo">
+                </div>
             </a>
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit" class="btn">Logout</button>
-            </form>
+        </div>
+        <span style="color:grey;font-size:15px; font-weight:bold;padding:1rem">Products</span>
+        <div class="search-container">
+            <div class="search-bar">
+                <form th:action="@{/questions/search}" method="get" style="display: flex; width: 100%;">
+                    <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}" />
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <div class="auth-buttons" sec:authorize="!isAuthenticated()">
+                <a th:href="@{/auth/login}" class="btn">Login</a>
+                <a th:href="@{/auth/signup}" class="btn">SignUp</a>
+            </div>
+            <div class="auth-buttons" sec:authorize="isAuthenticated()">
+                <a th:href="@{/users/{userId}(userId=${#authentication.principal.id})}" class="profile-icon">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn">Logout</button>
+                </form>
+            </div>
         </div>
     </div>
 </header>
 
-<div class="layout" >
-
+<div class="layout">
+    <!-- Friend's Sidebar with Icons -->
     <aside class="sidebar">
         <ul>
             <li><a th:href="@{/}"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
@@ -316,9 +477,8 @@
         </ul>
     </aside>
 
-
-    <main class="content" >
-
+    <!-- Your Content Section -->
+    <main class="content">
         <section class="sec-container" layout:fragment="content">
             <div class="content-header" sec:authorize="!isAuthenticated()">
                 <h1>Recently Active Questions</h1>
@@ -326,17 +486,88 @@
             </div>
             <div class="content-header" sec:authorize="isAuthenticated()">
                 <div>
-                    <h1>Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
+                    <div class="header-wave"></div>
+                    <h1 class="user-title">Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
                     <p>Find answers to your technical questions and help others answer theirs.</p>
                 </div>
                 <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
             </div>
+
             <h1>Interesting posts for you</h1>
+
             <div class="question-card" th:each="question : ${questions}">
-                <h2 th:text="${question.title}">Question Title</h2>
-                <p th:text="${question.content}">Question description...</p>
-                <a th:href="@{/questions/{id}(id=${question.id})}">View Details</a>
+                <div class="question-container">
+                    <!-- Stats Column -->
+                    <div class="question-stats">
+                        <div>
+                            <span th:text="${question.voteCount != null ? question.voteCount : 0}">0</span>
+                            <span>votes</span>
+                        </div>
+                        <div th:if="${answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
+                            <span th:text="${answerCounts[question.id]}">0</span>
+                            <span>answers</span>
+                        </div>
+                        <div th:unless="${answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                            <span th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</span>
+                            <span>answers</span>
+                        </div>
+
+                        <div>
+                            <span th:text="${question.viewCount != null ? question.viewCount : 0}">0</span>
+                            <span>views</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Content -->
+                    <div class="question-content">
+                        <a th:href="@{/questions/{id}(id=${question.id})}" class="question-title">
+                            <h2 th:text="${question.title}">Question Title</h2>
+                        </a>
+                        <p class="question-excerpt" th:text="${#strings.abbreviate(question.content, 200)}">Question description...</p>
+
+                        <!-- Tags -->
+                        <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
+                            <a th:each="tag : ${question.tags}"
+                               th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                               class="tag"
+                               th:text="${tag.name}">tag</a>
+                        </div>
+
+                        <!-- Author and Timestamp -->
+                        <div class="question-meta">
+                            <div class="user-info">
+                                <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
+                                   th:text="${question.user.username}">Username</a>
+                                <span th:if="${question.user.reputation != null}" class="reputation"
+                                      th:text="${question.user.reputation}">123</span>
+                            </div>
+                            <div class="timestamp" th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">
+                                2 mins ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div th:if="${totalPages > 1}" class="pagination">
+                <ul>
+                    <!-- Previous -->
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/(page=${currentPage - 1})}">Previous</a>
+                    </li>
+
+                    <!-- Current Page (just highlight) -->
+                    <li>
+                        <a class="active-page" th:text="${currentPage + 1}">1</a>
+                    </li>
+
+                    <!-- Next -->
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/(page=${currentPage + 1})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+
         </section>
     </main>
 </div>
