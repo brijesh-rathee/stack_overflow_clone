@@ -32,7 +32,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                     .question(question)
                     .build();
 
-            bookmarkRepository.save(bookmark);
+            bookmarkRepository.save(newBookmark);
         }
     }
 

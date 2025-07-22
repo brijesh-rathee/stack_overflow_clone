@@ -82,6 +82,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            height: 200px;
+            overflow: auto;
         }
 
         .tag-name {
@@ -110,7 +112,6 @@
 <section layout:fragment="content">
     <div class="tag-container">
 
-        <!-- Header Section -->
         <div class="top-section">
             <h1>Tags</h1>
             <p>
@@ -133,13 +134,16 @@
                 </div>
             </div>
 
-            <!-- Tags Grid -->
             <div class="tags-grid">
-                <div class="tag-box" th:each="tag : ${tags}">
-                    <div class="tag-name" th:text="${tag.name}">Tag Name</div>
-                    <div class="tag-desc" th:text="${tag.description}">Tag description goes here...</div>
-                    <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
-                </div>
+                <a th:each="tag : ${tags}"
+                   th:href="@{/tags/{tagName}(tagName=${tag.name})}"
+                   style="text-decoration: none; color: inherit;">
+                    <div class="tag-box">
+                        <div class="tag-name" th:text="${tag.name}">Tag Name</div>
+                        <div class="tag-desc" th:text="${tag.description}">Tag description goes here...</div>
+                        <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

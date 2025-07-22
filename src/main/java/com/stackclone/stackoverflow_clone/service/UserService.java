@@ -28,7 +28,5 @@ public interface UserService {
 
     User getLoggedInUser();
 
-    User getUserByEmail(String email);
-
     List<User> searchBasic(String query);
 }
