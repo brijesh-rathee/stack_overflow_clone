@@ -1,6 +1,8 @@
 package com.stackclone.stackoverflow_clone.repository;
 
 import com.stackclone.stackoverflow_clone.entity.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,10 +13,41 @@ import java.util.Optional;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
+
     Optional<Tag> findByNameIgnoreCase(String name);
 
     boolean existsByName(String tagName);
 
     @Query("SELECT u.followedTags FROM User u WHERE u.id = :userId")
     List<Tag> findFollowedTagsByUserId(@Param("userId") Long userId);
+
+    // Search by name and sort by popularity (number of questions)
+    @Query("""
+        SELECT t FROM Tag t
+        LEFT JOIN t.questions q
+        WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        GROUP BY t
+        ORDER BY COUNT(q) DESC
+    """)
+    Page<Tag> searchByKeywordOrderByPopularity(@Param("keyword") String keyword, Pageable pageable);
+
+    // Search by name and sort alphabetically
+    @Query("""
+        SELECT t FROM Tag t
+        WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        ORDER BY t.name ASC
+    """)
+    Page<Tag> searchByKeywordOrderByNameAsc(@Param("keyword") String keyword, Pageable pageable);
+
+    // All tags sorted by popularity
+    @Query("""
+        SELECT t FROM Tag t
+        LEFT JOIN t.questions q
+        GROUP BY t
+        ORDER BY COUNT(q) DESC
+    """)
+    Page<Tag> findAllOrderByPopularity(Pageable pageable);
+
+    // All tags sorted alphabetically
+    Page<Tag> findAllByOrderByNameAsc(Pageable pageable);
 }

@@ -32,7 +32,6 @@ public class BookmarkController {
         return "redirect:/questions/" + questionId;
     }
 
-
     @GetMapping
     public String viewBookmarks(Model model) {
         User user = userService.getLoggedInUser();

@@ -32,19 +32,22 @@ public class TagController {
     @GetMapping
     public String listTags(@RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "20") int size,
-                           @RequestParam(name = "keyword",required = false) String tagName,
+                           @RequestParam(name = "keyword", required = false) String keyword,
+                           @RequestParam(name = "sort", required = false, defaultValue = "popular") String sort,
                            Model model, Principal principal) {
 
-        Page<Tag> tagPage = tagService.getPaginatedTags(PageRequest.of(page, size));
+        Page<Tag> tagPage = tagService.getTagsFilteredAndSorted(keyword, sort, PageRequest.of(page, size));
+
         model.addAttribute("tags", tagPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", tagPage.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("sort", sort);
 
         if (principal != null) {
             User user = userService.getLoggedInUser();
-            Long userId = user.getId();
-            Set<String> followedTags = tagService.getFollowedTagNames(userId);
+            Set<String> followedTags = tagService.getFollowedTagNames(user.getId());
             model.addAttribute("followedTags", followedTags);
         }
 

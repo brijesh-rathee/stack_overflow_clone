@@ -182,15 +182,18 @@
             background-color: #d0d0d0;
             color: black;
         }
-
-         .content {
-             margin-left: var(--sidebar-width);
-             padding: 20px;
-             flex: 1;
-             overflow-y: auto;
-             color: var(--text-dark);
-         }
-
+       .sidebar a.active-link {
+            background-color: var(--active-color);
+            color: white;
+            font-weight: bold;
+        }
+        .content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            color: var(--text-dark);
+        }
          .sec-container{
             width: 90%;
          }

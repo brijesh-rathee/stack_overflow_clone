@@ -45,17 +45,18 @@
         }
 
         .search-box input {
-            width: 100%;
+            width: 90%;
             padding: 8px 12px;
             font-size: 1rem;
             border: 1px solid #ccc;
             border-radius: 4px;
+            height:50px;
         }
 
         .filters {
             margin-left: 20px;
             display: flex;
-            gap: 10px;
+            gap: 30px;
             flex-wrap: wrap;
         }
 
@@ -146,25 +147,20 @@
             text-decoration: underline;
             color: #005999;
         }
-        .page-link {
-        text-decoration: none;
-        padding: 6px 12px;
-        border: 1px solid #007bff;
+        .filter-btn {
+        background-color: #e0e0e0;
+        padding: 6px 10px;
         border-radius: 4px;
-        color: #007bff;
-        font-weight: 500;
-        transition: background-color 0.3s, color 0.3s;
+        cursor: pointer;
+        font-size: 16px;
+        color: #333;
+        text-decoration: none;
+        border: 1px solid black;
+        transition: all 0.2s ease;
         }
 
-        .page-link:hover {
-            background-color: #f0f0f0;
-            border-color: var(--accent-blue);
-        }
-
-        .active-page {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
+        .filter-btn:hover {
+            background-color: #e0e0e0;
         }
 
     </style>
@@ -184,24 +180,41 @@
         <!-- Search and Filters -->
         <div class="bottom-section">
             <div class="bottom-header">
+                <!-- SEARCH BOX with form -->
                 <div class="search-box">
-                    <input type="text" placeholder="Search tags..." />
+                    <form th:action="@{/tags}" method="get" style="width: 100%;">
+                        <input type="text"
+                               name="keyword"
+                               th:value="${keyword}"
+                               placeholder="Search tags..." />
+                    </form>
                 </div>
+
                 <div class="filters">
-                    <span>Popular</span>
-                    <span>Newest</span>
-                    <span>Trending</span>
-                    <span>Alphabetical</span>
+                    <a th:href="@{/tags(sort='popular', keyword=${keyword})}"
+                       th:if="${sort == null or sort.equals('popular')}"
+                       class="filter-btn active-filter">Popular</a>
+                    <a th:href="@{/tags(sort='popular', keyword=${keyword})}"
+                       th:unless="${sort == null or sort.equals('popular')}"
+                       class="filter-btn">Popular</a>
+
+                    <a th:href="@{/tags(sort='alphabetical', keyword=${keyword})}"
+                       th:if="${sort != null and sort.equals('alphabetical')}"
+                       class="filter-btn active-filter">Alphabetical</a>
+                    <a th:href="@{/tags(sort='alphabetical', keyword=${keyword})}"
+                       th:unless="${sort != null and sort.equals('alphabetical')}"
+                       class="filter-btn">Alphabetical</a>
                 </div>
             </div>
-
+            <!-- Inside .tags-grid -->
             <div class="tags-grid">
                 <div class="tag-box" th:each="tag : ${tags}">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <a th:href="@{/tags/{tagName}(tagName=${tag.name})}" class="tag-link" th:text="${tag.name}">Tag Name</a>
 
+                        <!-- Debug: Show current follow status -->
                         <div style="display: flex; align-items: center; gap: 10px;">
-
+                            <!-- Form-based toggle button -->
                             <form th:action="${followedTags != null and followedTags.contains(tag.name)} ? @{/tags/unfollow} : @{/tags/follow}"
                                   method="post" style="margin: 0;">
                                 <input type="hidden" name="tagName" th:value="${tag.name}">
@@ -225,25 +238,6 @@
                     <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
                 </div>
             </div>
-            <div style="margin-top: 20px; text-align: center;">
-                <ul style="list-style: none; display: inline-flex; gap: 10px; padding: 0;">
-                    <li th:if="${currentPage > 0}">
-                        <a th:href="@{/tags(page=${currentPage - 1}, size=${pageSize})}" class="page-link">Prev</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence((currentPage > 0 ? currentPage - 1 : 0),
-                                              (currentPage + 1 < totalPages ? currentPage + 1 : totalPages - 1))}">
-                        <a th:href="@{/tags(page=${i}, size=${pageSize})}"
-                           th:text="${i + 1}"
-                           th:classappend="${i == currentPage} ? ' active-page' : ''"
-                           class="page-link">
-                        </a>
-                    </li>
-                    <li th:if="${currentPage < totalPages - 1}">
-                        <a th:href="@{/tags(page=${currentPage + 1}, size=${pageSize})}" class="page-link">Next</a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
     </div>
 </section>

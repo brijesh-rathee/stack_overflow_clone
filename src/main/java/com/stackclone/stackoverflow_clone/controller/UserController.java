@@ -82,7 +82,6 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size);
         Page<Question> savedQuestionsPage = bookmarkService.getBookmarkedQuestions(user, pageable);
 
-        // Populate answerCounts using the current page's questions
         Map<Long, Integer> answerCounts = new HashMap<>();
         for (Question question : savedQuestionsPage.getContent()) {
             int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
@@ -95,9 +94,9 @@ public class UserController {
         model.addAttribute("savedQuestions", savedQuestionsPage.getContent());
         model.addAttribute("totalPages", savedQuestionsPage.getTotalPages());
         model.addAttribute("currentPage", page);
-        model.addAttribute("answerCounts", answerCounts); // Add answerCounts to model
+        model.addAttribute("answerCounts", answerCounts);
 
-        return USER_PROFILE_VIEW; // Ensure this matches your template name
+        return USER_PROFILE_VIEW;
     }
 
     @GetMapping("/registerForm")
@@ -124,6 +123,7 @@ public class UserController {
     @GetMapping
     public String viewAllUsers(Model model) {
         List<User> aLlUsers = userService.getAllUsers();
+
         model.addAttribute("allUsers", aLlUsers);
 
         return "user-page";
@@ -131,7 +131,9 @@ public class UserController {
 
     @GetMapping("/search")
     public String searchUsers(@RequestParam String query, Model model) {
+
         model.addAttribute("users", userService.searchBasic(query));
+
         return "fragments/user-list :: userList";
     }
 

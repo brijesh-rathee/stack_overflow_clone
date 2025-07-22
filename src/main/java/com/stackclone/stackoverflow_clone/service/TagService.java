@@ -32,4 +32,6 @@ public interface TagService {
     void unfollowTag(String tagName, Long userId);
 
     Set<String> getFollowedTagNames(Long userId);
+
+    Page<Tag> getTagsFilteredAndSorted(String keyword, String sort, Pageable pageable);
 }

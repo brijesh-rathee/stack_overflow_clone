@@ -9,6 +9,7 @@ import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -111,6 +112,29 @@ public class TagServiceImpl implements TagService {
             tagNames.add(tag.getName());
         }
         return tagNames;
+    }
+
+    @Override
+    public Page<Tag> getTagsFilteredAndSorted(String keyword, String sort, Pageable pageable) {
+        if (sort == null || sort.isBlank()) {
+            sort = "popular";
+        }
+
+        boolean isSearch = keyword != null && !keyword.isBlank();
+
+        if (sort.equalsIgnoreCase("alphabetical")) {
+            if (isSearch) {
+                return tagRepository.searchByKeywordOrderByNameAsc(keyword, pageable);
+            } else {
+                return tagRepository.findAllByOrderByNameAsc(pageable);
+            }
+        } else {
+            if (isSearch) {
+                return tagRepository.searchByKeywordOrderByPopularity(keyword, pageable);
+            } else {
+                return tagRepository.findAllOrderByPopularity(pageable);
+            }
+        }
     }
 
 }
