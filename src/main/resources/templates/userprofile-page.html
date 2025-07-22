@@ -318,6 +318,46 @@
         .btn-secondary:hover {
             background-color: #5a6268;
         }
+
+          .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding-left: 0;
+    margin: 0; /* Remove default margin */
+    align-items: center; /* Vertically center items */
+}
+
+.pagination li {
+    display: inline-block; /* Ensure list items stay in line */
+}
+
+.pagination li a,
+.pagination li span {
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #0077cc;
+    border: 1px solid #ccc;
+    display: inline-block; /* Ensure consistent sizing */
+}
+
+.pagination .active-page {
+    background-color: #0077cc;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination li a:hover {
+    background-color: #e6f0ff;
+}
+
     </style>
 </head>
 <body>
@@ -469,8 +509,42 @@
     <!-- Saves Tab Content -->
     <div class="profile-main-body" th:if="${activeTab == 'saves'}">
         <div class="user-content">
-            <h2>Saved Posts</h2>
-            <p>Display user's saved posts.</p>
+            <h2>Saved Questions</h2>
+
+            <div th:if="${#lists.isEmpty(savedQuestions)}">
+                <p>No saved questions yet.</p>
+            </div>
+
+            <!-- Updated styling for better visibility -->
+            <div style="margin-top: 20px;" th:if="${!#lists.isEmpty(savedQuestions)}">
+                <!-- Each question in a clear container -->
+                <div th:each=" q : ${savedQuestions}"
+                     style="border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 8px; background: #fff;">
+                   <div>
+                       <a th:href="@{/questions/{id}(id=${q.id})}"
+                          th:text="${q.title}"
+                          style="color: #0066cc; text-decoration: none;">Question Title</a>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${totalPages > 1}" class="pagination">
+            <ul>
+                <!-- Previous -->
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage - 1})}">‹ Previous</a>
+                </li>
+
+                <!-- Current Page -->
+                <li>
+                    <span class="active-page" th:text="${currentPage + 1}">1</span>
+                </li>
+
+                <!-- Next -->
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage + 1})}">Next ›</a>
+                </li>
+            </ul>
         </div>
     </div>
 

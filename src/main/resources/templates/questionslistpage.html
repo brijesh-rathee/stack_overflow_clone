@@ -212,6 +212,44 @@
                 text-align: left;
             }
         }
+        .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding-left: 0;
+    margin: 0; /* Remove default margin */
+    align-items: center; /* Vertically center items */
+}
+
+.pagination li {
+    display: inline-block; /* Ensure list items stay in line */
+}
+
+.pagination li a,
+.pagination li span {
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #0077cc;
+    border: 1px solid #ccc;
+    display: inline-block; /* Ensure consistent sizing */
+}
+
+.pagination .active-page {
+    background-color: #0077cc;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination li a:hover {
+    background-color: #e6f0ff;
+}
     </style>
 </head>
 <body>
@@ -305,11 +343,9 @@
                     <a th:href="@{/questionslist(page=${currentPage - 1})}">Previous</a>
                 </li>
 
-                <!-- Page Numbers -->
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="@{/questionslist(page=${i})}"
-                       th:text="${i + 1}"
-                       th:classappend="${i == currentPage} ? 'active-page'">1</a>
+                <!-- Current Page -->
+                <li>
+                    <span class="active-page" th:text="${currentPage + 1}">1</span>
                 </li>
 
                 <!-- Next -->

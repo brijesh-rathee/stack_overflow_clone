@@ -18,4 +18,6 @@ public interface TagService {
     List<Tag> getTagsByIds(List<Long> tagIds);
 
     Tag findByName(String tagName);
+
+    List<Tag> findByTagsByUserId(Long userId);
 }

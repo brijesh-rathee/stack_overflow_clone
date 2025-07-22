@@ -1,10 +1,7 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.*;
-import com.stackclone.stackoverflow_clone.service.AnswerService;
-import com.stackclone.stackoverflow_clone.service.BadgeService;
-import com.stackclone.stackoverflow_clone.service.QuestionService;
-import com.stackclone.stackoverflow_clone.service.UserService;
+import com.stackclone.stackoverflow_clone.service.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,10 +23,11 @@ public class UserController {
     private final BadgeService badgeService;
     private final QuestionService questionService;
     private final AnswerService answerService;
+    private final BookmarkService bookmarkService;
 
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
-    @GetMapping({"/{userId}", "/{userId}/activity"})
+    @GetMapping({"/{userId}", "/{userId}/activity", "/{userId}/summary"})
     public String viewUserById(@PathVariable Long userId, Model model) {
         User user = userService.getUserById(userId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -50,6 +48,7 @@ public class UserController {
         model.addAttribute("questionCount", allQuestions.size());
         model.addAttribute("answerCount",   allAnswers.size());
         model.addAttribute("activeTab", "activity");
+        model.addAttribute("tab", "summary");
 
         return USER_PROFILE_VIEW;
     }
@@ -59,23 +58,28 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUsername = auth.getName();
         boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
-        /*List<Question> savedQuestions = user.getSavedQuestions();*/
+
 
         model.addAttribute("user", user);
         model.addAttribute("activeTab", "profile");
         model.addAttribute("isCurrentUser", isCurrentUser);
-        /*model.addAttribute("savedQuestions",savedQuestions)*/
+
         return USER_PROFILE_VIEW;
     }
 
     @GetMapping("/{userId}/bookmarks")
-    public String viewUserBookmarks(@PathVariable Long userId, Model model) {
+    public String viewUserBookmarks(@PathVariable Long userId,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "5") int size,
+                                    Model model) {
         User user = userService.getUserById(userId); // Get the user
         List<Bookmark> allBookMarks = userService.getAllBookMarks(userId); // Get bookmarks
+        List<Question> savedQuestions = bookmarkService.getBookmarkedQuestion(user);
 
         model.addAttribute("user", user);
         model.addAttribute("bookmarks", allBookMarks);
         model.addAttribute("activeTab", "saves");
+        model.addAttribute("savedQuestions",savedQuestions);
 
         return USER_PROFILE_VIEW;
     }
@@ -129,39 +133,92 @@ public class UserController {
         return "redirect:/users/" + userId + "/profile";
     }
 
-    @GetMapping("/{userId}/questions")
+    @GetMapping("/{userId}/activity/questions")
     public String listUserQuestions(@PathVariable Long userId, Model model) {
         List<Question> questions = questionService.getQuestionsByUser(userId);
+        User user = userService.getUserById(userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = auth.getName();
+        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
+        model.addAttribute("user", user);
         model.addAttribute("questions", questions);
+        model.addAttribute("tab", "questions");
+        model.addAttribute("activeTab", "activity");
 
-        return "user/questions";
+        return USER_PROFILE_VIEW;
     }
 
-    @GetMapping("/{userId}/answers")
+    @GetMapping("/{userId}/activity/answers")
     public String listUserAnswers(@PathVariable Long userId, Model model) {
         List<Answer> answers = answerService.getAnswerByUserId(userId);
+        User user = userService.getUserById(userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = auth.getName();
+        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
+        model.addAttribute("user", user);
         model.addAttribute("answers", answers);
-
-        return "user/answers";
+        model.addAttribute("tab", "answers");
+        model.addAttribute("activeTab", "activity");
+        return USER_PROFILE_VIEW;
     }
 
+    @GetMapping("/{userId}/activity/following")
+    public String findFollowers(@PathVariable Long userId, Model model){
+
+        User user = userService.getUserById(userId);
+
+        model.addAttribute("user", user);
+        model.addAttribute("tab", "following");
+        model.addAttribute("activeTab", "activity");
 
 
-    @GetMapping("/{userId}/allVotes")
+        return USER_PROFILE_VIEW;
+    }
+    @GetMapping("/{userId}/activity/responses")
+    public String findResponses(@PathVariable Long userId, Model model){
+
+        User user = userService.getUserById(userId);
+
+        model.addAttribute("user", user);
+        model.addAttribute("tab", "responses");
+        model.addAttribute("activeTab", "activity");
+
+
+        return USER_PROFILE_VIEW;
+    }
+
+    @GetMapping("/{userId}/activity/votes")
     public String viewUserVotes(@PathVariable Long userId, Model model){
         List<Vote> allVotes = userService.getAllVotesByUser(userId);
+        User user = userService.getUserById(userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = auth.getName();
+        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
+
+        model.addAttribute("user", user);
+        model.addAttribute("tab", "votes");
+        model.addAttribute("activeTab", "activity");
         model.addAttribute("votes",allVotes);
 
-        return "";
+        return USER_PROFILE_VIEW;
     }
 
-    @GetMapping("/{userid}/badges")
+    @GetMapping("/{userId}/activity/badges")
     public String getAllBadges(@PathVariable Long userId, Model model){
         Set<Badge> allBadges = userService.getAllBadgesByUser(userId);
         model.addAttribute("allBadges",allBadges);
+        User user = userService.getUserById(userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = auth.getName();
+        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
-        return "";
+        model.addAttribute("user", user);
+        model.addAttribute("allBadges", allBadges);
+        model.addAttribute("tab", "badges");
+        model.addAttribute("activeTab", "activity");
+
+        return USER_PROFILE_VIEW;
     }
 }

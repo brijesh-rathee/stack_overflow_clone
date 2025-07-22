@@ -4,14 +4,14 @@ import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.BookmarkRepository;
-import com.stackclone.stackoverflow_clone.repository.QuestionRepository;
 import com.stackclone.stackoverflow_clone.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +41,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         return bookmarkRepository.findByUserAndQuestion(user, question).isPresent();
     }
 
+
     @Override
     public List<Question> getBookmarkedQuestion(User user) {
         List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
@@ -52,4 +53,6 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         return questions;
     }
+
+
 }

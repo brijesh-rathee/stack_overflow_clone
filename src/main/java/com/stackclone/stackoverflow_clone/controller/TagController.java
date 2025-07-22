@@ -3,8 +3,10 @@ package com.stackclone.stackoverflow_clone.controller;
 import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
+import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.TagService;
+import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class TagController {
     private final TagService tagService;
     private final QuestionService questionService;
+    private final UserService userService;
 
     @GetMapping
     public String ListTags(Model model) {
@@ -37,7 +40,18 @@ public class TagController {
 
         return "tag/form";
     }
+    @GetMapping("/{userId}/activity")
+    public String findAllTagsByUSerId(@PathVariable Long userId, Model model){
+        List<Tag> tags = tagService.findByTagsByUserId(userId);
+        User user = userService.getUserById(userId);
 
+        model.addAttribute("user", user);
+        model.addAttribute("tags", tags);
+        model.addAttribute("tab", "tags");
+        model.addAttribute("activeTab", "activity");
+
+        return "userprofile-page";
+    }
     @PostMapping("/create")
     public String createTag(@ModelAttribute Tag tag, RedirectAttributes redirectAttributes) {
         try {
