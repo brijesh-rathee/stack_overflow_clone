@@ -23,4 +23,8 @@ public interface QuestionService {
     Page<Question> getPaginatedQuestions(int page, int size);
 
     void saveQuestion(Question question);
+
+    Page<Question> getPaginatedQuestionsByTag(Tag tag, int page, int size);
+
+    Page<Question> searchQuestions(String keyword, int page, int size);
 }

@@ -29,9 +29,9 @@ public class BookmarkController {
         User user = userService.getLoggedInUser();
         Question question = questionService.getQuestionById(questionId);
         bookmarkService.toggleBookmark(user, question);
-
         return "redirect:/questions/" + questionId;
     }
+
 
     @GetMapping
     public String viewBookmarks(Model model) {

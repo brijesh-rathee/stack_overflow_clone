@@ -19,4 +19,8 @@ public class CustomUserDetailService implements UserDetailsService {
         return userRepository.findByEmail(username).orElseThrow(
                 () -> new UsernameNotFoundException("Email not found need to register"));
     }
+
+    public Long getId() {
+        return null;
+    }
 }

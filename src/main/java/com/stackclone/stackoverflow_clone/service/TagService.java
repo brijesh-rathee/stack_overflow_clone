@@ -16,4 +16,9 @@ public interface TagService {
     Tag getTagById(Long id);
 
     List<Tag> getTagsByIds(List<Long> tagIds);
+
+    Tag findByName(String tagName);
+
+
+    List<Tag> findByTagsByUserId(Long userId);
 }

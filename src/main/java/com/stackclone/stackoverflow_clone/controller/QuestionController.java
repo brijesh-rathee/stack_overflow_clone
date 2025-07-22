@@ -48,12 +48,12 @@ public class QuestionController {
     public String getQuestion(@PathVariable Long id, Model model, Principal principal) {
         Question currentQuestion = questionService.getQuestionById(id);
         int questionScore = voteService.getQuestionScore(currentQuestion);
-        boolean bookmarked = false;
+        boolean isBookmarkedByUser = false;
 
         if (principal != null) {
             User user = userService.getLoggedInUser();
             questionViewService.recordView(user, currentQuestion);
-            bookmarked = bookmarkService.isBookmarked(user, currentQuestion);
+            isBookmarkedByUser = bookmarkService.isBookmarked(user, currentQuestion);
         }
 
         List<Answer> answers = answerService.getAllAnswersByQuestionId(id);
@@ -71,6 +71,7 @@ public class QuestionController {
         model.addAttribute("questionScore", questionScore);
         model.addAttribute("answerScores", answerScores);
         model.addAttribute("questionComments",comments);
+        model.addAttribute("isBookmarkedByUser", isBookmarkedByUser);
         model.addAttribute("answerCommentsMap", answerCommentsMap);
         model.addAttribute("newAnswer", new Answer());
 
@@ -116,6 +117,25 @@ public class QuestionController {
         model.addAttribute("questions", userQuestions);
 
         return HOME_VIEW;
+    }
+
+    @PostMapping("/{questionId}/accept-answer/{answerId}")
+    public String acceptAnswer(@PathVariable Long questionId, @PathVariable Long answerId, Principal principal) {
+        Question question = questionService.getQuestionById(questionId);
+        Answer answer = answerService.getAnswerById(answerId);
+
+        if (!question.getUser().getUsername().equals(principal.getName())) {
+            return "redirect:/questions/" + questionId;
+        }
+        if (question.getAcceptedAnswer() != null && question.getAcceptedAnswer().getId().equals(answerId)) {
+            question.setAcceptedAnswer(null);
+        } else {
+            question.setAcceptedAnswer(answer);
+        }
+
+        questionService.saveQuestion(question);
+
+        return "redirect:/questions/" + questionId;
     }
 
     @PostMapping("/upvote/{id}")

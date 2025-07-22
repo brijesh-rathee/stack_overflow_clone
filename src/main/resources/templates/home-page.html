@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Stack Overflow Clone</title>
-    <link rel="icon" type="image/png" th:href="@{/icon.webp}" />
+    <link rel="icon" type="image/png" th:href="@{icon.webp}" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
@@ -33,7 +33,6 @@
 
          body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Remove fixed positioning conflicts */
             padding-bottom: var(--footer-height);
          }
 
@@ -61,7 +60,7 @@
          }
 
          .logo img {
-            height: 200px; /* Fixed oversized logo */
+            height: 200px;
             width: auto;
             object-fit: contain;
             display: block;
@@ -189,7 +188,6 @@
              padding: 20px;
              flex: 1;
              overflow-y: auto;
-             /* Removed margin-bottom that was conflicting with footer */
              color: var(--text-dark);
          }
 
@@ -234,7 +232,6 @@
              color: #1B75D0;
          }
 
-         /* Fixed footer positioning */
          .footer {
              position: fixed;
              bottom: 0;
@@ -247,7 +244,7 @@
              align-items: center;
              justify-content: center;
              border-top: 1px solid var(--border-color);
-             margin-top: auto; /* Push footer to bottom */
+             margin-top: auto;
          }
 
          .question-card {
@@ -284,7 +281,6 @@
             color: black;
         }
 
-        /* Question card content styling from second template */
         .question-container {
             display: flex;
             gap: 20px;
@@ -324,7 +320,7 @@
 
         .question-title {
             color: var(--question-title-color);
-            font-size: 16px;
+            font-size: 25px;
             font-weight: 500;
             margin-bottom: 8px;
             display: block;
@@ -337,7 +333,7 @@
 
         .question-title h2 {
             margin: 0;
-            font-size: 16px;
+            font-size: 25px;
             color: inherit;
         }
 
@@ -417,11 +413,10 @@
             font-weight: 600;
         }
 
-        /* Fixed pagination styling */
         .pagination {
             margin: 30px 0;
             text-align: center;
-            clear: both; /* Clear any floated elements */
+            clear: both;
             padding: 20px 0;
         }
 
@@ -461,7 +456,6 @@
             pointer-events: none;
         }
 
-        /* Ensure proper page flow */
         .page-wrapper {
             min-height: 100vh;
             display: flex;
@@ -484,17 +478,13 @@
                 </div>
             </a>
             <nav class="nav-links">
-                <!--            <ul>-->
-                <!--                <li><a th:href="@{/}">Home</a></li>-->
-                <!--                <li><a th:href="@{/about}">About</a></li>-->
-                <!--                <li><a th:href="@{/contact}">Contact</a></li>-->
-                <!--            </ul>-->
+
             </nav>
         </div>
 
         <div class="nav-right">
             <div class="search-bar">
-                <form th:action="@{/questions/search}" method="get" style="display: flex; width: 100%;">
+                <form th:action="@{/home}" method="get" style="display: flex; width: 100%;">
                     <input type="text" name="keyword" placeholder="Search..." th:value="${keyword}" />
                     <button type="submit">🔍</button>
                 </form>
@@ -522,7 +512,8 @@
                 <li><a th:href="@{/tags}"><i class="fa-solid fa-tags"></i><span>Tags</span></a></li>
                 <li><a th:href="@{/users}"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
                 <li><a th:href="@{/questionslist}"><i class="fa-solid fa-clipboard-question"></i><span>Questions</span></a></li>
-                <li><a th:href="@{/users/saves}"><i class="fa-solid fa-bookmark"></i><span>Saves</span></a></li>
+                <li  sec:authorize="isAuthenticated()"><a th:href="@{/users/{userId}/bookmarks(userId=${#authentication.principal.id})}"><i class="fa-solid fa-bookmark"></i><span>Saves</span></a></li>
+                <li  sec:authorize="!isAuthenticated()"><a th:href="@{/users/bookmarks}"><i class="fa-solid fa-bookmark"></i><span>Saves</span></a></li>
             </ul>
         </aside>
 
@@ -545,27 +536,20 @@
 
                 <div class="question-card" th:each="question : ${questions}">
                     <div class="question-container">
-                        <!-- Stats Column -->
                         <div class="question-stats">
                             <div>
                                 <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
                                 <span>votes</span>
                             </div>
-                            <div th:if="${answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
-                                <strong th:text="${answerCounts[question.id]}">0</strong>
-                                <span>answers</span>
-                            </div>
-                            <div th:unless="${answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                            <div class="answer-count">
                                 <strong th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
-                                <span>answers</span>
+                                <span><span th:if="${question.acceptedAnswer != null}" style="color: green; font-weight: bold;">✔</span>answers</span>
                             </div>
                             <div>
                                 <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
                                 <span>views</span>
                             </div>
                         </div>
-
-                        <!-- Question Content -->
                         <div class="question-content">
                             <a th:href="@{/questions/{id}(id=${question.id})}" class="question-title">
                                 <h2 th:text="${question.title}">Question Title</h2>
@@ -580,7 +564,6 @@
                                    th:text="${tag.name}">tag</a>
                             </div>
 
-                            <!-- Author and Timestamp -->
                             <div class="question-meta">
                                 <div class="user-info">
                                     <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
@@ -596,7 +579,6 @@
                     </div>
                 </div>
 
-                <!-- Fixed Pagination -->
                 <div th:if="${totalPages > 1}" class="pagination">
                     <ul>
                         <li th:if="${currentPage > 0}">

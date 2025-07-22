@@ -3,6 +3,7 @@ package com.stackclone.stackoverflow_clone.service;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 public interface BookmarkService {
@@ -12,4 +13,5 @@ public interface BookmarkService {
     boolean isBookmarked(User user, Question question);
 
     List<Question> getBookmarkedQuestion(User user);
+
 }
