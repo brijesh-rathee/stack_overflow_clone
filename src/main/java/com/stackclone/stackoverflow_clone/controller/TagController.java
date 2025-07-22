@@ -35,7 +35,7 @@ public class TagController {
     }
 
     @GetMapping("/create")
-    public String showCreateForm (Model model) {
+    public String showCreateForm(Model model) {
         model.addAttribute("tag", new Tag());
 
         return "tag/form";
@@ -65,7 +65,7 @@ public class TagController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEditForm (@PathVariable Long id, Model model) {
+    public String showEditForm(@PathVariable Long id, Model model) {
         Tag tag = tagService.getTagById(id);
 
         model.addAttribute("tag", tag);
@@ -74,7 +74,7 @@ public class TagController {
     }
 
     @PostMapping("/{id}/edit")
-    public String updateTag (@PathVariable Long id, @ModelAttribute Tag tag, RedirectAttributes redirectAttributes) {
+    public String updateTag(@PathVariable Long id, @ModelAttribute Tag tag, RedirectAttributes redirectAttributes) {
         try {
             tagService.updateTag(id, tag);
             redirectAttributes.addFlashAttribute("message", "Tag updated successfully");
@@ -86,7 +86,7 @@ public class TagController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteTag (@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String deleteTag(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             tagService.deleteTag(id);
             redirectAttributes.addFlashAttribute("message", "Tag deleted successfully!");
@@ -96,9 +96,10 @@ public class TagController {
 
         return "redirect:/tags";
     }
+
     @GetMapping("/{tagName}")
     public String getQuestionsByTag(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "5") int size,
+                                    @RequestParam(defaultValue = "10") int size,
                                     @PathVariable String tagName,
                                     Model model) {
         Tag tag = tagService.findByName(tagName);
@@ -121,4 +122,5 @@ public class TagController {
 
         return "tagQuestions";
     }
+
 }

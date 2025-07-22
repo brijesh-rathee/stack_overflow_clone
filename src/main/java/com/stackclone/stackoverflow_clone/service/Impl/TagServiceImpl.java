@@ -23,7 +23,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag createTag(Tag tag) {
-        if (tagRepository.findByName(tag.getName()).isPresent()) {
+        if (tagRepository.findByNameIgnoreCase(tag.getName()).isPresent()) {
             throw new RuntimeException("Tag with this name already exist");
         }
         return tagRepository.save(tag);
@@ -59,13 +59,14 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findAllById(tagIds);
     }
 
+    @Override
     public Tag findByName(String name) {
-        return tagRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Tag not found"));
+        return tagRepository.findByNameIgnoreCase(name).orElse(null);
     }
 
     @Override
     public List<Tag> findByTagsByUserId(Long userId) {
         return tagRepository.findFollowedTagsByUserId(userId);
     }
+
 }

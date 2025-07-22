@@ -4,9 +4,47 @@
       layout:decorate="~{home-page}">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Questions tagged [' + ${tag.name} + ']'">Questions by Tag</title>
+    <title th:text="${tag != null} ? 'Questions tagged [' + ${tag.name} + ']' : 'Tag Not Found'">Questions by Tag</title>
     <style>
         .questions-container { width: 90%; margin: 0 auto; }
+
+        .tag-name-header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: #2c3e50;
+        }
+
+        .tag-description-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .tag-description-box h3 {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .tag-description-box p {
+            font-size: 1.05rem;
+            color: #3b4045;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .questions-section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
         .question-box {
             background-color: #fff;
             border: 1px solid #ccc;
@@ -29,10 +67,6 @@
             color: #6a737c;
             font-size: 14px;
             gap: 6px;
-        }
-
-        .stats div {
-            line-height: 1.2;
         }
 
         .answer-count {
@@ -105,6 +139,16 @@
             color: #999;
         }
 
+        .no-questions-message, .tag-not-found {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            color: #6a737c;
+            font-size: 16px;
+        }
+
         .pagination ul {
             list-style: none;
             display: flex;
@@ -130,76 +174,102 @@
 <body>
 <section layout:fragment="content">
     <div class="questions-container">
-        <h1 th:text="'Questions tagged with ' + ${tag.name}">Tagged Questions</h1>
 
-        <div th:if="${questions.isEmpty()}">
-            <p>No questions found for this tag.</p>
+        <!-- Case: tag is null -->
+        <div th:if="${tag == null}" class="tag-not-found">
+            <h2>Tag not found</h2>
+            <p>The tag you’re looking for doesn’t exist.</p>
         </div>
 
-        <div th:each="question : ${questions}" class="question-box">
-            <div class="question-container">
-                <div class="stats">
-                    <div>
-                        <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
-                        <div>votes</div>
-                    </div>
-                    <div th:if="${answerCounts[question.id] > 0}" class="answer-count">
-                        <strong th:text="${answerCounts[question.id]}">0</strong>
-                        <div>answers</div>
-                    </div>
-                    <div th:unless="${answerCounts[question.id] > 0}">
-                        <strong th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
-                        <div>answers</div>
-                    </div>
-                    <div>
-                        <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
-                        <div>views</div>
-                    </div>
-                </div>
+        <!-- Case: tag is present -->
+        <div th:if="${tag != null}">
 
-                <div class="question-content-wrapper" style="flex: 1;">
-                    <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">Question Title</a>
-                    <p class="excerpt" th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content'}">Content</p>
+            <!-- Tag Name -->
+            <div class="tag-name-header">
+                <h1 th:text="${tag.name}">Tag Name</h1>
+            </div>
 
-                    <div class="tags">
-                        <a th:each="tag : ${question.tags}"
-                           th:href="@{'/tags/' + ${tag.name}}"
-                           class="tag"
-                           th:text="${tag.name}">tag</a>
-                    </div>
+            <!-- Tag Description -->
+            <div th:if="${tag.description != null}" class="tag-description-box">
+                <h3>Description</h3>
+                <p th:text="${tag.description}">Tag description goes here.</p>
+            </div>
 
-                    <div class="user-info-row">
+            <!-- Section Header -->
+            <div class="questions-section-header">
+                <h2>Questions tagged with this tag</h2>
+            </div>
+
+            <!-- No Questions -->
+            <div th:if="${questions.isEmpty()}" class="no-questions-message">
+                <p>No questions found for this tag.</p>
+            </div>
+
+            <!-- Questions List -->
+            <div th:each="question : ${questions}" class="question-box">
+                <div class="question-container">
+                    <div class="stats">
                         <div>
-                            <a th:href="@{/users/{userId}(userId=${question.user.id})}"
-                               class="username"
-                               th:text="${question.user.username}">Username</a>
-                            <span th:if="${question.user.reputation}" class="reputation"
-                                  th:text="'• ' + ${question.user.reputation}"> • 0</span>
+                            <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
+                            <div>votes</div>
                         </div>
-                        <div class="timestamp"
-                             th:if="${question.createdAt}"
-                             th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">timestamp</div>
+                        <div th:if="${answerCounts[question.id] > 0}" class="answer-count">
+                            <strong th:text="${answerCounts[question.id]}">0</strong>
+                            <div>answers</div>
+                        </div>
+                        <div th:unless="${answerCounts[question.id] > 0}">
+                            <strong th:text="${answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
+                            <div>answers</div>
+                        </div>
+                        <div>
+                            <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
+                            <div>views</div>
+                        </div>
+                    </div>
+
+                    <div class="question-content-wrapper" style="flex: 1;">
+                        <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">Question Title</a>
+                        <p class="excerpt" th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content'}">Content</p>
+
+                        <div class="tags">
+                            <a th:each="tag : ${question.tags}"
+                               th:href="@{'/tags/' + ${tag.name}}"
+                               class="tag"
+                               th:text="${tag.name}">tag</a>
+                        </div>
+
+                        <div class="user-info-row">
+                            <div>
+                                <a th:href="@{/users/{userId}(userId=${question.user.id})}"
+                                   class="username"
+                                   th:text="${question.user.username}">Username</a>
+                                <span th:if="${question.user.reputation}" class="reputation"
+                                      th:text="'• ' + ${question.user.reputation}"> • 0</span>
+                            </div>
+                            <div class="timestamp"
+                                 th:if="${question.createdAt}"
+                                 th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">timestamp</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div th:if="${totalPages > 1}" class="pagination">
-            <ul>
-                <li th:if="${currentPage > 0}">
-                    <a th:href="@{|/tags/${tag.name}?page=${currentPage - 1}|}">Previous</a>
-                </li>
-
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="@{|/tags/${tag.name}?page=${i}|}"
-                       th:text="${i + 1}"
-                       th:classappend="${i == currentPage} ? 'active-page'">1</a>
-                </li>
-
-                <li th:if="${currentPage < totalPages - 1}">
-                    <a th:href="@{|/tags/${tag.name}?page=${currentPage + 1}|}">Next</a>
-                </li>
-            </ul>
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}" class="pagination">
+                <ul>
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{|/tags/${tag.name}?page=${currentPage - 1}|}">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{|/tags/${tag.name}?page=${i}|}"
+                           th:text="${i + 1}"
+                           th:classappend="${i == currentPage} ? 'active-page'">1</a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{|/tags/${tag.name}?page=${currentPage + 1}|}">Next</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </section>
