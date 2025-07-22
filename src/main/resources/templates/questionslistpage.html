@@ -257,8 +257,7 @@
     <div class="questions-container">
         <div class="filter-container">
             <h1>All Questions</h1>
-            <form method="get" th:action="@{/questions/search}" class="filter-form">
-                <input type="hidden" name="keyword" th:value="${keyword}" /> <!-- hidden input for search keyword -->
+            <form method="get" th:action="@{/questionslist}" class="filter-form">
 
                 <select name="tagId" th:value="${tagId}">
                     <option value="">All Tags</option>
@@ -266,9 +265,9 @@
                 </select>
 
                 <select name="sort" th:value="${sort}">
-                    <option value="newest">Newest</option>
-                    <option value="views">Most Viewed</option>
-                    <option value="votes">Most Voted</option>
+                    <option value="newest" th:selected="${sort == 'newest'}">Newest</option>
+                    <option value="views" th:selected="${sort == 'views'}">Most Viewed</option>
+                    <option value="votes" th:selected="${sort == 'votes'}">Most Voted</option>
                 </select>
 
                 <button type="submit">Apply Filter</button>

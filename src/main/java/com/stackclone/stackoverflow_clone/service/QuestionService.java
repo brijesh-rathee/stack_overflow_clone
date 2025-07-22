@@ -27,4 +27,6 @@ public interface QuestionService {
     Page<Question> getPaginatedQuestionsByTag(Tag tag, int page, int size);
 
     Page<Question> searchQuestions(String keyword, int page, int size);
+
+    Page<Question> getFilteredAndSortedQuestions(int page, int size, Long tagId, String sort);
 }

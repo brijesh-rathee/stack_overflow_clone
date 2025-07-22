@@ -60,12 +60,16 @@ public class HomeController {
     @GetMapping("/questionslist")
     public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "5") int size,
+                                    @RequestParam(required = false) Long tagId,
+                                    @RequestParam(defaultValue = "newest") String sort,
                                     Model model){
-        Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
+        Page<Question> paginatedQuestions = questionService.getFilteredAndSortedQuestions(page, size, tagId, sort);
         List<Tag> tags = tagService.getAllTags();
 
         model.addAttribute("questions", paginatedQuestions.getContent());
         model.addAttribute("tags",tags);
+        model.addAttribute("tagId", tagId);
+        model.addAttribute("sort", sort);
         model.addAttribute("totalQuestions",paginatedQuestions.getTotalElements());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());

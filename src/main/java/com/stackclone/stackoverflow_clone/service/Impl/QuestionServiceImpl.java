@@ -99,6 +99,28 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.searchByTitleTagOrAnswer(keyword, pageable);
     }
 
+    @Override
+    public Page<Question> getFilteredAndSortedQuestions(int page, int size, Long tagId, String sort) {
+        Pageable pageable;
+
+        switch (sort) {
+            case "views":
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "viewCount"));
+                break;
+            case "votes":
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "voteCount"));
+                break;
+            default:
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        }
+
+        if (tagId != null) {
+            return questionRepository.findByTagsId(tagId, pageable);
+        } else {
+            return questionRepository.findAll(pageable);
+        }
+    }
+
 
 }
 
