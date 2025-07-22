@@ -207,8 +207,8 @@
                 <form th:action="@{/bookmarks/{id}/toggle(id=${question.id})}" method="post" style="margin-top: 12px;">
                     <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" th:disabled="${#authentication.name == null}" class="bookmark-button" title="Bookmark this question">
-                        <span th:if="${isBookmarkedByUser}" class="star filled">&#9733;</span> <!-- ★ -->
-                        <span th:unless="${isBookmarkedByUser}" class="star">&#9734;</span>    <!-- ☆ -->
+                        <span th:if="${isBookmarkedByUser}" class="star filled">&#9733;</span>
+                        <span th:unless="${isBookmarkedByUser}" class="star">&#9734;</span>
                     </button>
                 </form>
 
