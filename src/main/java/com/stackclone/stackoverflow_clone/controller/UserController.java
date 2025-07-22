@@ -31,15 +31,14 @@ public class UserController {
 
     @GetMapping({"/{userId}", "/{userId}/activity"})
     public String viewUserById(@PathVariable Long userId, Model model) {
-
         User user = userService.getUserById(userId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUsername = auth.getName();
         boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
-        List<Question> allQuestions   = user.getQuestions();
-        List<Answer> allAnswers     = user.getAnswers();
-        Set<Tag>  allTags        = user.getFollowedTags();
+        List<Question> allQuestions = user.getQuestions();
+        List<Answer> allAnswers = user.getAnswers();
+        Set<Tag>  allTags  = user.getFollowedTags();
 
         model.addAttribute("isCurrentUser", isCurrentUser);
         model.addAttribute("user", user);
@@ -57,8 +56,15 @@ public class UserController {
     @GetMapping("/{id}/profile")
     public String getProfilePage(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = auth.getName();
+        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
+        /*List<Question> savedQuestions = user.getSavedQuestions();*/
+
         model.addAttribute("user", user);
         model.addAttribute("activeTab", "profile");
+        model.addAttribute("isCurrentUser", isCurrentUser);
+        /*model.addAttribute("savedQuestions",savedQuestions)*/
         return USER_PROFILE_VIEW;
     }
 
@@ -119,7 +125,8 @@ public class UserController {
     @PostMapping("/{userId}/update")
     public String saveUpdatedUser(@ModelAttribute("user")User user,@PathVariable Long userId){
         userService.updateUser(user,userId);
-        return "";
+
+        return "redirect:/users/" + userId + "/profile";
     }
 
     @GetMapping("/{userId}/questions")

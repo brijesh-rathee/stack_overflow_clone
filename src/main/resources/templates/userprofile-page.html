@@ -31,12 +31,20 @@
             padding: 6px 12px; border-radius: 6px;
         }
         .profile-actions {
-            display: flex; flex-direction: column; gap: 10px;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: flex-start;
         }
         .profile-actions button {
             padding: 8px 14px; font-size: 14px;
             border: 1px solid #ccc; background: #fff;
             border-radius: 4px; cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+        .profile-actions button:hover {
+            background-color: #f0f0f0;
         }
         .profile-main-body { display: flex; gap: 30px; }
         .sidebar-container { flex: 5%; }
@@ -76,7 +84,6 @@
             border-radius: 8px; padding: 16px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             height: 70%; overflow-y: auto;
-
         }
         .section-heading {
             font-size: 22px; font-weight: 700;
@@ -127,6 +134,190 @@
             border-radius: 6px;
         }
 
+        /* Profile Details Styling */
+        .profile-details-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .profile-details-header {
+            background: linear-gradient(135deg, #f48024, #ff6b35);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .profile-details-header h3 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .profile-details-body {
+            padding: 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            background: #f48024;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 16px;
+            color: white;
+        }
+
+        .detail-content {
+            flex: 1;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Edit Button Styling */
+        .edit-button-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px 0;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .edit-button {
+            background: #f48024;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-button:hover {
+            background: #e0721f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Edit Form Styling */
+        .edit-form-container {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-top: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .edit-form-header {
+            background: #333;
+            color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .edit-form-header h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .edit-form-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f48024;
+            box-shadow: 0 0 0 3px rgba(244, 128, 36, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #f48024;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0721f;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -146,20 +337,29 @@
             </div>
         </div>
         <div class="profile-actions" th:if="${isCurrentUser}">
-            <button>Edit profile</button>
-            <button>Network profile</button>
+                <button onclick="
+                                const form = document.getElementById('editForm');
+                                if (form.style.display === 'none' || form.style.display === '') {
+                                  form.style.display = 'block';
+                                } else {
+                                  form.style.display = 'none';
+                                }
+                              ">Edit Profile
+                </button>
+            <button type="button">Network profile</button>
         </div>
     </div>
+
     <div class="profile-tabs">
         <a th:href="@{'/users/' + ${user.id} + '/profile'}"
            th:classappend="${activeTab == 'profile'} ? ' active'">Profile</a>
-
         <a th:href="@{'/users/' + ${user.id} + '/activity'}"
            th:classappend="${activeTab == 'activity'} ? ' active'">Activity</a>
-
         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'}"
            th:classappend="${activeTab == 'saves'} ? ' active'">Saves</a>
     </div>
+
+    <!-- Activity Tab Content -->
     <div class="profile-main-body" th:if="${activeTab == 'activity'}">
         <div class="sidebar-container">
             <ul>
@@ -180,11 +380,10 @@
 
         <div class="user-content">
             <h2>Summary</h2>
-
             <div class="summary-cards">
                 <div class="card">
                     <h3>Reputation is how the community thanks you</h3>
-                    <p>When users upvote your helpful posts, you’ll earn reputation and unlock new privileges.</p>
+                    <p>When users upvote your helpful posts, you'll earn reputation and unlock new privileges.</p>
                 </div>
                 <div class="card">
                     <h3>Earn badges for helpful actions</h3>
@@ -267,6 +466,7 @@
         </div>
     </div>
 
+    <!-- Saves Tab Content -->
     <div class="profile-main-body" th:if="${activeTab == 'saves'}">
         <div class="user-content">
             <h2>Saved Posts</h2>
@@ -274,23 +474,85 @@
         </div>
     </div>
 
+    <!-- Profile Tab Content -->
     <div class="profile-main-body" th:if="${activeTab == 'profile'}">
         <div class="user-content">
-            <h2>Edit Profile</h2>
-            <form method="post" th:action="@{'/users/' + ${user.id} + '/update'}">
-                <label>Username</label>
-                <input type="text" name="username" th:value="${user.username}" /><br><br>
+            <h2>Profile Information</h2>
 
-                <label>Email</label>
-                <input type="email" name="email" th:value="${user.email}" /><br><br>
+            <!-- Profile Details Card -->
+            <div class="profile-details-card">
+                <div class="profile-details-header">
+                    <h3>Account Details</h3>
+                </div>
+                <div class="profile-details-body">
+                    <div class="detail-item">
+                        <div class="detail-icon">👤</div>
+                        <div class="detail-content">
+                            <div class="detail-label">Username</div>
+                            <div class="detail-value" th:text="${user.username}">Ashish Kalbande</div>
+                        </div>
+                    </div>
 
-                <button type="submit">Save Changes</button>
-            </form>
+                    <div class="detail-item">
+                        <div class="detail-icon">📧</div>
+                        <div class="detail-content">
+                            <div class="detail-label">Email Address</div>
+                            <div class="detail-value" th:text="${user.email}">ashish@example.com</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon">📅</div>
+                        <div class="detail-content">
+                            <div class="detail-label">Member Since</div>
+                            <div class="detail-value" th:text="${#temporals.format(user.createdAt, 'dd MMMM yyyy')}">22 July 2025</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon">⭐</div>
+                        <div class="detail-content">
+                            <div class="detail-label">Repuatation</div>
+                            <div class="detail-value" th:text="${user.reputation}"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Edit Form (initially hidden) -->
+                    <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" th:value="${user.username}" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" th:value="${user.email}" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" th:value="${user.location}">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelBtn"
+                                    onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                        </div>
+                    </form>
+
         </div>
-    </div>
-
-    <div class="profile-main-body" >
-
     </div>
 </section>
 </body>
