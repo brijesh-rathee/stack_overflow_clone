@@ -320,43 +320,43 @@
         }
 
           .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-.pagination ul {
-    list-style: none;
-    display: flex;
-    gap: 10px;
-    padding-left: 0;
-    margin: 0; /* Remove default margin */
-    align-items: center; /* Vertically center items */
-}
+        .pagination ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            padding-left: 0;
+            margin: 0;
+            align-items: center;
+        }
 
-.pagination li {
-    display: inline-block; /* Ensure list items stay in line */
-}
+        .pagination li {
+            display: inline-block;
+        }
 
-.pagination li a,
-.pagination li span {
-    padding: 8px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #0077cc;
-    border: 1px solid #ccc;
-    display: inline-block; /* Ensure consistent sizing */
-}
+        .pagination li a,
+        .pagination li span {
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #0077cc;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
 
-.pagination .active-page {
-    background-color: #0077cc;
-    color: white;
-    font-weight: bold;
-}
+        .pagination .active-page {
+            background-color: #0077cc;
+            color: white;
+            font-weight: bold;
+        }
 
-.pagination li a:hover {
-    background-color: #e6f0ff;
-}
+        .pagination li a:hover {
+            background-color: #e6f0ff;
+        }
          .section-header {
             display: flex;
             justify-content: space-between;
@@ -396,20 +396,20 @@
             color: #333;
             font-size: 15px;
         }
-.question-link {
-    font-size: 16px;
-    font-weight: 500;
-    color: #1a0dab;
-    text-decoration: none;
-    display: inline-block;
-}
-.answer-link {
-    font-size: 16px;
-    font-weight: 500;
-    color: #1a0dab;
-    text-decoration: none;
-    display: inline-block;
-}
+        .question-link {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a0dab;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .answer-link {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a0dab;
+            text-decoration: none;
+            display: inline-block;
+        }
 
     </style>
 </head>
@@ -475,17 +475,14 @@
         </div>
         <div th:if="${totalPages > 1}" class="pagination">
             <ul>
-                <!-- Previous -->
                 <li th:if="${currentPage > 0}">
                     <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage - 1})}">‹ Previous</a>
                 </li>
 
-                <!-- Current Page -->
                 <li>
                     <span class="active-page" th:text="${currentPage + 1}">1</span>
                 </li>
 
-                <!-- Next -->
                 <li th:if="${currentPage < totalPages - 1}">
                     <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage + 1})}">Next ›</a>
                 </li>
@@ -538,7 +535,6 @@
                 </div>
             </div>
 
-            <!-- Edit Form (initially hidden) -->
                     <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -586,7 +582,6 @@
         </div>
 
         <div class="user-content">
-            <!-- Summary Tab -->
             <div th:if="${tab == 'summary'}">
                 <h2>Summary</h2>
                 <div class="summary-cards">
@@ -664,7 +659,6 @@
                 <div class="section"><h3>Articles</h3><p>You have not created any articles</p></div>
             </div>
 
-            <!-- Answers Tab -->
             <div th:if="${tab == 'answers'}">
                 <div class="section-header">
                     <h3 class="section-heading">Answers</h3>
@@ -678,7 +672,7 @@
                         <li th:each="a : ${answers}" class="answer-list-item">
                             <div class="answer-content">
                                 <a th:href="@{/questions/{id}(id=${a.question.id})}"
-                                   th:text="${a.content.length() > 50 ? a.content.substring(0, 50) + '...' : a.content}"
+                                   th:text="${a.content}"
                                    class="answer-link"></a>
                             </div>
                         </li>
@@ -686,7 +680,6 @@
                 </div>
             </div>
 
-            <!-- Questions Tab -->
             <div th:if="${tab == 'questions'}">
                 <div class="section-header">
                     <h3 class="section-heading">Questions</h3>
@@ -700,7 +693,7 @@
                         <li th:each="q : ${questions}" class="answer-list-item">
                             <div class="answer-content">
                                 <a th:href="@{/questions/{id}(id=${q.id})}"
-                                   th:text="${q.title.length() > 50 ? q.title.substring(0, 50) + '...' : q.title}"
+                                   th:text="${q.title}"
                                    class="question-link"></a>
                             </div>
                         </li>
@@ -708,7 +701,6 @@
                 </div>
             </div>
 
-            <!-- Tags Tab -->
             <div th:if="${tab == 'tags'}">
                 <h3 class="section-heading">Tags</h3>
                 <div class="section-count" th:text="${tags.size()} + ' total'">0 total</div>
@@ -720,7 +712,6 @@
                 </div>
             </div>
 
-            <!-- Badges Tab -->
             <div th:if="${tab == 'badges'}">
                 <h3 class="section-heading">Badges</h3>
                 <div class="section-count" th:text="${badges.size()} + ' total'">0 total</div>
