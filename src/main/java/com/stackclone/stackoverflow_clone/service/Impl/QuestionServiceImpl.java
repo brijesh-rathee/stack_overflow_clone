@@ -93,6 +93,12 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findByTagsContaining(tag, pageable);
     }
 
+    @Override
+    public Page<Question> searchQuestions(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return questionRepository.searchByTitleTagOrAnswer(keyword, pageable);
+    }
+
 
 }
 

@@ -146,6 +146,27 @@
             text-decoration: underline;
             color: #005999;
         }
+        .page-link {
+        text-decoration: none;
+        padding: 6px 12px;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        color: #007bff;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+        }
+
+        .page-link:hover {
+            background-color: #f0f0f0;
+            border-color: var(--accent-blue);
+        }
+
+        .active-page {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -173,15 +194,14 @@
                     <span>Alphabetical</span>
                 </div>
             </div>
-            <!-- Inside .tags-grid -->
+
             <div class="tags-grid">
                 <div class="tag-box" th:each="tag : ${tags}">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <a th:href="@{/tags/{tagName}(tagName=${tag.name})}" class="tag-link" th:text="${tag.name}">Tag Name</a>
 
-                        <!-- Debug: Show current follow status -->
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <!-- Form-based toggle button -->
+
                             <form th:action="${followedTags != null and followedTags.contains(tag.name)} ? @{/tags/unfollow} : @{/tags/follow}"
                                   method="post" style="margin: 0;">
                                 <input type="hidden" name="tagName" th:value="${tag.name}">
@@ -205,6 +225,25 @@
                     <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
                 </div>
             </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <ul style="list-style: none; display: inline-flex; gap: 10px; padding: 0;">
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/tags(page=${currentPage - 1}, size=${pageSize})}" class="page-link">Prev</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence((currentPage > 0 ? currentPage - 1 : 0),
+                                              (currentPage + 1 < totalPages ? currentPage + 1 : totalPages - 1))}">
+                        <a th:href="@{/tags(page=${i}, size=${pageSize})}"
+                           th:text="${i + 1}"
+                           th:classappend="${i == currentPage} ? ' active-page' : ''"
+                           class="page-link">
+                        </a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/tags(page=${currentPage + 1}, size=${pageSize})}" class="page-link">Next</a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
 </section>

@@ -9,14 +9,17 @@ import com.stackclone.stackoverflow_clone.service.TagService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,10 +30,24 @@ public class TagController {
     private final UserService userService;
 
     @GetMapping
-    public String ListTags(Model model) {
-        List<Tag> tags = tagService.getAllTags();
+    public String listTags(@RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "20") int size,
+                           @RequestParam(name = "keyword",required = false) String tagName,
+                           Model model, Principal principal) {
 
-        model.addAttribute("tags", tags);
+        Page<Tag> tagPage = tagService.getPaginatedTags(PageRequest.of(page, size));
+        model.addAttribute("tags", tagPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", tagPage.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        if (principal != null) {
+            User user = userService.getLoggedInUser();
+            Long userId = user.getId();
+            Set<String> followedTags = tagService.getFollowedTagNames(userId);
+            model.addAttribute("followedTags", followedTags);
+        }
+
         return "tags-page";
     }
 
@@ -122,5 +139,25 @@ public class TagController {
 
         return "tagQuestions";
     }
+
+    @PostMapping("/follow")
+    public String followTag(@RequestParam String tagName) {
+        User user = userService.getLoggedInUser();
+        Long userId = user.getId();
+        tagService.followTag(tagName, userId);
+
+        return "redirect:/tags";
+    }
+
+    @PostMapping("/unfollow")
+    public String unfollowTag(@RequestParam String tagName, Principal principal) {
+        User user = userService.getLoggedInUser();
+        Long userId = user.getId();
+        tagService.unfollowTag(tagName, userId);
+
+        return "redirect:/tags";
+    }
+
+
 
 }

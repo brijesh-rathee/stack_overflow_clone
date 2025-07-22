@@ -409,117 +409,67 @@
             color: #1a0dab;
             text-decoration: none;
             display: inline-block;
-        }/* Saved Questions Section Styling */
-.question-box {
-    margin-top: 20px;
-}
+        }
+        .tags-grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+        padding: 0;
+        list-style: none;
+        }
 
-.question-container {
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #fff;
-    padding: 15px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    margin-bottom: 15px;
-}
+        .tag-box {
+            background-color: #F5F5F5;
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 200px;
+            overflow: auto;
+        }
+        .tag-link {
+            font-size: 18px;
+            color: #0077cc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .tag-link:hover {
+            text-decoration: underline;
+            color: #005999;
+        }
+        .follow-btn {
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+        .follow-btn.follow {
+            background-color: #007bff;
+        }
 
-.stats {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px;
-    min-width: 60px;
-    text-align: center;
-}
-
-.stats div {
-    margin-bottom: 10px;
-}
-
-.stats strong {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    display: block;
-}
-
-.stats span {
-    font-size: 12px;
-    color: #666;
-}
-
-.answer-count strong {
-    color: #0c0;
-}
-
-.question-content-wrapper {
-    flex: 1;
-}
-
-.question-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #0066cc;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.question-title:hover {
-    text-decoration: underline;
-}
-
-.excerpt {
-    font-size: 14px;
-    color: #444;
-    margin-bottom: 10px;
-    line-height: 1.4;
-}
-
-.tags {
-    margin-bottom: 10px;
-}
-
-.tags .tag {
-    display: inline-block;
-    background-color: #e1ecf4;
-    color: #39739d;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    text-decoration: none;
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-.tags .tag:hover {
-    background-color: #d0e3f0;
-}
-
-.user-info {
-    font-size: 12px;
-    color: #666;
-}
-
-.user-info .username {
-    color: #0077cc;
-    text-decoration: none;
-    margin-right: 5px;
-}
-
-.user-info .username:hover {
-    text-decoration: underline;
-}
-
-.user-info .reputation {
-    margin-right: 5px;
-}
-
-.user-info .timestamp {
-    color: #777;
-}
-
+        .follow-btn.follow:hover {
+            background-color: #0056b3;
+        }
+        .follow-btn.following {
+            background-color: #28a745;
+        }
+        .follow-btn.following:hover {
+            background-color: #1e7e34;
+        }
+        .tag-desc {
+            font-size: 15px;
+            color: #3b4045;
+            line-height: 1.4;
+        }
+        .tag-count {
+            font-size: 12px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -539,7 +489,7 @@
             </div>
         </div>
         <div class="profile-actions" th:if="${isCurrentUser}">
-            <button onclick="
+                <button onclick="
                                 const form = document.getElementById('editForm');
                                 if (form.style.display === 'none' || form.style.display === '') {
                                   form.style.display = 'block';
@@ -547,7 +497,7 @@
                                   form.style.display = 'none';
                                 }
                               ">Edit Profile
-            </button>
+                </button>
             <button type="button">Network profile</button>
         </div>
     </div>
@@ -569,102 +519,36 @@
                 <p>No saved questions yet.</p>
             </div>
 
-            <div th:each="question : ${savedQuestions}" class="question-box">
-                <div class="question-container">
-                    <!-- Stats Column (matching home page) -->
-                    <div class="stats">
-                        <div>
-                            <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
-                            <span>votes</span>
-                        </div>
-
-                        <!-- Show answer count with green styling if > 0 -->
-                        <div th:if="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
-                            <strong th:text="${answerCounts[question.id]}">0</strong>
-                            <span>answers</span>
-                        </div>
-                        <div th:unless="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}">
-                            <strong th:text="${answerCounts != null and answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
-                            <span>answers</span>
-                        </div>
-
-                        <div>
-                            <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
-                            <span>views</span>
-                        </div>
-                    </div>
-
-                    <!-- Question Content (matching home page) -->
-                    <div class="question-content-wrapper">
-                        <a class="question-title"
-                           th:href="@{'/questions/' + ${question.id}}"
-                           th:text="${question.title != null ? question.title : 'Untitled'}">
-                            Question Title
-                        </a>
-
-                        <p class="excerpt"
-                           th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
-                            Question excerpt...
-                        </p>
-
-                        <!-- Tags (matching home page styling) -->
-                        <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
-                            <a th:each="tag : ${question.tags}"
-                               th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
-                               class="tag"
-                               th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
-                        </div>
-
-                        <!-- User Info and Timestamp (matching home page) -->
-                        <div class="user-info">
-                            <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
-                               th:text="${question.user.username}">Username</a>
-                            <span th:if="${question.user.reputation != null}" class="reputation"
-                                  th:text="${question.user.reputation}">123</span>
-                            <span class="timestamp" th:if="${question.createdAt}"
-                                  th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">
-                            2 mins ago
-                        </span>
-                        </div>
-                    </div>
+            <!-- Updated styling for better visibility -->
+            <div style="margin-top: 20px;" th:if="${!#lists.isEmpty(savedQuestions)}">
+                <!-- Each question in a clear container -->
+                <div th:each=" q : ${savedQuestions}"
+                     style="border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 8px; background: #fff;">
+                   <div>
+                       <a th:href="@{/questions/{id}(id=${q.id})}"
+                          th:text="${q.title}"
+                          style="color: #0066cc; text-decoration: none;">Question Title</a>
+                   </div>
                 </div>
             </div>
+        </div>
+        <div th:if="${totalPages > 1}" class="pagination">
+            <ul>
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage - 1})}">‹ Previous</a>
+                </li>
 
-            <div th:if="${totalPages > 1}" class="pagination">
-                <ul>
-                    <!-- Previous Link -->
-                    <li th:if="${currentPage > 0}">
-                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1})}">‹ Previous</a>
-                    </li>
+                <li>
+                    <span class="active-page" th:text="${currentPage + 1}">1</span>
+                </li>
 
-                    <!-- First Page -->
-                    <li th:class="${currentPage == 0} ? 'active-page'">
-                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=0)}" th:text="1" th:unless="${currentPage == 0}"></a>
-                        <span th:text="1" th:if="${currentPage == 0}" class="active-page"></span>
-                    </li>
-
-                    <!-- Middle Pages (up to 5 pages around current page) -->
-                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                        th:if="${i != 0 and i != totalPages - 1 and (i >= currentPage - 2 and i <= currentPage + 2)}"
-                        th:class="${i == currentPage} ? 'active-page'">
-                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${i})}" th:text="${i + 1}" th:unless="${i == currentPage}"></a>
-                        <span th:text="${i + 1}" th:if="${i == currentPage}" class="active-page"></span>
-                    </li>
-
-                    <!-- Last Page -->
-                    <li th:class="${currentPage == totalPages - 1} ? 'active-page'">
-                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${totalPages - 1})}" th:text="${totalPages}" th:unless="${currentPage == totalPages - 1}"></a>
-                        <span th:text="${totalPages}" th:if="${currentPage == totalPages - 1}" class="active-page"></span>
-                    </li>
-
-                    <!-- Next Link -->
-                    <li th:if="${currentPage < totalPages - 1}">
-                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage + 1})}">Next ›</a>
-                    </li>
-                </ul>
-            </div>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage + 1})}">Next ›</a>
+                </li>
+            </ul>
         </div>
     </div>
+
     <div class="profile-main-body" th:if="${activeTab == 'profile'}">
         <div class="user-content">
             <h2>Profile Information</h2>
@@ -710,36 +594,36 @@
                 </div>
             </div>
 
-            <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" th:value="${user.username}" required />
-                </div>
+                    <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" th:value="${user.username}" required />
+                        </div>
 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" th:value="${user.email}" required />
-                </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" th:value="${user.email}" required />
+                        </div>
 
-                <div class="form-group">
-                    <label for="bio">Bio</label>
-                    <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
 
-                </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location" name="location" th:value="${user.location}">
-                </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" th:value="${user.location}">
+                        </div>
 
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelBtn"
-                            onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
-                </div>
-            </form>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelBtn"
+                                    onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                        </div>
+                    </form>
         </div>
     </div>
     <div class="profile-main-body" th:if="${activeTab == 'activity'}">
@@ -748,10 +632,8 @@
                 <li><a th:href="@{/users/{id}/summary(id=${user.id})}" th:classappend="${tab == 'summary'} ? 'active'">Summary</a></li>
                 <li><a th:href="@{/users/{id}/activity/answers(id=${user.id})}" th:classappend="${tab == 'answers'} ? 'active'">Answers</a></li>
                 <li><a th:href="@{/users/{id}/activity/questions(id=${user.id})}" th:classappend="${tab == 'questions'} ? 'active'">Questions</a></li>
-                <li><a th:href="@{/tags/{id}/activity(id=${user.id})}" th:classappend="${tab == 'tags'} ? 'active'">Tags</a></li>
-                <li><a th:href="@{/users/{id}/activity/badges(id=${user.id})}" th:classappend="${tab == 'badges'} ? 'active'">Badges</a></li>
-                <li><a th:href="@{/users/{id}/activity/following(id=${user.id})}" th:classappend="${tab == 'following'} ? 'active'">Following</a></li>
-                <li><a th:href="@{/users/{id}/activity/responses(id=${user.id})}" th:classappend="${tab == 'responses'} ? 'active'">Responses</a></li>
+                <li><a th:href="@{/tags/{id}/activity(id=${user.id})}" th:classappend="${tab == 'tags'} ? 'active'">Followed Tags</a></li>
+                <li><a th:href="@{/users/{id}/activity/badges(id=${user.id})}" th:classappend="${tab == 'badges'} ? 'active'">Badges</a></li><li><a th:href="@{/users/{id}/activity/responses(id=${user.id})}" th:classappend="${tab == 'responses'} ? 'active'">Responses</a></li>
                 <li><a th:href="@{/users/{id}/activity/votes(id=${user.id})}" th:classappend="${tab == 'votes'} ? 'active'">Votes</a></li>
             </ul>
         </div>
@@ -854,7 +736,6 @@
                     </ul>
                 </div>
             </div>
-
             <div th:if="${tab == 'questions'}">
                 <div class="section-header">
                     <h3 class="section-heading">Questions</h3>
@@ -875,18 +756,47 @@
                     </ul>
                 </div>
             </div>
-
             <div th:if="${tab == 'tags'}">
-                <h3 class="section-heading">Tags</h3>
+                <h3 class="section-heading">Followed Tags</h3>
                 <div class="section-count" th:text="${tags.size()} + ' total'">0 total</div>
+
                 <div class="section-box">
-                    <div th:if="${#lists.isEmpty(tags)}"><p>You have not participated in any tags</p></div>
-                    <ul th:if="${!#lists.isEmpty(tags)}" class="section-list">
-                        <li th:each="tag : ${tags}" th:text="${tag.name}"></li>
+                    <div th:if="${#lists.isEmpty(tags)}">
+                        <p>You are not following any tags yet.</p>
+                    </div>
+
+                    <ul th:if="${!#lists.isEmpty(tags)}" class="tags-grid-container">
+                        <li th:each="tag : ${tags}" class="tag-item">
+                            <div class="tag-box">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <a th:href="@{/tags/{tagName}(tagName=${tag.name})}" th:text="${tag.name}" class="tag-link"></a>
+
+                                    <form th:action="${isFollowedTags != null and isFollowedTags.contains(tag.name)} ? @{/tags/unfollow} : @{/tags/follow}"
+                                          method="post" style="margin: 0;">
+                                        <input type="hidden" name="tagName" th:value="${tag.name}">
+                                        <button type="submit"
+                                                th:class="${isFollowedTags != null and isFollowedTags.contains(tag.name)} ? 'follow-btn following' : 'follow-btn follow'"
+                                                th:text="${isFollowedTags != null and isFollowedTags.contains(tag.name)} ? 'Following' : 'Follow'">
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="tag-desc"
+                                     th:if="${tag.description != null and !tag.description.isEmpty()}"
+                                     th:with="words=${#strings.listSplit(tag.description, ' ')}"
+                                     th:text="${words.size() > 20} ? ${#strings.arrayJoin(words.subList(0, 20).toArray(), ' ')} + '...' : tag.description">
+                                </div>
+
+                                <div class="tag-desc" th:if="${tag.description == null or tag.description.isEmpty()}">
+                                    No description available.
+                                </div>
+
+                                <div class="tag-count" th:text="${tag.questions.size()} + ' questions'">0 questions</div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
-
             <div th:if="${tab == 'badges'}">
                 <h3 class="section-heading">Badges</h3>
                 <div class="section-count" th:text="${badges.size()} + ' total'">0 total</div>
