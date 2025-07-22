@@ -83,6 +83,7 @@ public class UserController {
 
         return USER_PROFILE_VIEW;
     }
+
     @GetMapping("/registerForm")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());

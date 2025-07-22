@@ -319,44 +319,190 @@
             background-color: #5a6268;
         }
 
-          .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-.pagination ul {
-    list-style: none;
-    display: flex;
-    gap: 10px;
-    padding-left: 0;
-    margin: 0; /* Remove default margin */
-    align-items: center; /* Vertically center items */
-}
+        .pagination ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            padding-left: 0;
+            margin: 0; /* Remove default margin */
+            align-items: center; /* Vertically center items */
+        }
 
-.pagination li {
-    display: inline-block; /* Ensure list items stay in line */
-}
+        .pagination li {
+            display: inline-block; /* Ensure list items stay in line */
+        }
 
-.pagination li a,
-.pagination li span {
-    padding: 8px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #0077cc;
-    border: 1px solid #ccc;
-    display: inline-block; /* Ensure consistent sizing */
-}
+        .pagination li a,
+        .pagination li span {
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #0077cc;
+            border: 1px solid #ccc;
+            display: inline-block; /* Ensure consistent sizing */
+        }
 
-.pagination .active-page {
-    background-color: #0077cc;
-    color: white;
-    font-weight: bold;
-}
+        .pagination .active-page {
+            background-color: #0077cc;
+            color: white;
+            font-weight: bold;
+        }
 
-.pagination li a:hover {
-    background-color: #e6f0ff;
-}
+        .pagination li a:hover {
+            background-color: #e6f0ff;
+        }
+
+        /* Question box styling to match questions list */
+        .question-box {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .question-box:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Match home page container layout */
+        .question-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Updated stats to match home page */
+        .stats {
+            min-width: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 15px;
+            color: #6a737c;
+            text-align: center;
+        }
+
+        .stats > div {
+            margin-bottom: 8px;
+        }
+
+        .stats strong {
+            font-size: 15px;
+            color: #111111;
+            display: block;
+        }
+
+        /* Green answer count styling like home page */
+        .answer-count {
+            border: 1px solid #5eba7d;
+            border-radius: 4px;
+            color: #5eba7d;
+            padding: 2px 5px;
+            display: inline-block;
+        }
+
+        /* Question content wrapper */
+        .question-content-wrapper {
+            flex: 1;
+        }
+
+        /* Updated question title styling */
+        .question-title {
+            color: #1da1f2;
+            font-size: 25px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .question-title:hover {
+            text-decoration: underline;
+        }
+
+        /* Updated excerpt styling */
+        .excerpt {
+            color: #3b4045;
+            font-size: 14px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        /* Updated tags styling to match home page */
+        .tags {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #e1f0fa;
+            color: #39739d;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+        }
+
+        .tag:hover {
+            background-color: #d1e5f1;
+        }
+
+        /* Updated user info styling */
+        .user-info {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #6a737c;
+            margin-top: 12px;
+        }
+
+        .user-info .username {
+            color: #0077cc;
+            font-weight: 500;
+            margin-right: 6px;
+            text-decoration: none;
+        }
+
+        .user-info .username:hover {
+            text-decoration: underline;
+        }
+
+        .user-info .reputation {
+            font-weight: bold;
+            color: #535a60;
+        }
+
+        .user-info .timestamp {
+            margin-left: auto;
+        }
+
+        /* Responsive design for question display */
+        @media (max-width: 768px) {
+            .question-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .stats {
+                flex-direction: row;
+                justify-content: space-between;
+                min-width: auto;
+                text-align: left;
+            }
+        }
 
     </style>
 </head>
@@ -377,7 +523,7 @@
             </div>
         </div>
         <div class="profile-actions" th:if="${isCurrentUser}">
-                <button onclick="
+            <button onclick="
                                 const form = document.getElementById('editForm');
                                 if (form.style.display === 'none' || form.style.display === '') {
                                   form.style.display = 'block';
@@ -385,7 +531,7 @@
                                   form.style.display = 'none';
                                 }
                               ">Edit Profile
-                </button>
+            </button>
             <button type="button">Network profile</button>
         </div>
     </div>
@@ -515,19 +661,72 @@
                 <p>No saved questions yet.</p>
             </div>
 
-            <!-- Updated styling for better visibility -->
+            <!-- Updated styling to match questions list page -->
             <div style="margin-top: 20px;" th:if="${!#lists.isEmpty(savedQuestions)}">
-                <!-- Each question in a clear container -->
-                <div th:each=" q : ${savedQuestions}"
-                     style="border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 8px; background: #fff;">
-                   <div>
-                       <a th:href="@{/questions/{id}(id=${q.id})}"
-                          th:text="${q.title}"
-                          style="color: #0066cc; text-decoration: none;">Question Title</a>
-                   </div>
+                <div th:each="question : ${savedQuestions}" class="question-box">
+                    <div class="question-container">
+                        <!-- Stats Column (matching home page) -->
+                        <div class="stats">
+                            <div>
+                                <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
+                                <span>votes</span>
+                            </div>
+
+                            <!-- Show answer count with green styling if > 0 -->
+                            <div th:if="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
+                                <strong th:text="${answerCounts[question.id]}">0</strong>
+                                <span>answers</span>
+                            </div>
+                            <div th:unless="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                                <strong th:text="${answerCounts != null and answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
+                                <span>answers</span>
+                            </div>
+
+                            <div>
+                                <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
+                                <span>views</span>
+                            </div>
+                        </div>
+
+                        <!-- Question Content (matching home page) -->
+                        <div class="question-content-wrapper">
+                            <a class="question-title"
+                               th:href="@{'/questions/' + ${question.id}}"
+                               th:text="${question.title != null ? question.title : 'Untitled'}">
+                                Question Title
+                            </a>
+
+                            <p class="excerpt"
+                               th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
+                                Question excerpt...
+                            </p>
+
+                            <!-- Tags (matching home page styling) -->
+                            <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
+                                <a th:each="tag : ${question.tags}"
+                                   th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                                   class="tag"
+                                   th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
+                            </div>
+
+                            <!-- User Info and Timestamp (matching home page) -->
+                            <div class="user-info">
+                                <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
+                                   th:text="${question.user.username}">Username</a>
+                                <span th:if="${question.user.reputation != null}" class="reputation"
+                                      th:text="${question.user.reputation}">123</span>
+                                <span class="timestamp" th:if="${question.createdAt}"
+                                      th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">
+                                    2 mins ago
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Pagination for saved questions -->
         <div th:if="${totalPages > 1}" class="pagination">
             <ul>
                 <!-- Previous -->
@@ -595,36 +794,36 @@
             </div>
 
             <!-- Edit Form (initially hidden) -->
-                    <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username" th:value="${user.username}" required />
-                        </div>
+            <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" th:value="${user.username}" required />
+                </div>
 
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" th:value="${user.email}" required />
-                        </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" th:value="${user.email}" required />
+                </div>
 
-                        <div class="form-group">
-                            <label for="bio">Bio</label>
-                            <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
 
-                        </div>
+                </div>
 
-                        <div class="form-group">
-                            <label for="location">Location</label>
-                            <input type="text" id="location" name="location" th:value="${user.location}">
-                        </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" th:value="${user.location}">
+                </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelBtn"
-                                    onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
-                                Cancel
-                            </button>
-                            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
-                        </div>
-                    </form>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn"
+                            onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                </div>
+            </form>
 
         </div>
     </div>
