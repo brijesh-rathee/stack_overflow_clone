@@ -1,8 +1,12 @@
 package com.stackclone.stackoverflow_clone.service;
 
 import com.stackclone.stackoverflow_clone.entity.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TagService {
     List<Tag> getAllTags();
@@ -19,6 +23,13 @@ public interface TagService {
 
     Tag findByName(String tagName);
 
-
     List<Tag> findByTagsByUserId(Long userId);
+
+    Page<Tag> getPaginatedTags(Pageable pageable);
+
+    void followTag(String tagName, Long userId);
+
+    void unfollowTag(String tagName, Long userId);
+
+    Set<String> getFollowedTagNames(Long userId);
 }

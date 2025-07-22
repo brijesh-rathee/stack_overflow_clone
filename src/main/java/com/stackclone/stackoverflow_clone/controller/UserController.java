@@ -24,6 +24,7 @@ public class UserController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final BookmarkService bookmarkService;
+    private final TagService tagService;
 
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
@@ -165,14 +166,16 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/activity/following")
-    public String findFollowers(@PathVariable Long userId, Model model){
+    public String findFollowers(Model model){
 
-        User user = userService.getUserById(userId);
+        User user = userService.getLoggedInUser();
+        Set<Tag> userFollowedTags = user.getFollowedTags();
 
         model.addAttribute("user", user);
         model.addAttribute("tab", "following");
+        model.addAttribute("tags",userFollowedTags);
+        model.addAttribute("isFollowedTags", tagService.getFollowedTagNames(user.getId()));
         model.addAttribute("activeTab", "activity");
-
 
         return USER_PROFILE_VIEW;
     }
