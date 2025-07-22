@@ -16,5 +16,6 @@ public interface BookmarkService {
 
     List<Question> getBookmarkedQuestion(User user);
 
+    Page<Question> getBookmarkedQuestions(User user, Pageable pageable);
 
 }

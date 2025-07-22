@@ -5,13 +5,18 @@ import com.stackclone.stackoverflow_clone.service.*;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -72,16 +77,26 @@ public class UserController {
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "5") int size,
                                     Model model) {
-        User user = userService.getUserById(userId); // Get the user
-        List<Bookmark> allBookMarks = userService.getAllBookMarks(userId); // Get bookmarks
-        List<Question> savedQuestions = bookmarkService.getBookmarkedQuestion(user);
+        User user = userService.getUserById(userId);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Question> savedQuestionsPage = bookmarkService.getBookmarkedQuestions(user, pageable);
+
+        // Populate answerCounts using the current page's questions
+        Map<Long, Integer> answerCounts = new HashMap<>();
+        for (Question question : savedQuestionsPage.getContent()) {
+            int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
+            answerCounts.put(question.getId(), count);
+        }
 
         model.addAttribute("user", user);
-        model.addAttribute("bookmarks", allBookMarks);
+        model.addAttribute("bookmarks", userService.getAllBookMarks(userId)); // Optional
         model.addAttribute("activeTab", "saves");
-        model.addAttribute("savedQuestions",savedQuestions);
+        model.addAttribute("savedQuestions", savedQuestionsPage.getContent());
+        model.addAttribute("totalPages", savedQuestionsPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("answerCounts", answerCounts); // Add answerCounts to model
 
-        return USER_PROFILE_VIEW;
+        return USER_PROFILE_VIEW; // Ensure this matches your template name
     }
 
     @GetMapping("/registerForm")
