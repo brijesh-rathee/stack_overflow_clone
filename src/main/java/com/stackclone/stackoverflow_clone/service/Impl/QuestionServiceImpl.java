@@ -87,6 +87,12 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.save(question);
     }
 
+    @Override
+    public Page<Question> getPaginatedQuestionsByTag(Tag tag, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return questionRepository.findByTagsContaining(tag, pageable);
+    }
+
 
 }
 
