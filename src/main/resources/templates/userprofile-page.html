@@ -357,59 +357,6 @@
 .pagination li a:hover {
     background-color: #e6f0ff;
 }
-         .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .section-heading {
-            font-size: 22px;
-            font-weight: 600;
-            color: #2d2d2d;
-            margin: 0;
-        }
-
-        .section-count {
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .section-box {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-
-            ul li {
-                color: #1DADF7;
-                border: 1px solid #D9D9D9;
-                padding: 4px 8px 4px 8px;
-            }
-        }
-
-        .answer-item p {
-            margin: 0;
-            color: #333;
-            font-size: 15px;
-        }
-.question-link {
-    font-size: 16px;
-    font-weight: 500;
-    color: #1a0dab;
-    text-decoration: none;
-    display: inline-block;
-}
-.answer-link {
-    font-size: 16px;
-    font-weight: 500;
-    color: #1a0dab;
-    text-decoration: none;
-    display: inline-block;
-}
 
     </style>
 </head>
@@ -452,6 +399,114 @@
            th:classappend="${activeTab == 'saves'} ? ' active'">Saves</a>
     </div>
 
+    <!-- Activity Tab Content -->
+    <div class="profile-main-body" th:if="${activeTab == 'activity'}">
+        <div class="sidebar-container">
+            <ul>
+                <li><a href="#" class="active">Summary</a></li>
+                <li><a href="#">Answers</a></li>
+                <li><a href="#">Questions</a></li>
+                <li><a href="#">Tags</a></li>
+                <li><a href="#">Articles</a></li>
+                <li><a href="#">Badges</a></li>
+                <li><a href="#">Following</a></li>
+                <li><a href="#">Bounties</a></li>
+                <li><a href="#">Reputation</a></li>
+                <li><a href="#">All actions</a></li>
+                <li><a href="#">Responses</a></li>
+                <li><a href="#">Votes</a></li>
+            </ul>
+        </div>
+
+        <div class="user-content">
+            <h2>Summary</h2>
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Reputation is how the community thanks you</h3>
+                    <p>When users upvote your helpful posts, you'll earn reputation and unlock new privileges.</p>
+                </div>
+                <div class="card">
+                    <h3>Earn badges for helpful actions</h3>
+                    <p>Badges are digital flair you get for participation.</p>
+                </div>
+                <div class="card">
+                    <h3>Measure your impact</h3>
+                    <p>Your posts help thousands of people looking for solutions.</p>
+                </div>
+            </div>
+
+            <div class="section-grid">
+                <div>
+                    <h3 class="section-heading">Answers</h3>
+                    <div class="section-count" th:text="${answerCount} + ' total'">0 total</div>
+                    <div class="section-box">
+                        <div th:if="${#lists.isEmpty(answers)}">
+                            <p>You have not answered any questions</p>
+                        </div>
+                        <ul th:if="${!#lists.isEmpty(answers)}" class="section-list">
+                            <li th:each="ans : ${answers}" th:text="${ans.content}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="section-heading">Questions</h3>
+                    <div class="section-count" th:text="${questionCount} + ' total'">0 total</div>
+                    <div class="section-box">
+                        <div th:if="${#lists.isEmpty(questions)}">
+                            <p>You have not asked any questions</p>
+                        </div>
+                        <ul th:if="${!#lists.isEmpty(questions)}" class="section-list">
+                            <li th:each="q : ${questions}" th:text="${q.title}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="section-heading">Tags</h3>
+                    <div class="section-count" th:text="${tags.size()} + ' total'">0 total</div>
+                    <div class="section-box">
+                        <div th:if="${#lists.isEmpty(tags)}">
+                            <p>You have not participated in any tags</p>
+                        </div>
+                        <ul th:if="${!#lists.isEmpty(tags)}" class="section-list">
+                            <li th:each="tag : ${tags}" th:text="${tag.name}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="section-heading">Reputation</h3>
+                    <div class="section-count" th:text="${reputation} + ' points'">0 points</div>
+                    <div class="section-box">
+                        <p>This is your current reputation score earned from upvotes on answers and questions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Badges</h3>
+                <p>You have not earned any badges</p>
+            </div>
+
+            <div class="section">
+                <h3>Followed posts</h3>
+                <p>You are not following any posts</p>
+            </div>
+
+            <div class="section">
+                <h3>Accounts</h3>
+                <p>🔗 Stack Overflow | Meta Stack Exchange</p>
+            </div>
+
+            <div class="section">
+                <h3>Articles</h3>
+                <p>You have not created any articles</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saves Tab Content -->
     <div class="profile-main-body" th:if="${activeTab == 'saves'}">
         <div class="user-content">
             <h2>Saved Questions</h2>
@@ -493,6 +548,7 @@
         </div>
     </div>
 
+    <!-- Profile Tab Content -->
     <div class="profile-main-body" th:if="${activeTab == 'profile'}">
         <div class="user-content">
             <h2>Profile Information</h2>
@@ -569,178 +625,7 @@
                             <button type="submit" class="btn btn-primary">💾 Save Changes</button>
                         </div>
                     </form>
-        </div>
-    </div>
-    <div class="profile-main-body" th:if="${activeTab == 'activity'}">
-        <div class="sidebar-container">
-            <ul>
-                <li><a th:href="@{/users/{id}/summary(id=${user.id})}" th:classappend="${tab == 'summary'} ? 'active'">Summary</a></li>
-                <li><a th:href="@{/users/{id}/activity/answers(id=${user.id})}" th:classappend="${tab == 'answers'} ? 'active'">Answers</a></li>
-                <li><a th:href="@{/users/{id}/activity/questions(id=${user.id})}" th:classappend="${tab == 'questions'} ? 'active'">Questions</a></li>
-                <li><a th:href="@{/tags/{id}/activity(id=${user.id})}" th:classappend="${tab == 'tags'} ? 'active'">Tags</a></li>
-                <li><a th:href="@{/users/{id}/activity/badges(id=${user.id})}" th:classappend="${tab == 'badges'} ? 'active'">Badges</a></li>
-                <li><a th:href="@{/users/{id}/activity/following(id=${user.id})}" th:classappend="${tab == 'following'} ? 'active'">Following</a></li>
-                <li><a th:href="@{/users/{id}/activity/responses(id=${user.id})}" th:classappend="${tab == 'responses'} ? 'active'">Responses</a></li>
-                <li><a th:href="@{/users/{id}/activity/votes(id=${user.id})}" th:classappend="${tab == 'votes'} ? 'active'">Votes</a></li>
-            </ul>
-        </div>
 
-        <div class="user-content">
-            <!-- Summary Tab -->
-            <div th:if="${tab == 'summary'}">
-                <h2>Summary</h2>
-                <div class="summary-cards">
-                    <div class="card"><h3>Reputation is how the community thanks you</h3><p>When users upvote your helpful posts, you’ll earn reputation and unlock new privileges.</p></div>
-                    <div class="card"><h3>Earn badges for helpful actions</h3><p>Badges are digital flair you get for participation.</p></div>
-                    <div class="card"><h3>Measure your impact</h3><p>Your posts help thousands of people looking for solutions.</p></div>
-                </div>
-
-                <div class="section-grid">
-                    <div>
-                        <div class="section-header">
-                            <h3 class="section-heading">Answers</h3>
-                            <span class="section-count" th:text="${answerCount} + ' total'">0 total</span>
-                        </div>
-                        <div class="section-box">
-                            <div th:if="${#lists.isEmpty(answers)}">
-                                <p>You have not asked any answers</p>
-                            </div>
-                            <ul th:if="${!#lists.isEmpty(answers)}" class="section-list">
-                                <li th:each="a : ${answers}" class="answer-list-item">
-                                    <div class="answer-content">
-                                        <a th:href="@{/questions/{id}(id=${a.question.id})}"
-                                           th:text="${a.content.length() > 50 ? a.content.substring(0, 50) + '...' : a.content}"
-                                           class="answer-link"></a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="section-header">
-                            <h3 class="section-heading">Questions</h3>
-                            <span class="section-count" th:text="${questionCount} + ' total'">0 total</span>
-                        </div>
-                        <div class="section-box">
-                            <div th:if="${#lists.isEmpty(questions)}">
-                                <p>You have not asked any questions</p>
-                            </div>
-                            <ul th:if="${!#lists.isEmpty(questions)}" class="section-list">
-                                <li th:each="q : ${questions}" class="answer-list-item">
-                                    <div class="answer-content">
-                                        <a th:href="@{/questions/{id}(id=${q.id})}"
-                                           th:text="${q.title.length() > 50 ? q.title.substring(0, 50) + '...' : q.title}"
-                                           class="question-link"></a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="section-heading">Tags</h3>
-                        <div class="section-count" th:text="${tags.size()} + ' total'">0 total</div>
-                        <div class="section-box">
-                            <div th:if="${#lists.isEmpty(tags)}"><p>You have not participated in any tags</p></div>
-                            <ul th:if="${!#lists.isEmpty(tags)}" class="section-list">
-                                <li th:each="tag : ${tags}" th:text="${tag.name}"></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="section-heading">Reputation</h3>
-                        <div class="section-count" th:text="${reputation} + ' points'">0 points</div>
-                        <div class="section-box">
-                            <p>This is your current reputation score earned from upvotes on answers and questions.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section"><h3>Badges</h3><p>You have not earned any badges</p></div>
-                <div class="section"><h3>Followed posts</h3><p>You are not following any posts</p></div>
-                <div class="section"><h3>Accounts</h3><p>🔗 Stack Overflow | Meta Stack Exchange</p></div>
-                <div class="section"><h3>Articles</h3><p>You have not created any articles</p></div>
-            </div>
-
-            <!-- Answers Tab -->
-            <div th:if="${tab == 'answers'}">
-                <div class="section-header">
-                    <h3 class="section-heading">Answers</h3>
-                    <span class="section-count" th:text="${answerCount} + ' total'">0 total</span>
-                </div>
-                <div class="section-box">
-                    <div th:if="${#lists.isEmpty(answers)}">
-                        <p>You have not answered any questions</p>
-                    </div>
-                    <ul th:if="${!#lists.isEmpty(answers)}" class="section-list">
-                        <li th:each="a : ${answers}" class="answer-list-item">
-                            <div class="answer-content">
-                                <a th:href="@{/questions/{id}(id=${a.question.id})}"
-                                   th:text="${a.content.length() > 50 ? a.content.substring(0, 50) + '...' : a.content}"
-                                   class="answer-link"></a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Questions Tab -->
-            <div th:if="${tab == 'questions'}">
-                <div class="section-header">
-                    <h3 class="section-heading">Questions</h3>
-                    <span class="section-count" th:text="${questionCount} + ' total'">0 total</span>
-                </div>
-                <div class="section-box">
-                    <div th:if="${#lists.isEmpty(questions)}">
-                        <p>You have not asked any questions</p>
-                    </div>
-                    <ul th:if="${!#lists.isEmpty(questions)}" class="section-list">
-                        <li th:each="q : ${questions}" class="answer-list-item">
-                            <div class="answer-content">
-                                <a th:href="@{/questions/{id}(id=${q.id})}"
-                                   th:text="${q.title.length() > 50 ? q.title.substring(0, 50) + '...' : q.title}"
-                                   class="question-link"></a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Tags Tab -->
-            <div th:if="${tab == 'tags'}">
-                <h3 class="section-heading">Tags</h3>
-                <div class="section-count" th:text="${tags.size()} + ' total'">0 total</div>
-                <div class="section-box">
-                    <div th:if="${#lists.isEmpty(tags)}"><p>You have not participated in any tags</p></div>
-                    <ul th:if="${!#lists.isEmpty(tags)}" class="section-list">
-                        <li th:each="tag : ${tags}" th:text="${tag.name}"></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Badges Tab -->
-            <div th:if="${tab == 'badges'}">
-                <h3 class="section-heading">Badges</h3>
-                <div class="section-count" th:text="${badges.size()} + ' total'">0 total</div>
-                <div class="section-box">
-                    <div th:if="${#lists.isEmpty(badges)}"><p>You have not earned any badges</p></div>
-                    <ul th:if="${!#lists.isEmpty(badges)}" class="section-list">
-                        <li th:each="badge : ${badges}" th:text="${badge.name}"></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div th:if="${tab == 'following'}">
-                <h3 class="section-heading">Following</h3>
-            </div>
-            <div th:if="${tab == 'responses'}">
-                <h3 class="section-heading">Responses</h3>
-            </div>
-            <div th:if="${tab == 'votes'}">
-                <h3 class="section-heading">Votes</h3>
-            </div>
         </div>
     </div>
 </section>
