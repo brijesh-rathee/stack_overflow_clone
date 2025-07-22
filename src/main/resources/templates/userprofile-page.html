@@ -319,7 +319,7 @@
             background-color: #5a6268;
         }
 
-          .pagination {
+        .pagination {
             margin-top: 20px;
             display: flex;
             justify-content: center;
@@ -346,18 +346,22 @@
             color: #0077cc;
             border: 1px solid #ccc;
             display: inline-block;
+            text-align: center;
+            min-width: 30px;
         }
 
         .pagination .active-page {
             background-color: #0077cc;
             color: white;
             font-weight: bold;
+            border-color: #0077cc;
         }
 
         .pagination li a:hover {
             background-color: #e6f0ff;
         }
-         .section-header {
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -396,6 +400,7 @@
             color: #333;
             font-size: 15px;
         }
+
         .question-link {
             font-size: 16px;
             font-weight: 500;
@@ -403,6 +408,7 @@
             text-decoration: none;
             display: inline-block;
         }
+
         .answer-link {
             font-size: 16px;
             font-weight: 500;
@@ -411,6 +417,116 @@
             display: inline-block;
         }
 
+        /* Saved Questions Section Styling */
+        .question-box {
+            margin-top: 20px;
+        }
+
+        .question-container {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .stats div {
+            margin-bottom: 10px;
+        }
+
+        .stats strong {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+        }
+
+        .stats span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .answer-count strong {
+            color: #0c0;
+        }
+
+        .question-content-wrapper {
+            flex: 1;
+        }
+
+        .question-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #0066cc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .question-title:hover {
+            text-decoration: underline;
+        }
+
+        .excerpt {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .tags {
+            margin-bottom: 10px;
+        }
+
+        .tags .tag {
+            display: inline-block;
+            background-color: #e1ecf4;
+            color: #39739d;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            text-decoration: none;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .tags .tag:hover {
+            background-color: #d0e3f0;
+        }
+
+        .user-info {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .user-info .username {
+            color: #0077cc;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+        .user-info .username:hover {
+            text-decoration: underline;
+        }
+
+        .user-info .reputation {
+            margin-right: 5px;
+        }
+
+        .user-info .timestamp {
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -430,15 +546,15 @@
             </div>
         </div>
         <div class="profile-actions" th:if="${isCurrentUser}">
-                <button onclick="
-                                const form = document.getElementById('editForm');
-                                if (form.style.display === 'none' || form.style.display === '') {
-                                  form.style.display = 'block';
-                                } else {
-                                  form.style.display = 'none';
-                                }
-                              ">Edit Profile
-                </button>
+            <button onclick="
+                    const form = document.getElementById('editForm');
+                    if (form.style.display === 'none' || form.style.display === '') {
+                        form.style.display = 'block';
+                    } else {
+                        form.style.display = 'none';
+                    }
+                  ">Edit Profile
+            </button>
             <button type="button">Network profile</button>
         </div>
     </div>
@@ -460,33 +576,104 @@
                 <p>No saved questions yet.</p>
             </div>
 
-            <!-- Updated styling for better visibility -->
-            <div style="margin-top: 20px;" th:if="${!#lists.isEmpty(savedQuestions)}">
-                <!-- Each question in a clear container -->
-                <div th:each=" q : ${savedQuestions}"
-                     style="border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 8px; background: #fff;">
-                   <div>
-                       <a th:href="@{/questions/{id}(id=${q.id})}"
-                          th:text="${q.title}"
-                          style="color: #0066cc; text-decoration: none;">Question Title</a>
-                   </div>
+            <div th:each="question : ${savedQuestions}" class="question-box">
+                <div class="question-container">
+                    <!-- Stats Column (matching home page) -->
+                    <div class="stats">
+                        <div>
+                            <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
+                            <span>votes</span>
+                        </div>
+
+                        <!-- Show answer count with green styling if > 0 -->
+                        <div th:if="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
+                            <strong th:text="${answerCounts[question.id]}">0</strong>
+                            <span>answers</span>
+                        </div>
+                        <div th:unless="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                            <strong th:text="${answerCounts != null and answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
+                            <span>answers</span>
+                        </div>
+
+                        <div>
+                            <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
+                            <span>views</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Content (matching home page) -->
+                    <div class="question-content-wrapper">
+                        <a class="question-title"
+                           th:href="@{'/questions/' + ${question.id}}"
+                           th:text="${question.title != null ? question.title : 'Untitled'}">
+                            Question Title
+                        </a>
+
+                        <p class="excerpt"
+                           th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
+                            Question excerpt...
+                        </p>
+
+                        <!-- Tags (matching home page styling) -->
+                        <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
+                            <a th:each="tag : ${question.tags}"
+                               th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                               class="tag"
+                               th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
+                        </div>
+
+                        <!-- User Info and Timestamp (matching home page) -->
+                        <div class="user-info">
+                            <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
+                               th:text="${question.user.username}">Username</a>
+                            <span th:if="${question.user.reputation != null}" class="reputation"
+                                  th:text="${question.user.reputation}">123</span>
+                            <span class="timestamp" th:if="${question.createdAt}"
+                                  th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy h:mm a')}">
+                        2 mins ago
+                        </span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div th:if="${totalPages > 1}" class="pagination">
-            <ul>
-                <li th:if="${currentPage > 0}">
-                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage - 1})}">‹ Previous</a>
-                </li>
 
-                <li>
-                    <span class="active-page" th:text="${currentPage + 1}">1</span>
-                </li>
+            <!-- Debug Output -->
+            <p th:text="'totalPages: ' + ${totalPages} + ', currentPage: ' + ${currentPage}"></p>
 
-                <li th:if="${currentPage < totalPages - 1}">
-                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage + 1})}">Next ›</a>
-                </li>
-            </ul>
+            <!-- Updated Pagination -->
+            <div th:if="${totalPages > 1}" class="pagination">
+                <ul>
+                    <!-- Previous Link -->
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1})}">‹ Previous</a>
+                    </li>
+
+                    <!-- First Page -->
+                    <li th:class="${currentPage == 0} ? 'active-page'">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=0)}" th:text="1" th:unless="${currentPage == 0}"></a>
+                        <span th:text="1" th:if="${currentPage == 0}" class="active-page"></span>
+                    </li>
+
+                    <!-- Middle Pages (up to 5 pages around current page) -->
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:if="${i != 0 and i != totalPages - 1 and (i >= currentPage - 2 and i <= currentPage + 2)}"
+                        th:class="${i == currentPage} ? 'active-page'">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${i})}" th:text="${i + 1}" th:unless="${i == currentPage}"></a>
+                        <span th:text="${i + 1}" th:if="${i == currentPage}" class="active-page"></span>
+                    </li>
+
+                    <!-- Last Page -->
+                    <li th:class="${currentPage == totalPages - 1} ? 'active-page'">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${totalPages - 1})}" th:text="${totalPages}" th:unless="${currentPage == totalPages - 1}"></a>
+                        <span th:text="${totalPages}" th:if="${currentPage == totalPages - 1}" class="active-page"></span>
+                    </li>
+
+                    <!-- Next Link -->
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage + 1})}">Next ›</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -527,46 +714,45 @@
                     <div class="detail-item">
                         <div class="detail-icon">⭐</div>
                         <div class="detail-content">
-                            <div class="detail-label">Repuatation</div>
+                            <div class="detail-label">Reputation</div>
                             <div class="detail-value" th:text="${user.reputation}"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-                    <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username" th:value="${user.username}" required />
-                        </div>
+            <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" th:value="${user.username}" required />
+                </div>
 
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" th:value="${user.email}" required />
-                        </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" th:value="${user.email}" required />
+                </div>
 
-                        <div class="form-group">
-                            <label for="bio">Bio</label>
-                            <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
+                </div>
 
-                        </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" th:value="${user.location}">
+                </div>
 
-                        <div class="form-group">
-                            <label for="location">Location</label>
-                            <input type="text" id="location" name="location" th:value="${user.location}">
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelBtn"
-                                    onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
-                                Cancel
-                            </button>
-                            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
-                        </div>
-                    </form>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn"
+                            onclick="document.getElementById('editForm').reset(); document.getElementById('editForm').style.display='none';">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
+
     <div class="profile-main-body" th:if="${activeTab == 'activity'}">
         <div class="sidebar-container">
             <ul>
