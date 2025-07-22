@@ -31,9 +31,16 @@ public class HomeController {
     @GetMapping({"/", "/home"})
     public String showHomePage(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
+                               @RequestParam(value = "keyword", required = false) String keyword,
                                Model model) {
-        Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
-        List<Question> questions = paginatedQuestions.getContent();
+        Page<Question> paginatedQuestions;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            paginatedQuestions = questionService.searchQuestions(keyword.trim().toLowerCase(), page, size);
+            model.addAttribute("keyword", keyword);
+        } else {
+            paginatedQuestions = questionService.getPaginatedQuestions(page, size);
+        }        List<Question> questions = paginatedQuestions.getContent();
 
         Map<Long, Integer> answerCounts = new HashMap<>();
         for (Question question : questions) {
