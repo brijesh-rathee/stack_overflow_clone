@@ -63,6 +63,7 @@ public class HomeController {
                                     Model model){
         Page<Question> paginatedQuestions = questionService.getPaginatedQuestions(page, size);
         List<Tag> tags = tagService.getAllTags();
+
         model.addAttribute("questions", paginatedQuestions.getContent());
         model.addAttribute("tags",tags);
         model.addAttribute("totalQuestions",paginatedQuestions.getTotalElements());
