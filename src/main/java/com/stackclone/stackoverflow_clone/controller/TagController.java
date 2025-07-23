@@ -60,8 +60,9 @@ public class TagController {
 
         return "tag/form";
     }
+
     @GetMapping("/{userId}/activity")
-    public String findAllTagsByUSerId(@PathVariable Long userId, Model model){
+    public String findAllTagsByUserId(@PathVariable Long userId, Model model){
         List<Tag> tags = tagService.findByTagsByUserId(userId);
         User user = userService.getUserById(userId);
 
@@ -72,6 +73,7 @@ public class TagController {
 
         return "userprofile-page";
     }
+
     @PostMapping("/create")
     public String createTag(@ModelAttribute Tag tag, RedirectAttributes redirectAttributes) {
         try {
@@ -160,7 +162,5 @@ public class TagController {
 
         return "redirect:/tags";
     }
-
-
 
 }
