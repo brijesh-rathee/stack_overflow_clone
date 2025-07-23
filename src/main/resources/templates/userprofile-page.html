@@ -763,11 +763,11 @@
                         </div>
                     </div>
                     <div class="question-content">
-                        <h3 class="question-title">
+                        <h1 class="question-title">
                             <a th:href="@{/questions/{id}(id=${q.id})}"
                                class="question-link"
                                th:text="${q.title}">Question Title</a>
-                        </h3>
+                        </h1>
                         <div class="question-excerpt" th:text="${q.content.length() > 200 ? q.content.substring(0, 200) + '...' : q.content}">
                             Question excerpt...
                         </div>
@@ -788,16 +788,46 @@
 
             <div th:if="${totalPages > 1}" class="pagination">
                 <ul>
+                    <!-- Previous Page -->
                     <li th:if="${currentPage > 0}">
-                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1}, size=${5})}">‹ Previous</a>
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1}, size=${5})}">‹ Prev</a>
                     </li>
 
-                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <!-- Always show first page -->
+                    <li>
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=0, size=${5})}"
+                           th:classappend="${0 == currentPage} ? 'active-page'"
+                           th:text="1">1</a>
+                    </li>
+
+                    <!-- Ellipsis if needed -->
+                    <li th:if="${currentPage > 2}">
+                        <span>...</span>
+                    </li>
+
+                    <!-- Surrounding pages (current -1, current, current +1) -->
+                    <li th:each="i : ${#numbers.sequence(
+            (currentPage > 1 ? currentPage - 1 : 1),
+            (currentPage < totalPages - 2 ? currentPage + 1 : totalPages - 2)
+        )}" th:if="${i > 0 && i < totalPages - 1}">
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${i}, size=${5})}"
                            th:classappend="${i == currentPage} ? 'active-page'"
-                           th:text="${i + 1}">1</a>
+                           th:text="${i + 1}"></a>
                     </li>
 
+                    <!-- Ellipsis if needed -->
+                    <li th:if="${currentPage < totalPages - 3}">
+                        <span>...</span>
+                    </li>
+
+                    <!-- Always show last page if more than 1 page -->
+                    <li th:if="${totalPages > 1}">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${totalPages - 1}, size=${5})}"
+                           th:classappend="${(totalPages - 1) == currentPage} ? 'active-page'"
+                           th:text="${totalPages}"></a>
+                    </li>
+
+                    <!-- Next Page -->
                     <li th:if="${currentPage < totalPages - 1}">
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage + 1}, size=${5})}">Next ›</a>
                     </li>

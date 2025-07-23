@@ -2,6 +2,7 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.TagService;
 import com.stackclone.stackoverflow_clone.service.UserService;
@@ -25,6 +26,7 @@ public class HomeController {
     private final QuestionService questionService;
     private final UserService userService;
     private final TagService tagService;
+    private final AnswerService answerService;
 
     private static final String HOME_VIEW = "home-page";
 
@@ -57,7 +59,7 @@ public class HomeController {
     }
 
 
-    @GetMapping("/questionslist")
+    /*@GetMapping("/questionslist")
     public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "5") int size,
                                     @RequestParam(required = false) Long tagId,
@@ -65,6 +67,8 @@ public class HomeController {
                                     Model model){
         Page<Question> paginatedQuestions = questionService.getFilteredAndSortedQuestions(page, size, tagId, sort);
         List<Tag> tags = tagService.getAllTags();
+
+
 
         model.addAttribute("questions", paginatedQuestions.getContent());
         model.addAttribute("tags",tags);
@@ -76,7 +80,34 @@ public class HomeController {
 
         return "questionslistpage";
     }
+*/
+    @GetMapping("/questionslist")
+    public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "5") int size,
+                                    @RequestParam(required = false) Long tagId,
+                                    @RequestParam(defaultValue = "newest") String sort,
+                                    Model model){
+        Page<Question> paginatedQuestions = questionService.getFilteredAndSortedQuestions(page, size, tagId, sort);
+        List<Tag> tags = tagService.getAllTags();
 
+        // Calculate answer counts for each question
+        Map<Long, Integer> answerCounts = new HashMap<>();
+        for (Question question : paginatedQuestions.getContent()) {
+            int count = answerService.getAnswerCountByQuestionId(question.getId());
+            answerCounts.put(question.getId(), count);
+        }
+
+        model.addAttribute("questions", paginatedQuestions.getContent());
+        model.addAttribute("tags", tags);
+        model.addAttribute("tagId", tagId);
+        model.addAttribute("sort", sort);
+        model.addAttribute("totalQuestions", paginatedQuestions.getTotalElements());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
+        model.addAttribute("answerCounts", answerCounts); // Add this line
+
+        return "questionslistpage";
+    }
     @GetMapping("/companies")
     public String getCompanies(){
         return "company-page";

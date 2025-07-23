@@ -36,6 +36,11 @@ public class AnswerServiceImpl implements AnswerService {
         return question.getAnswers();
     }
 
+    public int getAnswerCountByQuestionId(Long questionId) {
+        return answerRepository.countByQuestionId(questionId);
+    }
+
+
     @Override
     public void updateAnswer(Answer answer, Long answerId) {
         Answer existingAnswer = answerRepository.findById(answerId).orElseThrow();

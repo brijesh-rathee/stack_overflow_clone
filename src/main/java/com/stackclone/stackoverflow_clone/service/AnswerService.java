@@ -20,4 +20,6 @@ public interface AnswerService {
     Answer getAnswerById(Long answerId);
 
     List<Answer> getAnswerByUserId(Long userId);
+
+    int getAnswerCountByQuestionId(Long questionId);
 }
