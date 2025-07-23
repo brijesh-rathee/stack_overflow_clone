@@ -262,7 +262,8 @@
 
                 <select name="tagId" th:value="${tagId}">
                     <option value="">All Tags</option>
-                    <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}">Tag</option>
+                    <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"
+                    th:selected="${tag.id == tagId}">Tag</option>
                 </select>
 
                 <select name="sort" th:value="${sort}">
