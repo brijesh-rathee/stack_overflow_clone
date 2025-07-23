@@ -121,20 +121,23 @@ public class UserController {
     }
 
     @GetMapping
-    public String viewAllUsers(Model model) {
-        List<User> aLlUsers = userService.getAllUsers();
+    public String viewAllUsers(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "20") int size,
+                               @RequestParam(defaultValue = "createdAt") String sortField,
+                               @RequestParam(defaultValue = "desc") String sortDir,
+                               @RequestParam(required = false) String keyword,
+                               Model model) {
 
-        model.addAttribute("allUsers", aLlUsers);
+        Page<User> usersPage = userService.getAllPaginatedUsers(page, size, sortField, sortDir, keyword);
+        model.addAttribute("allUsers", usersPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usersPage.getTotalPages());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("query", keyword);
 
         return "user-page";
-    }
-
-    @GetMapping("/search")
-    public String searchUsers(@RequestParam String query, Model model) {
-
-        model.addAttribute("users", userService.searchBasic(query));
-
-        return "fragments/user-list :: userList";
     }
 
     @GetMapping("/edit/{userId}")
