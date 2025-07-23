@@ -91,4 +91,11 @@ public  class UserServiceImpl implements UserService {
     public List<User> searchBasic(String query) {
         return userRepository.searchBasic(query);
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        return userOptional.get();
+    }
 }

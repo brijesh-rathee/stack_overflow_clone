@@ -470,6 +470,19 @@
             font-size: 12px;
             color: #777;
         }
+        .user-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Adds space between content and pagination */
+            width: 100%; /* Ensures full width */
+        }
+
+        .pagination {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -488,7 +501,6 @@
                 </div>
             </div>
         </div>
-        <div class="profile-actions" th:if="${isCurrentUser}">
                 <button onclick="
                                 const form = document.getElementById('editForm');
                                 if (form.style.display === 'none' || form.style.display === '') {
@@ -496,10 +508,10 @@
                                 } else {
                                   form.style.display = 'none';
                                 }
-                              ">Edit Profile
+                              " style="border:none;padding:0.5rem;">Edit Profile
                 </button>
-            <button type="button">Network profile</button>
-        </div>
+            <button type="button"  style="border:none; padding:0.5rem;">Network profile</button>
+
     </div>
 
     <div class="profile-tabs">
@@ -522,30 +534,31 @@
             <!-- Updated styling for better visibility -->
             <div style="margin-top: 20px;" th:if="${!#lists.isEmpty(savedQuestions)}">
                 <!-- Each question in a clear container -->
-                <div th:each=" q : ${savedQuestions}"
+                <div th:each="q : ${savedQuestions}"
                      style="border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 8px; background: #fff;">
-                   <div>
-                       <a th:href="@{/questions/{id}(id=${q.id})}"
-                          th:text="${q.title}"
-                          style="color: #0066cc; text-decoration: none;">Question Title</a>
-                   </div>
+                    <div>
+                        <a th:href="@{/questions/{id}(id=${q.id})}"
+                           th:text="${q.title}"
+                           style="color: #0066cc; text-decoration: none;">Question Title</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div th:if="${totalPages > 1}" class="pagination">
-            <ul>
-                <li th:if="${currentPage > 0}">
-                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage - 1})}">‹ Previous</a>
-                </li>
 
-                <li>
-                    <span class="active-page" th:text="${currentPage + 1}">1</span>
-                </li>
+            <div th:if="${totalPages > 1}" class="pagination">
+                <ul>
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1}, size=${5})}">‹ Previous</a>
+                    </li>
 
-                <li th:if="${currentPage < totalPages - 1}">
-                    <a th:href="@{'/users/' + ${user.id} + '/saves'(page=${currentPage + 1})}">Next ›</a>
-                </li>
-            </ul>
+                    <li>
+                        <span class="active-page" th:text="${currentPage + 1}">1</span>
+                    </li>
+
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage + 1}, size=${5})}">Next ›</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
