@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -148,10 +149,21 @@ public class UserController {
         return "";
     }
 
-    @PostMapping("/{userId}/update")
-    public String saveUpdatedUser(@ModelAttribute("user")User user,@PathVariable Long userId){
-        userService.updateUser(user,userId);
 
+    @PostMapping("/{userId}/update")
+    public String saveUpdatedUser(@ModelAttribute("user") User user,
+                                  @PathVariable Long userId,
+                                  @RequestParam(value = "mediaFile", required = false) MultipartFile file) {
+
+        System.out.println("File received - empty?: " + (file == null || file.isEmpty()));
+        if (file != null && !file.isEmpty()) {
+            System.out.println("File details:");
+            System.out.println("Name: " + file.getOriginalFilename());
+            System.out.println("Size: " + file.getSize());
+            System.out.println("Content type: " + file.getContentType());
+        }
+
+        userService.updateUser(user, userId, file);
         return "redirect:/users/" + userId + "/profile";
     }
 

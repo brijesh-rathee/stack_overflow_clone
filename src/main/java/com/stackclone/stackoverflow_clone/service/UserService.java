@@ -5,6 +5,7 @@ import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ public interface UserService {
 
     void registerUser(User user);
 
-    void updateUser(User user, Long userId);
+    void updateUser(User user, Long userId, MultipartFile file);
 
     void deleteUser(Long userId);
 

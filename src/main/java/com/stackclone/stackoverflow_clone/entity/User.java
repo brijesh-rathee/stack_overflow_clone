@@ -42,6 +42,9 @@
         @Column(name = "location")
         private String location;
 
+        @Column(name = "image_url")
+        private String url;
+
         @Column(name = "website")
         private String website;
 

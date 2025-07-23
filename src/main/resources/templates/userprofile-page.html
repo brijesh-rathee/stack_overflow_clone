@@ -682,7 +682,11 @@
 <body>
 <section class="sec-container" layout:fragment="content">
     <div class="profile-header">
-        <div class="profile-picture"></div>
+        <img th:src="${user.url}"
+             alt="Profile Picture"
+             style="width: 220px; height: 220px; border-radius: 50%;">
+        <!--<div class="profile-picture">
+        </div>-->
         <div class="profile-info">
             <div class="name-block">
                 <h1 th:text="${user.username}">Ashish Kalbande</h1>
@@ -774,10 +778,10 @@
                             </p>
 
                             <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
-                                <span th:each="tag : ${question.tags}"
-                                   th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                                <a th:each="tag : ${question.tags}"
+                                   th:href="@{/tags/{tag}(tag=${tag.name})}"
                                    class="tag"
-                                   th:text="${tag.name != null ? tag.name : 'tag'}">tag</span>
+                                   th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
                             </div>
 
                             <div class="user-info">
@@ -883,7 +887,7 @@
                 </div>
             </div>
 
-                    <form method="post" id="editForm" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
+                    <form method="post" id="editForm" enctype="multipart/form-data" style="display:none;" th:action="@{'/users/' + ${user.id} + '/update'}">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username" th:value="${user.username}" required />
@@ -905,6 +909,12 @@
                             <label for="location">Location</label>
                             <input type="text" id="location" name="location" th:value="${user.location}">
                         </div>
+
+                        <div class="form-group">
+                            <label for="file">Upload Profie Photo</label>
+                            <input type="file" id="file" name="mediaFile" accept="image/*" />
+                        </div>
+
 
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" id="cancelBtn"

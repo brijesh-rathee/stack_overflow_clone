@@ -5,6 +5,7 @@ import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import com.stackclone.stackoverflow_clone.repository.UserRepository;
+import com.stackclone.stackoverflow_clone.service.CloudinaryService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import java.util.Set;
 public  class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CloudinaryService cloudinaryService;
 
     public User getUserById(Long id){
 
@@ -38,13 +41,22 @@ public  class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+
     @Override
-    public void updateUser(User user, Long userId) {
+    public void updateUser(User user, Long userId, MultipartFile file) {
         User existingUser = userRepository.findById(userId).orElseThrow();
+
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadImageToCloudinary(file);
+            System.out.println("Uploaded image URL: " + imageUrl);
+            existingUser.setUrl(imageUrl);
+        }
+
         existingUser.setEmail(user.getEmail());
         existingUser.setBio(user.getBio());
         existingUser.setUsername(user.getUsername());
         existingUser.setLocation(user.getLocation());
+
         userRepository.save(existingUser);
     }
 
