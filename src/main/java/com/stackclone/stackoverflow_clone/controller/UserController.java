@@ -200,18 +200,6 @@ public class UserController {
 
         return USER_PROFILE_VIEW;
     }
-    @GetMapping("/{userId}/activity/responses")
-    public String findResponses(@PathVariable Long userId, Model model){
-
-        User user = userService.getUserById(userId);
-
-        model.addAttribute("user", user);
-        model.addAttribute("tab", "responses");
-        model.addAttribute("activeTab", "activity");
-
-
-        return USER_PROFILE_VIEW;
-    }
 
     @GetMapping("/{userId}/activity/votes")
     public String viewUserVotes(@PathVariable Long userId, Model model){
@@ -232,14 +220,15 @@ public class UserController {
     @GetMapping("/{userId}/activity/badges")
     public String getAllBadges(@PathVariable Long userId, Model model){
         Set<Badge> allBadges = userService.getAllBadgesByUser(userId);
-        model.addAttribute("allBadges",allBadges);
+        int totalBadge = allBadges.size() != 0 ? allBadges.size() : 0;
         User user = userService.getUserById(userId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUsername = auth.getName();
         boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         model.addAttribute("user", user);
-        model.addAttribute("allBadges", allBadges);
+        model.addAttribute("totalBadge", totalBadge);
+        model.addAttribute("badges", allBadges);
         model.addAttribute("tab", "badges");
         model.addAttribute("activeTab", "activity");
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{home-page}">
 <head>
     <title>Profile - [[${user.username}]]</title>
@@ -90,7 +90,7 @@
             margin-top: 4px; font-weight: 500;
         }
         .section-list {
-            list-style: none; padding-left: 20px; margin: 0;
+            list-style: none; margin: 0;
         }
         .section-list li {
             margin-bottom: 8px; font-size: 14px; color: #444;
@@ -129,7 +129,6 @@
             border-radius: 6px;
         }
 
-        /* Profile Details Styling */
         .profile-details-card {
             background: #fff;
             border: 1px solid #e0e0e0;
@@ -223,7 +222,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-        /* Edit Form Styling */
         .edit-form-container {
             background: #f9f9f9;
             border: 1px solid #e0e0e0;
@@ -379,7 +377,7 @@
             height: 70%; overflow-y: auto;
 
             ul li {
-                color: #1DADF7;
+                color: #0077cc;
                 border: 1px solid #D9D9D9;
                 padding: 4px 8px 4px 8px;
             }
@@ -396,14 +394,14 @@
         .question-link {
             font-size: 16px;
             font-weight: 500;
-            color: #1a0dab;
+            color: #0077cc;
             text-decoration: none;
             display: inline-block;
         }
         .answer-link {
             font-size: 16px;
             font-weight: 500;
-            color: #1a0dab;
+            color: #0077cc;
             text-decoration: none;
             display: inline-block;
         }
@@ -473,7 +471,6 @@
             gap: 20px; /* Adds space between content and pagination */
             width: 100%; /* Ensures full width */
         }
-        /* Questions List Styling */
         .question-list {
             width: 100%;
             margin-top: 20px;
@@ -564,11 +561,6 @@
             color: #6a737c;
             margin-top: 4px;
         }
-
-        .user-info {
-            display: inline-block;
-        }
-
         .user-action-time {
             margin-bottom: 2px;
         }
@@ -579,121 +571,111 @@
             justify-content: center;
             width: 100%;
         }
-                /* Saved Questions Container Styling */
         .saved-questions-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-top: 20px;
+            width: 90%;
+            margin: 0 auto;
+            margin-top: 30px;
         }
 
         .question-box {
-            display: flex;
-            background-color: #fff;
-            border: 1px solid #e4e6e8;
-            border-radius: 4px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            padding: 12px;
-            transition: box-shadow 0.2s ease;
         }
 
         .question-box:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .question-stats {
+        .question-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stats {
+            min-width: 80px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            min-width: 80px;
-            padding-right: 16px;
-            text-align: center;
+            font-size: 15px;
             color: #6a737c;
-            font-size: 11px;
+            text-align: center;
         }
 
-        .stats-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+        .stats > div {
+            margin-bottom: 8px;
         }
 
-        .stats-count {
-            font-size: 17px;
-            font-weight: 500;
-            color: #242729;
+        .stats strong {
+            font-size: 15px;
+            color: #111111;
+            display: block;
+        }
+        .answer-count {
+            border: 1px solid #2e7d32;
+            border-radius: 4px;
+            color: #2e7d32;
+            padding: 2px 5px;
+            display: inline-block;
+            font-weight: 0;
         }
 
-        .stats-item.has-answers .stats-count {
-            color: #2e7d32; /* Green for answered questions */
-        }
-
-        .question-content {
+        .question-content-wrapper {
             flex: 1;
-            display: flex;
-            flex-direction: column;
         }
 
         .question-title {
-            margin: 0 0 8px 0;
-            font-size: 18px;
-            line-height: 2;
-        }
-
-        .question-link {
-            color: #0077cc;
-            font-size:20px;
+            color: #1da1f2;
+            font-size: 25px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
             text-decoration: none;
         }
 
-        .question-link:hover {
-            color: #0095ff;
+        .question-title:hover {
+            text-decoration: underline;
         }
 
-        .question-excerpt {
+        .excerpt {
             color: #3b4045;
-            font-size: 13px;
-            margin-bottom: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
             line-height: 1.4;
         }
 
-        .question-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
+        .tags {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
-        .question-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .post-tag {
-            color: #39739d;
-            background-color: #e1ecf4;
-            border-color: #e1ecf4;
+        .tag {
             display: inline-block;
-            padding: 0.4em 0.5em;
-            font-size: 12px;
-            line-height: 1;
-            white-space: nowrap;
-            text-decoration: none;
+            background-color: #e1f0fa;
+            color: #39739d;
+            padding: 4px 8px;
             border-radius: 3px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
         }
 
-        .post-tag:hover {
+        .tag:hover {
             background-color: #d1e5f1;
         }
-
-        .question-meta {
-            font-size: 12px;
+        .user-info {
+            display: flex;
+            align-items: right;
+            font-size: 13px;
             color: #6a737c;
-        }
-
-        .saved-date {
-            white-space: nowrap;
+            margin-top: 12px;
         }
     </style>
 </head>
@@ -753,47 +735,59 @@
                 <p>No saved questions yet.</p>
             </div>
 
-            <div th:if="${!#lists.isEmpty(savedQuestions)}" class="saved-questions-container">
-                <!-- Each question in a styled container box -->
-                <div th:each="q : ${savedQuestions}" class="question-box">
-                    <div class="question-stats">
-                        <div class="stats-item">
-                            <div class="stats-count" th:text="${q.voteCount}">0</div>
-                            <div class="stats-label">votes</div>
-                        </div>
-                        <div class="stats-item" th:classappend="${answerCounts.get(q.id) > 0} ? 'has-answers' : ''">
-                            <div class="stats-count" th:text="${answerCounts.get(q.id)}">0</div>
-                            <div class="stats-label">answers</div>
-                        </div>
-                        <div class="stats-item">
-                            <div class="stats-count" th:text="${q.viewCount}">0</div>
-                            <div class="stats-label">views</div>
-                        </div>
-                    </div>
-                    <div class="question-content">
-                        <h2 class="question-title">
-                            <a th:href="@{/questions/{id}(id=${q.id})}"
-                               class="question-link"
-                               th:text="${q.title}">Question Title</a>
-                        </h2>
-                        <div class="question-excerpt" th:text="${q.content.length() > 200 ? q.content.substring(0, 200) + '...' : q.content}">
-                            Question excerpt...
-                        </div>
-                        <div class="question-footer">
-                            <div class="question-tags">
-                                <a th:each="tag : ${q.tags}"
-                                   th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
-                                   class="post-tag"
-                                   th:text="${tag.name}">tag</a>
+            <div th:if="${!#lists.isEmpty(savedQuestions)}" class="questions-container">
+                <div th:each="question : ${savedQuestions}" class="question-box">
+                    <div class="question-container">
+                        <!-- Stats Section -->
+                        <div class="stats">
+                            <div>
+                                <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
+                                <span>votes</span>
                             </div>
-                            <div class="question-meta">
-                                <span class="saved-date">Saved <span th:text="${#temporals.format(q.createdAt, 'MMM d, yyyy')}">Jul 23, 2025</span></span>
+
+                            <div th:if="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
+                                <strong th:text="${answerCounts[question.id]}">0</strong>
+                                <span>answers</span>
+                            </div>
+                            <div th:unless="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}">
+                                <strong th:text="${answerCounts != null and answerCounts[question.id] != null ? answerCounts[question.id] : 0}">0</strong>
+                                <span>answers</span>
+                            </div>
+
+                            <div>
+                                <strong th:text="${question.viewCount != null ? question.viewCount : 0}">0</strong>
+                                <span>views</span>
+                            </div>
+                        </div>
+
+                        <!-- Question Content -->
+                        <div class="question-content-wrapper">
+                            <a class="question-title"
+                               th:href="@{'/questions/' + ${question.id}}"
+                               th:text="${question.title != null ? question.title : 'Untitled'}">
+                                Question Title
+                            </a>
+
+                            <p class="excerpt"
+                               th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
+                                Question excerpt...
+                            </p>
+
+                            <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
+                                <span th:each="tag : ${question.tags}"
+                                   th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                                   class="tag"
+                                   th:text="${tag.name != null ? tag.name : 'tag'}">tag</span>
+                            </div>
+
+                            <div class="user-info">
+                                <span>Saved on&nbsp;</span>
+                                <span class="timestamp" th:text="${#temporals.format(question.createdAt, 'MMM d, yyyy')}">Jul 23, 2025</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div th:if="${totalPages > 1}" class="pagination">
                 <ul>
                     <!-- Previous Page -->
@@ -929,7 +923,7 @@
                 <li><a th:href="@{/users/{id}/activity/answers(id=${user.id})}" th:classappend="${tab == 'answers'} ? 'active'">Answers</a></li>
                 <li><a th:href="@{/users/{id}/activity/questions(id=${user.id})}" th:classappend="${tab == 'questions'} ? 'active'">Questions</a></li>
                 <li><a th:href="@{/tags/{id}/activity(id=${user.id})}" th:classappend="${tab == 'tags'} ? 'active'">Followed Tags</a></li>
-                <li><a th:href="@{/users/{id}/activity/badges(id=${user.id})}" th:classappend="${tab == 'badges'} ? 'active'">Badges</a></li><li><a th:href="@{/users/{id}/activity/responses(id=${user.id})}" th:classappend="${tab == 'responses'} ? 'active'">Responses</a></li>
+                <li><a th:href="@{/users/{id}/activity/badges(id=${user.id})}" th:classappend="${tab == 'badges'} ? 'active'">Badges</a></li>
                 <li><a th:href="@{/users/{id}/activity/votes(id=${user.id})}" th:classappend="${tab == 'votes'} ? 'active'">Votes</a></li>
             </ul>
         </div>
@@ -951,7 +945,7 @@
                         </div>
                         <div class="section-box">
                             <div th:if="${#lists.isEmpty(answers)}">
-                                <p>You have not asked any answers</p>
+                                <p>You have not answered any question</p>
                             </div>
                             <ul th:if="${!#lists.isEmpty(answers)}" class="section-list">
                                 <li th:each="a : ${answers}" class="answer-list-item">
@@ -1095,7 +1089,7 @@
             </div>
             <div th:if="${tab == 'badges'}">
                 <h3 class="section-heading">Badges</h3>
-                <div class="section-count" th:text="${badges.size()} + ' total'">0 total</div>
+                <div class="section-count" th:text="${totalBadge}">0 total</div>
                 <div class="section-box">
                     <div th:if="${#lists.isEmpty(badges)}"><p>You have not earned any badges</p></div>
                     <ul th:if="${!#lists.isEmpty(badges)}" class="section-list">
@@ -1104,12 +1098,6 @@
                 </div>
             </div>
 
-            <div th:if="${tab == 'following'}">
-                <h3 class="section-heading">Following</h3>
-            </div>
-            <div th:if="${tab == 'responses'}">
-                <h3 class="section-heading">Responses</h3>
-            </div>
             <div th:if="${tab == 'votes'}">
                 <h3 class="section-heading">Votes</h3>
             </div>
