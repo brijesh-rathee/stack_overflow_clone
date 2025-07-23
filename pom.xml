@@ -8,6 +8,7 @@
 		<version>3.5.3</version>
 		<relativePath/>
 	</parent>
+
 	<groupId>com.stackclone</groupId>
 	<artifactId>stackoverflow-clone</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -85,6 +86,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.38.0</version>
 		</dependency>
 
 	</dependencies>
