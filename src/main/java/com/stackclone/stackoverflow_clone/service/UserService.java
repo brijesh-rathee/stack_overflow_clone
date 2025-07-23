@@ -5,7 +5,6 @@ import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -20,6 +19,8 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
+    List<User> getAllUsers();
+
     Set<Badge> getAllBadgesByUser(Long userId);
 
     List<Bookmark> getAllBookMarks(Long userId);
@@ -28,8 +29,8 @@ public interface UserService {
 
     User getLoggedInUser();
 
+
     User getUserByUsername(String name);
 
     Page<User> getAllPaginatedUsers(int page, int size, String sortField, String sortDir, String keyword);
-
 }
