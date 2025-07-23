@@ -58,29 +58,6 @@ public class HomeController {
         return HOME_VIEW;
     }
 
-
-    /*@GetMapping("/questionslist")
-    public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "5") int size,
-                                    @RequestParam(required = false) Long tagId,
-                                    @RequestParam(defaultValue = "newest") String sort,
-                                    Model model){
-        Page<Question> paginatedQuestions = questionService.getFilteredAndSortedQuestions(page, size, tagId, sort);
-        List<Tag> tags = tagService.getAllTags();
-
-
-
-        model.addAttribute("questions", paginatedQuestions.getContent());
-        model.addAttribute("tags",tags);
-        model.addAttribute("tagId", tagId);
-        model.addAttribute("sort", sort);
-        model.addAttribute("totalQuestions",paginatedQuestions.getTotalElements());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
-
-        return "questionslistpage";
-    }
-*/
     @GetMapping("/questionslist")
     public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "5") int size,
@@ -90,7 +67,6 @@ public class HomeController {
         Page<Question> paginatedQuestions = questionService.getFilteredAndSortedQuestions(page, size, tagId, sort);
         List<Tag> tags = tagService.getAllTags();
 
-        // Calculate answer counts for each question
         Map<Long, Integer> answerCounts = new HashMap<>();
         for (Question question : paginatedQuestions.getContent()) {
             int count = answerService.getAnswerCountByQuestionId(question.getId());

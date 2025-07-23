@@ -709,9 +709,17 @@
             </div>
             <div class="meta-info">
                 <div class="meta-row">
-                    <div class="meta-item">👤 Member for <span>3</span> days</div>
-                    <div class="meta-item">👀 Last seen this week</div>
-                    <div class="meta-item">📅 Visited <span>3</span> days, <span>3</span> consecutive</div>
+                    <div class="meta-item">
+                        <span th:if="${user.bio}" th:text="${user.bio}">User bio</span>
+                        <span th:unless="${user.bio}">No bio provided</span>
+                    </div>
+                    <div class="meta-item" th:if="${user.location}">
+                        📍 <span th:text="${user.location}">Location</span>
+                    </div>
+                    <div class="meta-item">
+                        📅 Member since
+                        <span th:text="${#temporals.format(user.createdAt, 'MMMM yyyy')}">July 2025</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -763,11 +771,11 @@
                         </div>
                     </div>
                     <div class="question-content">
-                        <h1 class="question-title">
+                        <h class="question-title">
                             <a th:href="@{/questions/{id}(id=${q.id})}"
                                class="question-link"
                                th:text="${q.title}">Question Title</a>
-                        </h1>
+                        </h>
                         <div class="question-excerpt" th:text="${q.content.length() > 200 ? q.content.substring(0, 200) + '...' : q.content}">
                             Question excerpt...
                         </div>
@@ -894,7 +902,8 @@
 
                         <div class="form-group">
                             <label for="bio">Bio</label>
-                            <textarea id="bio" name="bio" rows="10" cols="180" th:text="${user.bio}"></textarea>
+                            <input id="bio" name="bio" placeholder="Tell me about yourself in 50 words.."
+                                   th:value="${user.bio}"></input>
 
                         </div>
 
