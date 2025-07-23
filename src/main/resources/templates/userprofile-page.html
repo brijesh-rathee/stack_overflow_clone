@@ -476,13 +476,227 @@
             gap: 20px; /* Adds space between content and pagination */
             width: 100%; /* Ensures full width */
         }
+        /* Questions List Styling */
+.question-list {
+    width: 100%;
+    margin-top: 20px;
+}
 
-        .pagination {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+.question-summary {
+    padding: 12px 0 10px 0;
+    border-bottom: 1px solid #e4e6e8;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.stats-container {
+    width: 70px;
+    margin-right: 10px;
+    color: #6a737c;
+    font-size: 11px;
+}
+
+.stats {
+    margin: 0 0 4px 0;
+    text-align: center;
+}
+
+.vote, .answer, .view {
+    padding: 5px;
+    margin-bottom: 8px;
+}
+
+.vote-count, .answer-count, .view-count {
+    font-size: 17px;
+    font-weight: 500;
+    display: block;
+}
+
+.count-text {
+    font-size: 11px;
+}
+
+.summary {
+    flex: 1;
+    width: calc(100% - 90px);
+}
+
+.summary h3 {
+    margin: 0 0 5px 0;
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+.question-link {
+    color: #0077cc;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.question-link:hover {
+    color: #0095ff;
+}
+
+.excerpt {
+    color: #3b4045;
+    font-size: 13px;
+    margin: 0 0 8px 0;
+}
+
+.tags {
+    margin-bottom: 10px;
+}
+
+.post-tag {
+    color: #39739d;
+    background-color: #e1ecf4;
+    border-color: #e1ecf4;
+    display: inline-block;
+    padding: 0.4em 0.5em;
+    margin: 2px 2px 2px 0;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.started {
+    text-align: right;
+    font-size: 12px;
+    color: #6a737c;
+    margin-top: 4px;
+}
+
+.user-info {
+    display: inline-block;
+}
+
+.user-action-time {
+    margin-bottom: 2px;
+}
+
+.pagination {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+        /* Saved Questions Container Styling */
+.saved-questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.question-box {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #e4e6e8;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    padding: 12px;
+    transition: box-shadow 0.2s ease;
+}
+
+.question-box:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.question-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 80px;
+    padding-right: 16px;
+    text-align: center;
+    color: #6a737c;
+    font-size: 11px;
+}
+
+.stats-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stats-count {
+    font-size: 17px;
+    font-weight: 500;
+    color: #242729;
+}
+
+.stats-item.has-answers .stats-count {
+    color: #2e7d32; /* Green for answered questions */
+}
+
+.question-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.question-title {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.question-link {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.question-link:hover {
+    color: #0095ff;
+}
+
+.question-excerpt {
+    color: #3b4045;
+    font-size: 13px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.question-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.question-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.post-tag {
+    color: #39739d;
+    background-color: #e1ecf4;
+    border-color: #e1ecf4;
+    display: inline-block;
+    padding: 0.4em 0.5em;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.post-tag:hover {
+    background-color: #d1e5f1;
+}
+
+.question-meta {
+    font-size: 12px;
+    color: #6a737c;
+}
+
+.saved-date {
+    white-space: nowrap;
+}
     </style>
 </head>
 <body>
@@ -531,15 +745,43 @@
                 <p>No saved questions yet.</p>
             </div>
 
-            <!-- Updated styling for better visibility -->
-            <div style="margin-top: 20px;" th:if="${!#lists.isEmpty(savedQuestions)}">
-                <!-- Each question in a clear container -->
-                <div th:each="q : ${savedQuestions}"
-                     style="border: 1px solid #ddd; margin-bottom: 15px; padding: 15px; border-radius: 8px; background: #fff;">
-                    <div>
-                        <a th:href="@{/questions/{id}(id=${q.id})}"
-                           th:text="${q.title}"
-                           style="color: #0066cc; text-decoration: none;">Question Title</a>
+            <div th:if="${!#lists.isEmpty(savedQuestions)}" class="saved-questions-container">
+                <!-- Each question in a styled container box -->
+                <div th:each="q : ${savedQuestions}" class="question-box">
+                    <div class="question-stats">
+                        <div class="stats-item">
+                            <div class="stats-count" th:text="${q.voteCount}">0</div>
+                            <div class="stats-label">votes</div>
+                        </div>
+                        <div class="stats-item" th:classappend="${answerCounts.get(q.id) > 0} ? 'has-answers' : ''">
+                            <div class="stats-count" th:text="${answerCounts.get(q.id)}">0</div>
+                            <div class="stats-label">answers</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-count" th:text="${q.viewCount}">0</div>
+                            <div class="stats-label">views</div>
+                        </div>
+                    </div>
+                    <div class="question-content">
+                        <h3 class="question-title">
+                            <a th:href="@{/questions/{id}(id=${q.id})}"
+                               class="question-link"
+                               th:text="${q.title}">Question Title</a>
+                        </h3>
+                        <div class="question-excerpt" th:text="${q.content.length() > 200 ? q.content.substring(0, 200) + '...' : q.content}">
+                            Question excerpt...
+                        </div>
+                        <div class="question-footer">
+                            <div class="question-tags">
+                                <a th:each="tag : ${q.tags}"
+                                   th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                                   class="post-tag"
+                                   th:text="${tag.name}">tag</a>
+                            </div>
+                            <div class="question-meta">
+                                <span class="saved-date">Saved <span th:text="${#temporals.format(q.createdAt, 'MMM d, yyyy')}">Jul 23, 2025</span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -550,8 +792,10 @@
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1}, size=${5})}">‹ Previous</a>
                     </li>
 
-                    <li>
-                        <span class="active-page" th:text="${currentPage + 1}">1</span>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${i}, size=${5})}"
+                           th:classappend="${i == currentPage} ? 'active-page'"
+                           th:text="${i + 1}">1</a>
                     </li>
 
                     <li th:if="${currentPage < totalPages - 1}">
