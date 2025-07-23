@@ -723,6 +723,7 @@
                 </div>
             </div>
         </div>
+        <div th:if="${activeTab == 'profile'}">
                 <button onclick="
                                 const form = document.getElementById('editForm');
                                 if (form.style.display === 'none' || form.style.display === '') {
@@ -733,6 +734,7 @@
                               " style="border:none;padding:0.5rem;">Edit Profile
                 </button>
             <button type="button"  style="border:none; padding:0.5rem;">Network profile</button>
+        </div>
 
     </div>
 
