@@ -31,7 +31,6 @@ public class QuestionViewServiceImpl implements QuestionViewService {
             questionViewRepository.save(view);
 
             question.setViewCount(question.getViewCount() + 1);
-            badgeService.checkAndAssignViewBadges(question);
             questionRepository.save(question);
         }
     }

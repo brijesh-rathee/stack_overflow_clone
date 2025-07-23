@@ -70,7 +70,7 @@
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<Bookmark> bookmarks = new ArrayList<>();
 
-        @ManyToMany
+        @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(
                 name = "user_tags",
                 joinColumns = @JoinColumn(name = "user_id"),

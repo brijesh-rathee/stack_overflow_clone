@@ -23,9 +23,7 @@ public class BadgeServiceImpl implements BadgeService {
                 .anyMatch(b -> b.getName().equalsIgnoreCase(badgeName));
 
         if (!alreadyHasBadge) {
-            Badge badge = badgeRepository.findByName(badgeName)
-                    .orElseThrow(() -> new RuntimeException("Badge not found: " + badgeName));
-
+            Badge badge = badgeRepository.findByNameIgnoreCase(badgeName).orElseThrow();
             user.getBadges().add(badge);
             userRepository.save(user);
         }
@@ -37,16 +35,15 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public void checkAndAssignViewBadges(Question question) {
-        User user = question.getUser();
-        int views = user.getReputation();
+    public void checkAndAssignReputationBadges(User user) {
+        int rep = user.getReputation();
 
-        if (views >= 30000000) {
-            awardBadgeToUser(user, "GOLD");
-        } else if (views >= 20000000) {
-            awardBadgeToUser(user, "SILVER");
-        } else if (views >= 1000000) {
-            awardBadgeToUser(user, "BRONZE");
+        if (rep >= 30) {
+            awardBadgeToUser(user, "Legend");
+        } else if (rep >= 20) {
+            awardBadgeToUser(user, "Expert");
+        } else if (rep >= 10) {
+            awardBadgeToUser(user, "Contributor");
         }
     }
 }
