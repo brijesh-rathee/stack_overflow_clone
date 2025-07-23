@@ -9,6 +9,10 @@ import com.stackclone.stackoverflow_clone.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -51,11 +55,6 @@ public  class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
     public Set<Badge> getAllBadgesByUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
 
@@ -88,14 +87,25 @@ public  class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> searchBasic(String query) {
-        return userRepository.searchBasic(query);
-    }
-
-    @Override
     public User getUserByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         return userOptional.get();
     }
+
+    @Override
+    public Page<User> getAllPaginatedUsers(int page, int size, String sortField, String sortDir, String keyword) {
+        Sort sort = sortDir.equalsIgnoreCase("asc") ?
+                Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return userRepository.findAll(pageable);
+        } else {
+            return userRepository.findByUsernameContainingIgnoreCase(keyword, pageable);
+        }
+    }
+
 }
