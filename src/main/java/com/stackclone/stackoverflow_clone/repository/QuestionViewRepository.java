@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuestionViewRepository extends JpaRepository<QuestionView, Long> {
+
     boolean existsByUserAndQuestion(User user, Question question);
 }

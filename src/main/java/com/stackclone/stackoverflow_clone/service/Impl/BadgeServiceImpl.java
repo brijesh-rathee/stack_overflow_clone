@@ -38,14 +38,14 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public void checkAndAssignViewBadges(Question question) {
-        int views = question.getViewCount();
         User user = question.getUser();
+        int views = user.getReputation();
 
-        if (views >= 500) {
+        if (views >= 30000000) {
             awardBadgeToUser(user, "GOLD");
-        } else if (views >= 200) {
+        } else if (views >= 20000000) {
             awardBadgeToUser(user, "SILVER");
-        } else if (views >= 100) {
+        } else if (views >= 1000000) {
             awardBadgeToUser(user, "BRONZE");
         }
     }

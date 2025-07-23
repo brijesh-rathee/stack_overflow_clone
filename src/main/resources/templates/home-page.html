@@ -592,7 +592,7 @@
                             <!-- Tags -->
                             <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
                                 <a th:each="tag : ${question.tags}"
-                                   th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                                   th:href="@{/tags/{tag}(tag=${tag.name})}"
                                    class="tag"
                                    th:text="${tag.name}">tag</a>
                             </div>

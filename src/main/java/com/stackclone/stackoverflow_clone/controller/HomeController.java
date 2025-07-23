@@ -80,7 +80,7 @@ public class HomeController {
         model.addAttribute("totalQuestions", paginatedQuestions.getTotalElements());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", paginatedQuestions.getTotalPages());
-        model.addAttribute("answerCounts", answerCounts); // Add this line
+        model.addAttribute("answerCounts", answerCounts);
 
         return "questionslistpage";
     }

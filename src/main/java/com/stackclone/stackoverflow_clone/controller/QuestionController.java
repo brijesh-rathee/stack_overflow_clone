@@ -54,6 +54,7 @@ public class QuestionController {
             User user = userService.getLoggedInUser();
             questionViewService.recordView(user, currentQuestion);
             isBookmarkedByUser = bookmarkService.isBookmarked(user, currentQuestion);
+            currentQuestion = questionService.getQuestionById(id);
         }
 
         List<Answer> answers = answerService.getAllAnswersByQuestionId(id);

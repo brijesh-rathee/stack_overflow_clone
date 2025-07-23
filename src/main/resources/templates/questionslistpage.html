@@ -32,13 +32,11 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Match home page container layout */
         .question-container {
             display: flex;
             gap: 20px;
         }
 
-        /* Updated stats to match home page */
         .stats {
             min-width: 80px;
             display: flex;
@@ -262,7 +260,7 @@
 
                 <select name="tagId" th:value="${tagId}">
                     <option value="">All Tags</option>
-                    <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}">Tag</option>
+                    <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}" th:selected="${tag.Id==tagId}">Tag</option>
                 </select>
 
                 <select name="sort" th:value="${sort}">
@@ -316,7 +314,7 @@
                     <!-- Tags (matching home page styling) -->
                     <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
                         <a th:each="tag : ${question.tags}"
-                           th:href="@{/questions/tagged/{tag}(tag=${tag.name})}"
+                           th:href="@{/tags/{tag}(tag=${tag.name})}"
                            class="tag"
                            th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
                     </div>
@@ -338,12 +336,10 @@
 
         <div th:if="${totalPages > 1}" class="pagination">
             <ul>
-                <!-- Previous -->
                 <li th:if="${currentPage > 0}">
                     <a th:href="@{/questionslist(page=${currentPage - 1})}">Previous</a>
                 </li>
 
-                <!-- Current Page -->
                 <li>
                     <span class="active-page" th:text="${currentPage + 1}">1</span>
                 </li>
