@@ -6,10 +6,7 @@ import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
 import com.stackclone.stackoverflow_clone.enums.VoteType;
 import com.stackclone.stackoverflow_clone.repository.VoteRepository;
-import com.stackclone.stackoverflow_clone.service.AnswerService;
-import com.stackclone.stackoverflow_clone.service.QuestionService;
-import com.stackclone.stackoverflow_clone.service.UserService;
-import com.stackclone.stackoverflow_clone.service.VoteService;
+import com.stackclone.stackoverflow_clone.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,8 @@ public class voteServiceImpl implements VoteService {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final UserService userService;
+    private final BadgeService badgeService;
+
 
     private void updateReputation (User user, VoteType voteType) {
         int delta = 0;
@@ -79,6 +78,7 @@ public class voteServiceImpl implements VoteService {
             question.setVoteCount(question.getVoteCount() - 1);
             question.getUser().setReputation(question.getUser().getReputation() - 5);
         }
+        badgeService.checkAndAssignReputationBadges(question.getUser());
     }
 
     @Override

@@ -9,5 +9,5 @@ import java.util.List;
 public interface BadgeService {
     void awardBadgeToUser(User user, String badgeName);
     List<Badge> getUserBadges(User user);
-    void checkAndAssignViewBadges(Question question);
+    void checkAndAssignReputationBadges(User user);
 }
