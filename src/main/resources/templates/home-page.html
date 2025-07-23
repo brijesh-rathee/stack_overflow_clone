@@ -198,42 +198,65 @@
             width: 90%;
          }
 
-         .content-header {
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
-             margin-bottom: 20px;
-         }
-
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+            flex-wrap: nowrap;
+        }
+       .content-header .left-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: nowrap;
+            flex: 1;
+        }
+        .hello-logo {
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .content-header .text-section {
+            display: flex;
+            flex-direction: column;
+            flex: 0 1 auto;
+        }
          .content-header h1 {
                 font-size: 2.5rem;
                 font-weight: bold;
+                margin-bottom: 5px;
          }
 
          .content-header p {
                 font-size: 1.5rem;
+                margin: 0;
          }
-
          .user-title {
             font-weight: bold;
             font-size: 27px;
+            margin: 0;
         }
 
-         .ask-btn {
-             padding: 8px 16px;
-             text-decoration: none;
-             border: 1px solid #1B75D0;
-             background-color: transparent;
-             color: #1B75D0;
-             border-radius: 4px;
-             font-weight: 500;
-             transition: background-color 0.2s ease;
-         }
+        .ask-btn {
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #1B75D0;
+            background-color: transparent;
+            color: #1B75D0;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
 
-         .ask-btn:hover {
-             background-color: #D6E8FA;
-             color: #1B75D0;
-         }
+        .ask-btn:hover {
+            background-color: #D6E8FA;
+            color: #1B75D0;
+        }
 
          .footer {
              position: fixed;
@@ -332,12 +355,14 @@
 
         .question-title:hover {
             text-decoration: underline;
+            text-decoration: none;
         }
 
         .question-title h2 {
             margin: 0;
             font-size: 25px;
             color: inherit;
+            text-decoration: none;
         }
 
         .question-excerpt {
@@ -528,13 +553,16 @@
                     <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
                 </div>
                 <div class="content-header" sec:authorize="isAuthenticated()">
-                    <div>
-                        <h1 class="user-title">Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
-                        <p>Find answers to your technical questions and help others answer theirs.</p>
+                    <div class="left-section">
+                        <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQgHO4qmQCcGBCmtqXAp6PJukGOab5Lx8nU0PtBUnuebx8v1ov4"
+                             class="hello-logo">
+                        <div class="text-section">
+                            <h1 class="user-title">Welcome to Stack Overflow, <span th:text="${#authentication.name}">User</span>!</h1>
+                            <p style="color:grey; font-size:18px;">Find answers to your technical questions and help others answer theirs.</p>
+                        </div>
                     </div>
                     <a th:href="@{/questions/ask}" class="ask-btn">Ask Question</a>
                 </div>
-
                 <h1>Interesting posts for you</h1>
 
                 <div class="question-card" th:each="question : ${questions}">
