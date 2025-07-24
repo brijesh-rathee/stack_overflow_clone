@@ -232,7 +232,8 @@ public class UserController {
     @GetMapping("/{userId}/activity/badges")
     public String getAllBadges(@PathVariable Long userId, Model model){
         Set<Badge> allBadges = userService.getAllBadgesByUser(userId);
-        int totalBadge = allBadges.size() != 0 ? allBadges.size() : 0;
+        int totalBadge = !allBadges.isEmpty() ? allBadges.size() : 0;
+
         User user = userService.getUserById(userId);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUsername = auth.getName();

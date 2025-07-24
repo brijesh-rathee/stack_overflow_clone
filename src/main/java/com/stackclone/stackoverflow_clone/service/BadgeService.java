@@ -10,4 +10,5 @@ public interface BadgeService {
     void awardBadgeToUser(User user, String badgeName);
     List<Badge> getUserBadges(User user);
     void checkAndAssignReputationBadges(User user);
+    void removeReputationBadges(User user);
 }

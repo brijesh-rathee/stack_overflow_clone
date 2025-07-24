@@ -38,12 +38,25 @@ public class BadgeServiceImpl implements BadgeService {
     public void checkAndAssignReputationBadges(User user) {
         int rep = user.getReputation();
 
+        removeReputationBadges(user);
+
         if (rep >= 30) {
             awardBadgeToUser(user, "Legend");
+            awardBadgeToUser(user, "Expert");
+            awardBadgeToUser(user, "Contributor");
         } else if (rep >= 20) {
             awardBadgeToUser(user, "Expert");
+            awardBadgeToUser(user, "Contributor");
         } else if (rep >= 10) {
             awardBadgeToUser(user, "Contributor");
         }
+    }
+    @Override
+    public void removeReputationBadges(User user) {
+        user.getBadges().removeIf(badge ->
+                badge.getName().equals("Legend") ||
+                        badge.getName().equals("Expert") ||
+                        badge.getName().equals("Contributor"));
+        userRepository.save(user);
     }
 }
