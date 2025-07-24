@@ -835,7 +835,7 @@
                             </a>
 
                             <p class="excerpt"
-                               th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
+                               th:utext="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
                                 Question excerpt...
                             </p>
 
@@ -1138,10 +1138,6 @@
                                     <form th:action="${isFollowedTags != null and isFollowedTags.contains(tag.name)} ? @{/tags/unfollow} : @{/tags/follow}"
                                           method="post" style="margin: 0;">
                                         <input type="hidden" name="tagName" th:value="${tag.name}">
-                                        <button type="submit"
-                                                th:class="${isFollowedTags != null and isFollowedTags.contains(tag.name)} ? 'follow-btn following' : 'follow-btn follow'"
-                                                th:text="${isFollowedTags != null and isFollowedTags.contains(tag.name)} ? 'Following' : 'Follow'">
-                                        </button>
                                     </form>
                                 </div>
 
