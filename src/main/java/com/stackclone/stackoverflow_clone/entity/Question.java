@@ -37,6 +37,9 @@ public class Question {
     @Column(name = "link", columnDefinition = "TEXT")
     private String link;
 
+    @Column(name = "question_image_url")
+    private String url;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

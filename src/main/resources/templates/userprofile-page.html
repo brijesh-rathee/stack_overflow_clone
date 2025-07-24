@@ -426,7 +426,9 @@
         .tag-link {
             font-size: 18px;
             color: #0077cc;
-            text-decoration: none;
+    <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill-image-uploader@1.3.0/dist/quill.imageUploader.min.js"></script>        text-decoration: none;
             font-weight: 500;
         }
         .tag-link:hover {
@@ -732,11 +734,22 @@
 <body>
 <section class="sec-container" layout:fragment="content">
     <div class="profile-header">
-        <img th:src="${user.url}"
+        <!--<img th:src="${user.url}"
              alt="Profile Picture"
-             style="width: 220px; height: 220px; border-radius: 50%;">
-        <!--<div class="profile-picture">
-        </div>-->
+             style="width: 220px; height: 220px; border-radius: 50%;">-->
+        <div style="width: 220px; height: 220px; border-radius: 50%; position: relative; overflow: hidden;">
+            <img th:if="${user.url != null}"
+                 th:src="${user.url}"
+                 alt="Profile Picture"
+                 style="width: 100%; height: 100%; object-fit: cover;">
+
+            <div th:if="${user.url == null}"
+                 style="width: 100%; height: 100%; background-color: #F58021; color: white;
+                display: flex; align-items: center; justify-content: center; font-size: 72px; font-weight: bold;"
+                 th:text="${#strings.substring(user.username,0,1).toUpperCase()}">
+            </div>
+        </div>
+
         <div class="profile-info">
             <div class="name-block">
                 <h1 th:text="${user.username}">Ashish Kalbande</h1>

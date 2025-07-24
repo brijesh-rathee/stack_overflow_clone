@@ -5,11 +5,14 @@ import com.stackclone.stackoverflow_clone.entity.*;
 import com.stackclone.stackoverflow_clone.enums.VoteType;
 import com.stackclone.stackoverflow_clone.service.*;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -80,8 +83,11 @@ public class QuestionController {
     }
 
     @PostMapping("/submit")
-    public String createQuestion(@ModelAttribute Question question, @RequestParam List<Long> tagIds ) {
-        questionService.createQuestion(question, tagIds);
+    public String createQuestion(@ModelAttribute Question question,
+                                 @RequestParam List<Long> tagIds ,
+                                 @RequestParam(value = "mediaFile", required = false) MultipartFile file,
+                                  HttpServletRequest request) {
+        questionService.createQuestion(question, tagIds,file);
 
         return REDIRECT_HOME_VIEW;
     }

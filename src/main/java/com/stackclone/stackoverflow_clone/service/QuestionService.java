@@ -3,6 +3,7 @@ package com.stackclone.stackoverflow_clone.service;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface QuestionService {
 
     List<Question> getAllQuestions();
 
-    void createQuestion(Question question, List<Long> tagIds);
+    void createQuestion(Question question, List<Long> tagIds, MultipartFile file);
 
     Question getQuestionById(Long id);
 

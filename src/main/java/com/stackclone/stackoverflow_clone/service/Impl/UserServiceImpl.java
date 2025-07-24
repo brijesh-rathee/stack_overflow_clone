@@ -48,7 +48,6 @@ public  class UserServiceImpl implements UserService {
 
         if (file != null && !file.isEmpty()) {
             String imageUrl = cloudinaryService.uploadImageToCloudinary(file);
-            System.out.println("Uploaded image URL: " + imageUrl);
             existingUser.setUrl(imageUrl);
         }
 

@@ -4,6 +4,7 @@ import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.QuestionRepository;
+import com.stackclone.stackoverflow_clone.service.CloudinaryService;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 
 import com.stackclone.stackoverflow_clone.service.TagService;
@@ -21,12 +22,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
+import org.springframework.web.multipart.MultipartFile;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
     private final UserService userService;
     private final TagService tagService;
+    private final CloudinaryService cloudinaryService;
 
     private final QuestionRepository questionRepository;
 
@@ -43,11 +49,25 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.save(existingQuestion);
     }
 
-    public void createQuestion(Question question,List<Long> tagIds) {
+    public void createQuestion(Question question, List<Long> tagIds, MultipartFile file) {
         User loggedInUser = userService.getLoggedInUser();
         List<Tag> tags = tagService.getTagsByIds(tagIds);
         question.setUser(loggedInUser);
         question.setTags(new HashSet<>(tags));
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                String imageUrl = cloudinaryService.uploadImageToCloudinary(file);
+                question.setUrl(imageUrl);
+            } catch (Exception e) {
+                System.err.println("Failed to upload image: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No file uploaded or file is empty");
+        }
+
+        String content = question.getContent() != null ? question.getContent() : "";
+        question.setContent(content);
 
         questionRepository.save(question);
     }
