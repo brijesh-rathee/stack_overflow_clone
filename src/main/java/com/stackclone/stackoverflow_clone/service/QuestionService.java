@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface QuestionService {
 
-    List<Question> getAllQuestions();
-
     void createQuestion(Question question, List<Long> tagIds, MultipartFile file);
 
     Question getQuestionById(Long id);

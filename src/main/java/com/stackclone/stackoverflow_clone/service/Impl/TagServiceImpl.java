@@ -79,11 +79,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Page<Tag> getPaginatedTags(Pageable pageable) {
-        return tagRepository.findAll(pageable);
-    }
-
-    @Override
     public void followTag(String tagName, Long userId) {
         User user = userService.getUserById(userId);
         Tag tag = tagRepository.findByNameIgnoreCase(tagName).orElseThrow();

@@ -25,17 +25,6 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AnswerService answerService;
 
-    public List<Comment> getComments(){
-
-        return commentRepository.findAll();
-    }
-
-    public Comment getComment(Long commentId){
-        Optional<Comment> comment = commentRepository.findById(commentId);
-
-        return comment.get();
-    }
-
     public void addCommentToQuestion(Long questionId, String commentText) {
         Comment comment = new Comment();
         comment.setComment(commentText);
@@ -53,23 +42,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setAnswer(answer);
 
         commentRepository.save(comment);
-    }
-    public void updateComment(Long commentId, Comment comment){
-        Comment originalComment = getComment(commentId);
-        originalComment.setComment(comment.getComment());
-
-        commentRepository.save(originalComment);
-    }
-
-    public void deleteComment(Long commentId){
-        commentRepository.deleteById(commentId);
-    }
-
-    public List<Comment> getCommentsByUserId(Long userId){
-        User user = userService.getUserById(userId);
-        List<Comment> comments = user.getComments();
-
-        return comments;
     }
 
     public List<Comment> getCommentByQuestionId(Long questionId){

@@ -54,13 +54,6 @@ public class TagController {
         return "tags-page";
     }
 
-    @GetMapping("/create")
-    public String showCreateForm(Model model) {
-        model.addAttribute("tag", new Tag());
-
-        return "tag/form";
-    }
-
     @GetMapping("/{userId}/activity")
     public String findAllTagsByUserId(@PathVariable Long userId, Model model){
         List<Tag> tags = tagService.findByTagsByUserId(userId);
@@ -84,15 +77,6 @@ public class TagController {
         }
 
         return "redirect:/admin/tags";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Tag tag = tagService.getTagById(id);
-
-        model.addAttribute("tag", tag);
-
-        return "tag/form";
     }
 
     @PostMapping("/edit/{id}")
@@ -155,7 +139,7 @@ public class TagController {
     }
 
     @PostMapping("/unfollow")
-    public String unfollowTag(@RequestParam String tagName, Principal principal) {
+    public String unfollowTag(@RequestParam String tagName) {
         User user = userService.getLoggedInUser();
         Long userId = user.getId();
         tagService.unfollowTag(tagName, userId);

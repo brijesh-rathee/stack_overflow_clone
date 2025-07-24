@@ -22,8 +22,6 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    List<User> getAllUsers();
-
     Set<Badge> getAllBadgesByUser(Long userId);
 
     List<Bookmark> getAllBookMarks(Long userId);
@@ -31,9 +29,6 @@ public interface UserService {
     List<Vote> getAllVotesByUser(Long userId);
 
     User getLoggedInUser();
-
-
-    User getUserByUsername(String name);
 
     Page<User> getAllPaginatedUsers(int page, int size, String sortField, String sortDir, String keyword);
 

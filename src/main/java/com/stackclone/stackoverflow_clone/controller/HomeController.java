@@ -24,7 +24,6 @@ import java.util.Map;
 public class HomeController {
 
     private final QuestionService questionService;
-    private final UserService userService;
     private final TagService tagService;
     private final AnswerService answerService;
 
@@ -83,9 +82,6 @@ public class HomeController {
         model.addAttribute("answerCounts", answerCounts);
 
         return "questionslistpage";
-    }
-    @GetMapping("/companies")
-    public String getCompanies(){
-        return "company-page";
+
     }
 }

@@ -31,8 +31,8 @@ public class Question {
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name="scores")
-    private int scores=0;
+    @Column(name = "scores")
+    private int scores = 0;
 
     @Column(name = "link", columnDefinition = "TEXT")
     private String link;

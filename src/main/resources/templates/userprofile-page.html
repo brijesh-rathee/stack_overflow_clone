@@ -94,6 +94,7 @@
         }
         .section-list li {
             margin-bottom: 8px; font-size: 14px; color: #444;
+
         }
         .section {
             grid-column: span 2;
@@ -1058,7 +1059,7 @@
                             <div th:if="${#lists.isEmpty(tags)}"><p>You have not participated in any tags</p></div>
                             <ul th:if="${!#lists.isEmpty(tags)}" class="section-list">
                                 <li th:each="tag : ${tags}">
-                                    <a th:href="@{/tags/{tagName}(tagName=${tag.name})}" th:text="${tag.name}"></a>
+                                    <a class="answer-link" th:href="@{/tags/{tagName}(tagName=${tag.name})}" th:text="${tag.name}"></a>
                                 </li>
                             </ul>
                         </div>

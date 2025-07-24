@@ -25,8 +25,6 @@ public interface TagService {
 
     List<Tag> findByTagsByUserId(Long userId);
 
-    Page<Tag> getPaginatedTags(Pageable pageable);
-
     void followTag(String tagName, Long userId);
 
     void unfollowTag(String tagName, Long userId);

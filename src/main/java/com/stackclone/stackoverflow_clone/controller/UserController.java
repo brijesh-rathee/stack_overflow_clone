@@ -62,10 +62,8 @@ public class UserController {
     @GetMapping("/{id}/profile")
     public String getProfilePage(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = auth.getName();
+        String loggedInUsername = userService.getLoggedInUser().getUsername();
         boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
-
 
         model.addAttribute("user", user);
         model.addAttribute("activeTab", "profile");
@@ -100,27 +98,6 @@ public class UserController {
         return USER_PROFILE_VIEW;
     }
 
-    @GetMapping("/registerForm")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("user", new User());
-
-        return "";
-    }
-
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user) {
-        userService.registerUser(user);
-
-        return "";
-    }
-
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam Long userId){
-        userService.deleteUser(userId);
-
-        return "";
-    }
-
     @GetMapping
     public String viewAllUsers(@RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "20") int size,
@@ -141,15 +118,6 @@ public class UserController {
         return "user-page";
     }
 
-    @GetMapping("/edit/{userId}")
-    public String updateForm(@PathVariable Long userId , Model model){
-        User user = userService.getUserById(userId);
-        model.addAttribute("existingUser",user);
-
-        return "";
-    }
-
-
     @PostMapping("/{userId}/update")
     public String saveUpdatedUser(@ModelAttribute("user") User user,
                                   @PathVariable Long userId,
@@ -164,9 +132,6 @@ public class UserController {
     public String listUserQuestions(@PathVariable Long userId, Model model) {
         List<Question> questions = questionService.getQuestionsByUser(userId);
         User user = userService.getUserById(userId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = auth.getName();
-        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         model.addAttribute("user", user);
         model.addAttribute("questions", questions);
@@ -180,9 +145,6 @@ public class UserController {
     public String listUserAnswers(@PathVariable Long userId, Model model) {
         List<Answer> answers = answerService.getAnswerByUserId(userId);
         User user = userService.getUserById(userId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = auth.getName();
-        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         model.addAttribute("user", user);
         model.addAttribute("answers", answers);
@@ -211,9 +173,6 @@ public class UserController {
     public String viewUserVotes(@PathVariable Long userId, Model model){
         List<Vote> allVotes = userService.getAllVotesByUser(userId);
         User user = userService.getUserById(userId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = auth.getName();
-        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         model.addAttribute("user", user);
         model.addAttribute("tab", "votes");
@@ -229,9 +188,6 @@ public class UserController {
         int totalBadge = !allBadges.isEmpty() ? allBadges.size() : 0;
 
         User user = userService.getUserById(userId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = auth.getName();
-        boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         model.addAttribute("user", user);
         model.addAttribute("totalBadge", totalBadge);

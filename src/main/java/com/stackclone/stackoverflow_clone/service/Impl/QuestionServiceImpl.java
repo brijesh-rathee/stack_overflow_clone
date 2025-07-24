@@ -74,11 +74,6 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public List<Question> getAllQuestions() {
-
-        return questionRepository.findAll();
-    }
-
     @Override
     public Question getQuestionById(Long id) {
         Optional<Question> optionalQuestion = questionRepository.findById(id);

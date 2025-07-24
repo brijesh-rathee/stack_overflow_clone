@@ -16,12 +16,9 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     Optional<Tag> findByNameIgnoreCase(String name);
 
-    boolean existsByName(String tagName);
-
     @Query("SELECT u.followedTags FROM User u WHERE u.id = :userId")
     List<Tag> findFollowedTagsByUserId(@Param("userId") Long userId);
 
-    // Search by name and sort by popularity (number of questions)
     @Query("""
         SELECT t FROM Tag t
         LEFT JOIN t.questions q
@@ -31,7 +28,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     """)
     Page<Tag> searchByKeywordOrderByPopularity(@Param("keyword") String keyword, Pageable pageable);
 
-    // Search by name and sort alphabetically
     @Query("""
         SELECT t FROM Tag t
         WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
@@ -39,7 +35,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     """)
     Page<Tag> searchByKeywordOrderByNameAsc(@Param("keyword") String keyword, Pageable pageable);
 
-    // All tags sorted by popularity
     @Query("""
         SELECT t FROM Tag t
         LEFT JOIN t.questions q
@@ -48,6 +43,5 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     """)
     Page<Tag> findAllOrderByPopularity(Pageable pageable);
 
-    // All tags sorted alphabetically
     Page<Tag> findAllByOrderByNameAsc(Pageable pageable);
 }

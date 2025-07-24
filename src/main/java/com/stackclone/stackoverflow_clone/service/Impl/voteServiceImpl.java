@@ -24,18 +24,6 @@ public class voteServiceImpl implements VoteService {
     private final BadgeService badgeService;
 
 
-    private void updateReputation (User user, VoteType voteType) {
-        int delta = 0;
-
-        if (voteType == VoteType.UP) {
-            delta = 10;
-        } else if (voteType == VoteType.DOWN) {
-            delta = -5;
-        }
-
-        user.setReputation(user.getReputation() + delta);
-    }
-
     @Override
     @Transactional
     public void voteQuestion(Long questionId, VoteType newVoteType) {

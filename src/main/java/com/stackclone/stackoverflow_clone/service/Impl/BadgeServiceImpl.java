@@ -51,6 +51,7 @@ public class BadgeServiceImpl implements BadgeService {
             awardBadgeToUser(user, "Contributor");
         }
     }
+
     @Override
     public void removeReputationBadges(User user) {
         user.getBadges().removeIf(badge ->

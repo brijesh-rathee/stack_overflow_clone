@@ -29,15 +29,8 @@ public class AnswerController {
     private final UserService userService;
     private final VoteService voteService;
 
-    @GetMapping("/user/{userId}")
-    public String getAllAnswersByUser(@PathVariable Long userId, Model model){
-        List<Answer> answerList = answerService.getAnswerByUserId(userId);
-        model.addAttribute("allAnswer",answerList);
-
-        return "";
-    }
     @GetMapping("/edit/{id}")
-    public String showEditAnswerForm(@PathVariable("id") Long id, Model model, Principal principal) {
+    public String showEditAnswerForm(@PathVariable("id") Long id, Model model) {
         Answer answer = answerService.getAnswerById(id);
 
         Question question = answer.getQuestion();
@@ -89,13 +82,6 @@ public class AnswerController {
         return "redirect:/questions/" + questionId;
     }
 
-    @GetMapping("/{answerId}")
-    public String getAnswerById(@PathVariable Long answerId,Model model){
-        Answer answer = answerService.getAnswerById(answerId);
-        model.addAttribute("answer",answer);
-
-        return "";
-    }
     @PostMapping("/{answerId}/delete")
     public String deleteAnswer(@PathVariable Long answerId) {
         Answer answer = answerService.getAnswerById(answerId);

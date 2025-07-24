@@ -71,11 +71,6 @@ public  class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
     public Set<Badge> getAllBadgesByUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
 
@@ -105,14 +100,6 @@ public  class UserServiceImpl implements UserService {
         }
 
         return (User) authentication.getPrincipal();
-    }
-
-
-    @Override
-    public User getUserByUsername(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-
-        return userOptional.get();
     }
 
     @Override
