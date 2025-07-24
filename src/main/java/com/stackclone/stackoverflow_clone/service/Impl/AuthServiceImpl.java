@@ -29,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRole(UserRole.USER);
+        user.setUrl("https://res.cloudinary.com/dx9zbuld9/image/upload/v1753328661/bwto7aeew9b6wex8wmuv.jpg");
 
         userRepository.save(user);
     }

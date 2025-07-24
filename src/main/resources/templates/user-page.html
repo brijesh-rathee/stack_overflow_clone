@@ -212,10 +212,17 @@
                   data-reputation=${user.reputation},
                   data-role='user'">
 
-            <div class="avatar"
-                 th:text="${#strings.substring(user.username,0,1).toUpperCase()}">A</div>
+              <div class="avatar" style="overflow: hidden;">
+                  <img th:if="${user.url != null}" th:src="@{${user.url}}" alt="User Image"
+                       style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                  <span th:if="${user.url == null}"
+                        th:text="${#strings.substring(user.username,0,1).toUpperCase()}"
+                        style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                  </span>
+              </div>
 
-            <div class="user-card-item">
+
+              <div class="user-card-item">
               <div class="user-info">
                 <strong th:text="${user.username}">Username</strong>
                 <div class="location" th:if="${user.location}"
