@@ -207,24 +207,24 @@
                 <div class="search-box">
                     <form th:action="@{/tags}" method="get" style="width: 100%;">
                         <input type="text"
-                               name="keyword"
-                               th:value="${keyword}"
+                               name="tagKeyword"
+                               th:value="${tagKeyword}"
                                placeholder="Search tags..." />
                     </form>
                 </div>
 
                 <div class="filters">
-                    <a th:href="@{/tags(sort='popular', keyword=${keyword})}"
+                    <a th:href="@{/tags(sort='popular', tagKeyword=${tagKeyword})}"
                        th:if="${sort == null or sort.equals('popular')}"
                        class="filter-btn active-filter">Popular</a>
-                    <a th:href="@{/tags(sort='popular', keyword=${keyword})}"
+                    <a th:href="@{/tags(sort='popular', tagKeyword=${tagKeyword})}"
                        th:unless="${sort == null or sort.equals('popular')}"
                        class="filter-btn">Popular</a>
 
-                    <a th:href="@{/tags(sort='alphabetical', keyword=${keyword})}"
+                    <a th:href="@{/tags(sort='alphabetical', tagKeyword=${tagKeyword})}"
                        th:if="${sort != null and sort.equals('alphabetical')}"
                        class="filter-btn active-filter">Alphabetical</a>
-                    <a th:href="@{/tags(sort='alphabetical', keyword=${keyword})}"
+                    <a th:href="@{/tags(sort='alphabetical', tagKeyword=${tagKeyword})}"
                        th:unless="${sort != null and sort.equals('alphabetical')}"
                        class="filter-btn">Alphabetical</a>
                 </div>
