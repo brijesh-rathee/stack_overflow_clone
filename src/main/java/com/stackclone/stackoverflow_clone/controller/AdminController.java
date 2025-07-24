@@ -54,7 +54,7 @@ public class AdminController {
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usersPage.getTotalPages());
-        model.addAttribute("role", role); // To keep the selected role
+        model.addAttribute("role", role);
         model.addAttribute("activeTab", "users");
 
         return "admin-page";
@@ -128,8 +128,8 @@ public class AdminController {
     }
     @PostMapping("/admin/tags/edit/{id}")
     public String updateTag(@PathVariable Long id, @ModelAttribute("tag") Tag tag) {
-        tag.setId(id); // Ensure the ID is set correctly
-        tagService.updateTag(id, tag); // you should have this method in service
+        tag.setId(id);
+        tagService.updateTag(id, tag);
         return "redirect:/admin/tags";
     }
 
