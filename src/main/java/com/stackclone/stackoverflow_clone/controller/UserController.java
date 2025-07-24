@@ -186,6 +186,7 @@ public class UserController {
 
         model.addAttribute("user", user);
         model.addAttribute("answers", answers);
+        model.addAttribute("answerCount", answers.size());
         model.addAttribute("tab", "answers");
         model.addAttribute("activeTab", "activity");
         return USER_PROFILE_VIEW;
