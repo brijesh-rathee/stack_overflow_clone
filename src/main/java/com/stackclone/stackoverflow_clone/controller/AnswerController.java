@@ -39,10 +39,6 @@ public class AnswerController {
     public String showEditAnswerForm(@PathVariable("id") Long id, Model model, Principal principal) {
         Answer answer = answerService.getAnswerById(id);
 
-        if (!answer.getUser().getUsername().equals(principal.getName())) {
-            throw new SecurityException("Unauthorized");
-        }
-
         Question question = answer.getQuestion();
         model.addAttribute("question", question);
         model.addAttribute("answers", question.getAnswers());
@@ -99,12 +95,19 @@ public class AnswerController {
         return "";
     }
     @PostMapping("/{answerId}/delete")
-    public String deleteAnswer(@PathVariable Long answerId){
-        Long questionId = answerService.getAnswerById(answerId).getQuestion().getId();
-        answerService.deleteAnswer(answerId);
+    public String deleteAnswer(@PathVariable Long answerId) {
+        Answer answer = answerService.getAnswerById(answerId);
+        Question question = answer.getQuestion();
+        Long questionId = question.getId();
+        Answer acceptedAnswer = question.getAcceptedAnswer();
+
+        if (acceptedAnswer == null || !acceptedAnswer.getId().equals(answerId)) {
+            answerService.deleteAnswer(answerId);
+        }
 
         return "redirect:/questions/" + questionId;
     }
+
     @PostMapping("/{answerId}/upvote")
     public String upvoteAnswer(@PathVariable Long answerId) {
         voteService.voteAnswer(answerId, VoteType.UP);

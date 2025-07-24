@@ -279,14 +279,12 @@
 
         <div th:each="question : ${questions}" class="question-box">
             <div class="question-container">
-                <!-- Stats Column (matching home page) -->
                 <div class="stats">
                     <div>
                         <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
                         <span>votes</span>
                     </div>
 
-                    <!-- Show answer count with green styling if > 0 -->
                     <div th:if="${answerCounts != null and answerCounts[question.id] != null and answerCounts[question.id] > 0}" class="answer-count">
                         <strong th:text="${answerCounts[question.id]}">0</strong>
                         <span>answers</span>
@@ -302,7 +300,6 @@
                     </div>
                 </div>
 
-                <!-- Question Content (matching home page) -->
                 <div class="question-content-wrapper">
                     <a class="question-title"
                        th:href="@{'/questions/' + ${question.id}}"
@@ -311,11 +308,9 @@
                     </a>
 
                     <p class="excerpt"
-                       th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content available'}">
+                       th:utext="${question.content != null ? #strings.abbreviate(question.content, 100) : 'No content available'}">
                         Question excerpt...
                     </p>
-
-                    <!-- Tags (matching home page styling) -->
                     <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
                         <a th:each="tag : ${question.tags}"
                            th:href="@{/tags/{tag}(tag=${tag.name})}"
@@ -323,7 +318,6 @@
                            th:text="${tag.name != null ? tag.name : 'tag'}">tag</a>
                     </div>
 
-                    <!-- User Info and Timestamp (matching home page) -->
                     <div class="user-info">
                         <a th:href="@{/users/{userId}(userId=${question.user.id})}" class="username"
                            th:text="${question.user.username}">Username</a>

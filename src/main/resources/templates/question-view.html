@@ -1,71 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorate="~{home-page}">
 <head>
     <meta charset="UTF-8">
     <title th:text="${question.title}">Question</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
         }
-
         .container {
             max-width: 980px;
-            margin: 40px;
+            margin: 40px ;
             padding: 20px;
             background: #fff;
             border-radius: 6px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         .question-header {
             margin-bottom: 10px;
         }
-
         .title {
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 5px;
         }
-
         .meta {
             font-size: 0.9rem;
             color: #6c757d;
         }
-
         .post-box {
             display: flex;
             margin-top: 20px;
         }
-
         .vote-box {
             margin-right: 20px;
             text-align: center;
             font-size: 1.2rem;
         }
-
         .vote-box button {
             background: none;
             border: none;
             cursor: pointer;
             font-size: 1.5rem;
         }
-
         .vote-box div {
             font-weight: bold;
             margin: 8px 0;
         }
-
         .content-box {
             flex: 1;
         }
-
         .tags {
             margin-top: 10px;
         }
-
         .tags span {
             display: inline-block;
             background-color: #e1ecf4;
@@ -75,12 +67,10 @@
             border-radius: 3px;
             font-size: 0.85rem;
         }
-
         .action-links {
             margin-top: 10px;
             font-size: 0.85rem;
         }
-
         .action-links a, .action-links button {
             color: #0077cc;
             text-decoration: none;
@@ -90,7 +80,6 @@
             padding: 0;
             font-weight: bold;
         }
-
         .comment-list {
             margin-top: 15px;
             padding-left: 15px;
@@ -98,29 +87,18 @@
             font-size: 0.9rem;
             color: #444;
         }
-
         .comment-form {
             margin-top: 10px;
         }
-
         .comment-form input[type="text"] {
             width: 100%;
             padding: 8px;
             font-size: 0.9rem;
         }
-
         .form-area {
             margin-top: 40px;
         }
-
-        .form-area textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 10px;
-            font-size: 1rem;
-        }
-
-        .form-area button, .comment-form button {
+        .form-area button, .comment-form button, .save-edit, .cancel-edit {
             margin-top: 8px;
             background-color: #0a95ff;
             color: white;
@@ -130,98 +108,110 @@
             cursor: pointer;
             font-size: 0.9rem;
         }
-
-        .form-area button:hover, .comment-form button:hover {
+        .form-area button:hover, .comment-form button:hover, .save-edit:hover, .cancel-edit:hover {
             background-color: #0077cc;
         }
-
         .answer {
             border-top: 1px solid #ddd;
             margin-top: 40px;
             padding-top: 20px;
         }
-
         .nav {
             margin-top: 30px;
         }
-
         .nav a {
             color: #0077cc;
             text-decoration: none;
         }
-
         .nav a:hover {
             text-decoration: underline;
         }
-
         .answer .meta {
             margin-top: 5px;
             font-size: 0.85rem;
         }
         .bookmark-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-         }
-
-    .bookmark-button .star {
-        font-size: 2.2rem; /* Increase size here */
-        color: #ccc;
-        transition: color 0.3s ease;
-    }
-    .bookmark-button .star.filled {
-        color: #f4c150; /* Gold-like color */
-    }
-    .bookmark-button:hover .star {
-        color: #f4c150;
-    }
-
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .bookmark-button .star {
+            font-size: 2.2rem;
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+        .bookmark-button .star.filled {
+            color: #f4c150;
+        }
+        .bookmark-button:hover .star {
+            color: #f4c150;
+        }
+        .answer-content p {
+            margin: 0;
+        }
+        .edit-answer-form {
+            margin-top: 20px;
+            display: none;
+        }
+        .ck-editor__editable {
+            min-height: 120px;
+        }
+        .accepted-answer {
+            border-left: 3px solid green;
+            padding-left: 10px;
+        }
+        /* Code block styling */
+        .ck-content pre {
+            padding: 1em;
+            color: #353535;
+            background: #f8f8f8;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+        .ck-content code {
+            background-color: #f8f8f8;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
 <section layout:fragment="content">
     <div class="container">
-
         <!-- Question Section -->
         <div class="question-header">
             <div class="title" th:text="${question.title}">Question Title</div>
             <div class="meta">Asked by <strong th:text="${question.user.username}">User</strong></div>
         </div>
-
         <div class="post-box">
             <div class="vote-box">
                 <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
                     <input type="hidden" name="voteType" value="UP"/>
                     <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit">▲</button>
+                    <button type="submit" th:disabled="${#authentication.name == null}">▲</button>
                 </form>
-
                 <div th:text="${questionScore}">0</div>
-
                 <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
                     <input type="hidden" name="voteType" value="DOWN"/>
                     <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit">▼</button>
+                    <button type="submit" th:disabled="${#authentication.name == null}">▼</button>
                 </form>
                 <form th:action="@{/bookmarks/{id}/toggle(id=${question.id})}" method="post" style="margin-top: 12px;">
                     <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" th:disabled="${#authentication.name == null}" class="bookmark-button" title="Bookmark this question">
-                        <span th:if="${isBookmarkedByUser}" class="star filled">&#9733;</span>
-                        <span th:unless="${isBookmarkedByUser}" class="star">&#9734;</span>
+                        <span th:if="${isBookmarkedByUser}" class="star filled">★</span>
+                        <span th:unless="${isBookmarkedByUser}" class="star">☆</span>
                     </button>
                 </form>
-
-
             </div>
-
             <div class="content-box">
                 <p th:utext="${question.content}">Question content...</p>
-
                 <div class="tags">
                     <span th:each="tag : ${question.tags}" th:text="${tag.name}">tag</span>
                 </div>
-
                 <div class="action-links" sec:authorize="isAuthenticated()">
                     <a th:href="@{/questions/update/{id}(id=${question.id})}">Edit</a> |
                     <form th:action="@{/questions/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
@@ -229,13 +219,11 @@
                         <button type="submit">Delete</button>
                     </form>
                 </div>
-
                 <ul class="comment-list" th:if="${questionComments}">
                     <li th:each="comment : ${questionComments}">
                         <span th:text="${comment.comment}"></span> — <em th:text="${comment.user.username}"></em>
                     </li>
                 </ul>
-
                 <div class="comment-form">
                     <form th:action="@{/comments/add}" method="post">
                         <input type="hidden" name="questionId" th:value="${question.id}"/>
@@ -250,53 +238,60 @@
         <!-- Answers Section -->
         <div class="answer">
             <h2 th:text="'Answers (' + ${#lists.size(answers)} + ')'">Answers</h2>
-
-            <div th:each="answer : ${answers}" style="margin-bottom: 30px;">
+            <div th:each="answer : ${answers}" th:classappend="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id} ? 'accepted-answer'" style="margin-bottom: 30px;">
                 <div class="post-box">
                     <div class="vote-box">
                         <form th:action="@{'/answers/' + ${answer.id} + '/upvote'}" method="post">
                             <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <button type="submit" th:disabled="${#authentication.name == null}">▲</button>
                         </form>
-
                         <span th:text="${answerScores[answer.id] ?: 0}"></span>
-
                         <form th:action="@{'/answers/' + ${answer.id} + '/downvote'}" method="post">
                             <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <button type="submit" th:disabled="${#authentication.name == null}">▼</button>
                         </form>
                     </div>
                     <div class="content-box">
-                        <p th:utext="${answer.content}">Answer content...</p>
+                        <!-- Display mode -->
+                        <div class="answer-content" th:id="'answer-content-' + ${answer.id}">
+                            <p th:utext="${answer.content}">Answer content...</p>
+                        </div>
+
+                        <!-- Edit mode (hidden by default) -->
+                        <div class="edit-answer-form" th:id="'edit-form-' + ${answer.id}">
+                            <form th:action="@{'/answers/save/' + ${question.id}}" method="post">
+                                <input type="hidden" name="id" th:value="${answer.id}">
+                                <textarea th:id="'edit-textarea-' + ${answer.id}" name="content" th:text="${answer.content}"></textarea>
+                                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" class="save-edit">Save</button>
+                                <button type="button" class="cancel-edit" th:data-answer-id="${answer.id}">Cancel</button>
+                            </form>
+                        </div>
+
                         <div class="meta">Answered by <strong th:text="${answer.user.username}">User</strong></div>
                         <div th:if="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id}" style="margin-top: 8px;">
                             <span style="color: green; font-weight: bold;">✔ Accepted Answer</span>
                         </div>
-
                         <form th:if="${#authentication.name == question.user.username}"
                               th:action="@{/questions/{questionId}/accept-answer/{answerId}(questionId=${question.id}, answerId=${answer.id})}"
                               method="post" style="margin-top: 6px;">
                             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <button type="submit"
-                                    style="color: #0077cc; background: none; border: none; cursor: pointer; font-weight: bold;"
-                                    th:text="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id ? 'Unaccept Answer' : 'Accept Answer'}">
+                            <button type="submit" style="color: #0077cc; background: none; border: none; cursor: pointer; font-weight: bold;"
+                                    th:text="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id} ? 'Unaccept Answer' : 'Accept Answer'">
                             </button>
                         </form>
-
                         <div class="action-links" th:if="${#authentication.name == answer.user.username}">
-                            <a th:href="@{'/answers/edit/' + ${answer.id}}">Edit</a> |
+                            <button class="edit-answer" th:data-answer-id="${answer.id}">Edit</button> |
                             <form th:action="@{'/answers/' + ${answer.id} + '/delete'}" method="post" style="display:inline;">
                                 <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit">Delete</button>
                             </form>
                         </div>
-
                         <ul class="comment-list" th:if="${answerCommentsMap[answer.id]}">
                             <li th:each="comment : ${answerCommentsMap[answer.id]}">
                                 <span th:text="${comment.comment}"></span> — <em th:text="${comment.user.username}"></em>
                             </li>
                         </ul>
-
                         <div class="comment-form">
                             <form th:action="@{/comments/add}" method="post">
                                 <input type="hidden" name="answerId" th:value="${answer.id}"/>
@@ -309,29 +304,207 @@
                 </div>
             </div>
         </div>
+        <!-- Answer Submission Form -->
         <div class="form-area">
-            <label for="answer" th:text="${editMode} ? 'Edit Your Answer' : 'Your Answer'"></label>
-            <form th:action="@{'/answers/save/' + ${question.id}}" method="post" th:object="${newAnswer}">
-        <textarea id="answer" th:field="*{content}" required
-                  th:disabled="${#authentication.name == null}"></textarea>
-                <!-- Hidden field for answer ID (only in edit mode) -->
-                <input type="hidden" th:if="${newAnswer.id != null}" th:field="*{id}" />
-                <!-- CSRF token -->
-                <input type="hidden" th:if="${_csrf != null}"
-                       th:name="${_csrf.parameterName}"
-                       th:value="${_csrf.token}" />
-               <!-- Submit button -->
-                <button type="submit"
-                        th:text="${editMode} ? 'Update Answer' : 'Submit Answer'"
-                        th:disabled="${#authentication.name == null}">
-                </button>
+            <h3>Your Answer</h3>
+            <form id="answer-form" th:action="@{'/answers/save/' + ${question.id}}" method="post">
+                <textarea id="answer" name="content" style="display:none;"></textarea>
+                <div id="editor"></div>
+                <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" id="submit-answer" th:disabled="${#authentication.name == null}">Submit Answer</button>
             </form>
         </div>
-
         <div class="nav">
             <a href="/">← Back to Home</a>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            console.log('Document ready - initializing editors');
+
+            // Main answer editor with enhanced code features
+            let mainEditor;
+            ClassicEditor
+                .create(document.querySelector('#answer'), {
+                    toolbar: {
+                        items: [
+                            'heading', '|',
+                            'bold', 'italic', 'link', '|',
+                            'bulletedList', 'numberedList', '|',
+                            'blockQuote', 'codeBlock', '|',
+                            'code', '|',
+                            'undo', 'redo'
+                        ],
+                        shouldNotGroupWhenFull: true
+                    },
+                    codeBlock: {
+                        languages: [
+                            { language: 'plaintext', label: 'Plain text' },
+                            { language: 'html', label: 'HTML' },
+                            { language: 'css', label: 'CSS' },
+                            { language: 'javascript', label: 'JavaScript' },
+                            { language: 'java', label: 'Java' },
+                            { language: 'python', label: 'Python' },
+                            { language: 'php', label: 'PHP' },
+                            { language: 'sql', label: 'SQL' },
+                            { language: 'xml', label: 'XML' },
+                            { language: 'json', label: 'JSON' }
+                        ]
+                    },
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                        ]
+                    }
+                })
+                .then(editor => {
+                    mainEditor = editor;
+                    console.log('Main editor initialized successfully');
+
+                    // Listen for changes in the editor
+                    editor.model.document.on('change:data', () => {
+                        console.log('Editor content changed:', editor.getData());
+                    });
+                })
+                .catch(error => {
+                    console.error('Main editor error:', error);
+                });
+
+            // Enhanced form submission handler
+            $('#answer-form').on('submit', function(e) {
+                console.log('Form submission initiated');
+
+                // Ensure editor content is properly synced
+                if (mainEditor) {
+                    // First method: update source element
+                    mainEditor.updateSourceElement();
+
+                    // Second method: directly set value (fallback)
+                    $('#answer').val(mainEditor.getData());
+
+                    console.log('Textarea content after sync:', $('#answer').val());
+                    console.log('Editor content:', mainEditor.getData());
+                } else {
+                    console.warn('Editor not initialized');
+                }
+
+                // Validate content
+                const content = $('#answer').val().trim();
+                if (!content) {
+                    console.error('Validation failed: Empty answer');
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Debug: show form data being submitted
+                const formData = $(this).serialize();
+                console.log('Form data being submitted:', formData);
+
+                return true;
+            });
+
+            // Edit button click handler
+            $('.edit-answer').click(function() {
+                var answerId = $(this).data('answer-id');
+                console.log('Edit clicked for answer:', answerId);
+
+                // Hide content and show edit form
+                $('#answer-content-' + answerId).hide();
+                $('#edit-form-' + answerId).show();
+
+                // Initialize CKEditor for the edit form if not already done
+                if (!$('#edit-textarea-' + answerId).data('editor')) {
+                    ClassicEditor
+                        .create(document.querySelector('#edit-textarea-' + answerId), {
+                            toolbar: {
+                                items: [
+                                    'heading', '|',
+                                    'bold', 'italic', 'link', '|',
+                                    'bulletedList', 'numberedList', '|',
+                                    'blockQuote', 'codeBlock', '|',
+                                    'code', '|',
+                                    'undo', 'redo'
+                                ],
+                                shouldNotGroupWhenFull: true
+                            },
+                            codeBlock: {
+                                languages: [
+                                    { language: 'plaintext', label: 'Plain text' },
+                                    { language: 'html', label: 'HTML' },
+                                    { language: 'css', label: 'CSS' },
+                                    { language: 'javascript', label: 'JavaScript' },
+                                    { language: 'java', label: 'Java' },
+                                    { language: 'python', label: 'Python' },
+                                    { language: 'php', label: 'PHP' },
+                                    { language: 'sql', label: 'SQL' },
+                                    { language: 'xml', label: 'XML' },
+                                    { language: 'json', label: 'JSON' }
+                                ]
+                            }
+                        })
+                        .then(editor => {
+                            console.log('Edit editor initialized for answer:', answerId);
+                            $('#edit-textarea-' + answerId).data('editor', editor);
+                        })
+                        .catch(error => {
+                            console.error('Edit editor error:', error);
+                        });
+                }
+            });
+
+            // Cancel button click handler
+            $('.cancel-edit').click(function() {
+                var answerId = $(this).data('answer-id');
+                console.log('Cancel clicked for answer:', answerId);
+
+                // Hide edit form and show content
+                $('#edit-form-' + answerId).hide();
+                $('#answer-content-' + answerId).show();
+
+                // Destroy the CKEditor instance
+                var editor = $('#edit-textarea-' + answerId).data('editor');
+                if (editor) {
+                    editor.destroy().then(() => {
+                        console.log('Editor destroyed for answer:', answerId);
+                        $('#edit-textarea-' + answerId).data('editor', null);
+                    });
+                }
+            });
+
+            // Handle edit form submissions
+            $('.edit-answer-form form').on('submit', function(e) {
+                console.log('Edit form submission started');
+
+                var answerId = $(this).find('input[name="id"]').val();
+                var editor = $('#edit-textarea-' + answerId).data('editor');
+
+                // Update textarea with CKEditor content before submitting
+                if (editor) {
+                    editor.updateSourceElement();
+                    $('#edit-textarea-' + answerId).val(editor.getData()); // Double sync
+                    console.log('Edit form content:', $('#edit-textarea-' + answerId).val());
+                }
+
+                // Validate content
+                if (!$('#edit-textarea-' + answerId).val().trim()) {
+                    console.warn('Validation failed: Empty answer');
+                    e.preventDefault();
+                    return false;
+                }
+                console.log('Edit form submitted successfully');
+                return true;
+            });
+
+            // Remove confirmation dialogs from delete forms
+            $('form[action*="/delete"]').on('submit', function(e) {
+                console.log('Delete form submitted');
+                // No confirmation dialog will be shown
+                return true;
+            });
+        });
+    </script>
 </section>
 </body>
 </html>
