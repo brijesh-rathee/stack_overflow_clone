@@ -16,7 +16,7 @@ public interface UserService {
 
     void registerUser(User user);
 
-    void updateUser(User user, Long userId, MultipartFile file);
+    void updateUser(User user, Long userId,boolean removeProfile, MultipartFile file);
 
     void deleteUser(Long userId);
 

@@ -43,8 +43,12 @@ public  class UserServiceImpl implements UserService {
 
 
     @Override
-    public void updateUser(User user, Long userId, MultipartFile file) {
+    public void updateUser(User user, Long userId, boolean removeProfile, MultipartFile file) {
         User existingUser = userRepository.findById(userId).orElseThrow();
+
+        if(removeProfile){
+            existingUser.setUrl("https://res.cloudinary.com/dx9zbuld9/image/upload/v1753347401/l9xivdngn5jjf33glmwo.jpg");
+        }
 
         if (file != null && !file.isEmpty()) {
             String imageUrl = cloudinaryService.uploadImageToCloudinary(file);

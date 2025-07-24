@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Safelist;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service

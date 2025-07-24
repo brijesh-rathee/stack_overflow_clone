@@ -805,7 +805,6 @@
             <div th:if="${!#lists.isEmpty(savedQuestions)}" class="questions-container">
                 <div th:each="question : ${savedQuestions}" class="question-box">
                     <div class="question-container">
-                        <!-- Stats Section -->
                         <div class="stats">
                             <div>
                                 <strong th:text="${question.voteCount != null ? question.voteCount : 0}">0</strong>
@@ -973,6 +972,10 @@
                             <label for="file">Upload Profie Photo</label>
                             <input type="file" id="file" name="mediaFile" accept="image/*" />
                         </div>
+                        <input type="checkbox" id="removeProfile" name="removeProfile" value="true">
+                        <label for="removeProfile" style="color: #d32f2f; font-weight: 500;">
+                            Remove profile picture
+                        </label>
 
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" id="cancelBtn"
@@ -1019,7 +1022,7 @@
                                 <li th:each="a : ${answers}" class="answer-list-item">
                                     <div class="answer-content">
                                         <a th:href="@{/questions/{id}(id=${a.question.id})}"
-                                           th:text="${a.content.length() > 50 ? a.content.substring(0, 50) + '...' : a.content}"
+                                           th:utext="${a.content.length() > 50 ? a.content.substring(0, 50) + '...' : a.content}"
                                            class="answer-link"></a>
                                     </div>
                                 </li>
@@ -1090,7 +1093,7 @@
                         <li th:each="a : ${answers}" class="answer-list-item">
                             <div class="answer-content">
                                 <a th:href="@{/questions/{id}(id=${a.question.id})}"
-                                   th:text="${a.content}"
+                                   th:utext="${a.content}"
                                    class="answer-link"></a>
                             </div>
                         </li>

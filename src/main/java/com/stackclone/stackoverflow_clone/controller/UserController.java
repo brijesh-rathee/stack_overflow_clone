@@ -153,8 +153,9 @@ public class UserController {
     @PostMapping("/{userId}/update")
     public String saveUpdatedUser(@ModelAttribute("user") User user,
                                   @PathVariable Long userId,
+                                  @RequestParam(value = "removeProfile", defaultValue = "false") boolean removeProfile,
                                   @RequestParam(value = "mediaFile", required = false) MultipartFile file) {
-        userService.updateUser(user, userId, file);
+        userService.updateUser(user, userId,removeProfile, file);
 
         return "redirect:/users/" + userId + "/profile";
     }
