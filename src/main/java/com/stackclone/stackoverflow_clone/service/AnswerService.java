@@ -3,13 +3,14 @@ package com.stackclone.stackoverflow_clone.service;
 import com.stackclone.stackoverflow_clone.entity.Answer;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
 public interface AnswerService {
 
-    void createAnswer(Answer answer);
+    void createAnswer(Answer answer, MultipartFile file);
 
     void deleteAnswer(Long answerId);
 

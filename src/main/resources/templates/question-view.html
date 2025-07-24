@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <title th:text="${question.title}">Question</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+    <!-- Quill Editor CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,6 +34,25 @@
             font-size: 0.9rem;
             color: #6c757d;
         }
+
+        /* Question Image Styling */
+        .question-image {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .question-image img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .question-image img:hover {
+            transform: scale(1.02);
+        }
+
         .post-box {
             display: flex;
             margin-top: 20px;
@@ -154,27 +174,92 @@
             margin-top: 20px;
             display: none;
         }
-        .ck-editor__editable {
-            min-height: 120px;
-        }
         .accepted-answer {
             border-left: 3px solid green;
             padding-left: 10px;
         }
-        /* Code block styling */
-        .ck-content pre {
-            padding: 1em;
-            color: #353535;
-            background: #f8f8f8;
-            border-radius: 3px;
-            border: 1px solid #ddd;
-            overflow-x: auto;
+
+        /* Quill Editor Styles */
+        .ql-container {
+            min-height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 1rem;
         }
-        .ck-content code {
-            background-color: #f8f8f8;
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-family: monospace;
+        .ql-toolbar {
+            border: 1px solid #ccc;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            background-color: #f8f9fa;
+        }
+
+        /* Image modal for fullscreen view */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+        .image-modal img {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 5%;
+        }
+        .image-modal .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .image-upload-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px dashed #d6d9dc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+
+        .image-upload-section label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .image-upload-section label:hover {
+            color: #0a95ff;
+        }
+
+        .image-upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 1.2rem;
+            color: #0a95ff;
+        }
+
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6a737c;
+        }
+
+        .file-name {
+            font-weight: normal;
+            color: #2d2d2d;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -186,6 +271,12 @@
             <div class="title" th:text="${question.title}">Question Title</div>
             <div class="meta">Asked by <strong th:text="${question.user.username}">User</strong></div>
         </div>
+
+        <!-- Question Image - Only display if image exists -->
+        <div class="question-image" th:if="${question.url != null and !#strings.isEmpty(question.url)}">
+            <img th:src="${question.url}" alt="Question Image" onclick="openImageModal(this.src)"/>
+        </div>
+
         <div class="post-box">
             <div class="vote-box">
                 <form th:action="@{/votes/question/{id}(id=${question.id})}" method="post">
@@ -254,20 +345,19 @@
                     <div class="content-box">
                         <!-- Display mode -->
                         <div class="answer-content" th:id="'answer-content-' + ${answer.id}">
-                            <p th:utext="${answer.content}">Answer content...</p>
+                            <div th:utext="${answer.content}"></div>
                         </div>
-
                         <!-- Edit mode (hidden by default) -->
                         <div class="edit-answer-form" th:id="'edit-form-' + ${answer.id}">
                             <form th:action="@{'/answers/save/' + ${question.id}}" method="post">
                                 <input type="hidden" name="id" th:value="${answer.id}">
-                                <textarea th:id="'edit-textarea-' + ${answer.id}" name="content" th:text="${answer.content}"></textarea>
+                                <div th:id="'editor-edit-' + ${answer.id}"></div>
+                                <textarea th:id="'edit-textarea-' + ${answer.id}" name="content" style="display:none;" th:text="${answer.content}"></textarea>
                                 <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit" class="save-edit">Save</button>
                                 <button type="button" class="cancel-edit" th:data-answer-id="${answer.id}">Cancel</button>
                             </form>
                         </div>
-
                         <div class="meta">Answered by <strong th:text="${answer.user.username}">User</strong></div>
                         <div th:if="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id}" style="margin-top: 8px;">
                             <span style="color: green; font-weight: bold;">✔ Accepted Answer</span>
@@ -286,6 +376,9 @@
                                 <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit">Delete</button>
                             </form>
+                            <div class="question-image" th:if="${answer.url != null and !#strings.isEmpty(answer.url)}">
+                                <img th:src="${answer.url}" alt="Answer Image" onclick="openImageModal(this.src)"/>
+                            </div>
                         </div>
                         <ul class="comment-list" th:if="${answerCommentsMap[answer.id]}">
                             <li th:each="comment : ${answerCommentsMap[answer.id]}">
@@ -304,12 +397,24 @@
                 </div>
             </div>
         </div>
+
         <!-- Answer Submission Form -->
         <div class="form-area">
             <h3>Your Answer</h3>
-            <form id="answer-form" th:action="@{'/answers/save/' + ${question.id}}" method="post">
-                <textarea id="answer" name="content" style="display:none;"></textarea>
+            <form id="answer-form" th:action="@{'/answers/save/' + ${question.id}}" enctype="multipart/form-data" method="post">
+                <div class="image-upload-section">
+                    <label for="file">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <span>Upload image (optional)</span>
+                    </label>
+                    <input type="file" id="file" name="mediaFile" accept="image/*" onchange="displayFileName(this)">
+                    <div class="file-info">
+                        Supported formats: JPG, PNG, GIF
+                        <div id="fileNameDisplay" class="file-name"></div>
+                    </div>
+                </div>
                 <div id="editor"></div>
+                <textarea id="answer" name="content" style="display:none;"></textarea>
                 <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" id="submit-answer" th:disabled="${#authentication.name == null}">Submit Answer</button>
             </form>
@@ -318,191 +423,146 @@
             <a href="/">← Back to Home</a>
         </div>
     </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+        <span class="close" onclick="closeImageModal()">&times;</span>
+        <img id="modalImage" src="" alt="">
+    </div>
+
+    <!-- Quill Editor JS -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.js"></script>
     <script>
         $(document).ready(function() {
-            console.log('Document ready - initializing editors');
+            console.log('Document ready - initializing Quill editors');
 
-            // Main answer editor with enhanced code features
-            let mainEditor;
-            ClassicEditor
-                .create(document.querySelector('#answer'), {
-                    toolbar: {
-                        items: [
-                            'heading', '|',
-                            'bold', 'italic', 'link', '|',
-                            'bulletedList', 'numberedList', '|',
-                            'blockQuote', 'codeBlock', '|',
-                            'code', '|',
-                            'undo', 'redo'
-                        ],
-                        shouldNotGroupWhenFull: true
-                    },
-                    codeBlock: {
-                        languages: [
-                            { language: 'plaintext', label: 'Plain text' },
-                            { language: 'html', label: 'HTML' },
-                            { language: 'css', label: 'CSS' },
-                            { language: 'javascript', label: 'JavaScript' },
-                            { language: 'java', label: 'Java' },
-                            { language: 'python', label: 'Python' },
-                            { language: 'php', label: 'PHP' },
-                            { language: 'sql', label: 'SQL' },
-                            { language: 'xml', label: 'XML' },
-                            { language: 'json', label: 'JSON' }
-                        ]
-                    },
-                    heading: {
-                        options: [
-                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+            // Initialize main answer editor
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        ['code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Write your answer here...'
+            });
+
+            // Sync Quill content to hidden textarea before form submission
+            $('#answer-form').on('submit', function(e) {
+                const content = quill.root.innerHTML;
+                $('#answer').val(content);
+
+                if (!content || content === '<p><br></p>' || content === '<p></p>') {
+                    alert('Please provide an answer before submitting.');
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+
+            // Edit answer functionality
+            $('.edit-answer').click(function() {
+            var answerId = $(this).data('answer-id');
+            console.log('Edit clicked for answer:', answerId);
+
+            $('#answer-content-' + answerId).hide();
+            $('#edit-form-' + answerId).show();
+
+            // Initialize editor if not already done
+            if (!$('#editor-edit-' + answerId).hasClass('ql-container')) {
+                const editQuill = new Quill('#editor-edit-' + answerId, {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            ['code-block'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['clean']
                         ]
                     }
-                })
-                .then(editor => {
-                    mainEditor = editor;
-                    console.log('Main editor initialized successfully');
-
-                    // Listen for changes in the editor
-                    editor.model.document.on('change:data', () => {
-                        console.log('Editor content changed:', editor.getData());
-                    });
-                })
-                .catch(error => {
-                    console.error('Main editor error:', error);
                 });
 
-            // Enhanced form submission handler
-            $('#answer-form').on('submit', function(e) {
-                console.log('Form submission initiated');
+                // Get the content from the hidden textarea
+                const existingContent = $('#edit-textarea-' + answerId).val();
+                console.log('Existing content:', existingContent);
 
-                // Ensure editor content is properly synced
-                if (mainEditor) {
-                    // First method: update source element
-                    mainEditor.updateSourceElement();
-
-                    // Second method: directly set value (fallback)
-                    $('#answer').val(mainEditor.getData());
-
-                    console.log('Textarea content after sync:', $('#answer').val());
-                    console.log('Editor content:', mainEditor.getData());
-                } else {
-                    console.warn('Editor not initialized');
+                // Set the content in the editor
+                if (existingContent) {
+                    editQuill.clipboard.dangerouslyPasteHTML(0, existingContent);
                 }
 
-                // Validate content
-                const content = $('#answer').val().trim();
-                if (!content) {
-                    console.error('Validation failed: Empty answer');
-                    e.preventDefault();
-                    return false;
-                }
+                // Store the Quill instance
+                $('#editor-edit-' + answerId).data('quill', editQuill);
 
-                // Debug: show form data being submitted
-                const formData = $(this).serialize();
-                console.log('Form data being submitted:', formData);
-
-                return true;
-            });
-
-            // Edit button click handler
-            $('.edit-answer').click(function() {
-                var answerId = $(this).data('answer-id');
-                console.log('Edit clicked for answer:', answerId);
-
-                // Hide content and show edit form
-                $('#answer-content-' + answerId).hide();
-                $('#edit-form-' + answerId).show();
-
-                // Initialize CKEditor for the edit form if not already done
-                if (!$('#edit-textarea-' + answerId).data('editor')) {
-                    ClassicEditor
-                        .create(document.querySelector('#edit-textarea-' + answerId), {
-                            toolbar: {
-                                items: [
-                                    'heading', '|',
-                                    'bold', 'italic', 'link', '|',
-                                    'bulletedList', 'numberedList', '|',
-                                    'blockQuote', 'codeBlock', '|',
-                                    'code', '|',
-                                    'undo', 'redo'
-                                ],
-                                shouldNotGroupWhenFull: true
-                            },
-                            codeBlock: {
-                                languages: [
-                                    { language: 'plaintext', label: 'Plain text' },
-                                    { language: 'html', label: 'HTML' },
-                                    { language: 'css', label: 'CSS' },
-                                    { language: 'javascript', label: 'JavaScript' },
-                                    { language: 'java', label: 'Java' },
-                                    { language: 'python', label: 'Python' },
-                                    { language: 'php', label: 'PHP' },
-                                    { language: 'sql', label: 'SQL' },
-                                    { language: 'xml', label: 'XML' },
-                                    { language: 'json', label: 'JSON' }
-                                ]
-                            }
-                        })
-                        .then(editor => {
-                            console.log('Edit editor initialized for answer:', answerId);
-                            $('#edit-textarea-' + answerId).data('editor', editor);
-                        })
-                        .catch(error => {
-                            console.error('Edit editor error:', error);
-                        });
-                }
-            });
-
-            // Cancel button click handler
+                // Update hidden textarea on changes
+                editQuill.on('text-change', function() {
+                    $('#edit-textarea-' + answerId).val(editQuill.root.innerHTML);
+                });
+            }
+        });
+            // Cancel edit functionality
             $('.cancel-edit').click(function() {
                 var answerId = $(this).data('answer-id');
-                console.log('Cancel clicked for answer:', answerId);
-
-                // Hide edit form and show content
                 $('#edit-form-' + answerId).hide();
                 $('#answer-content-' + answerId).show();
-
-                // Destroy the CKEditor instance
-                var editor = $('#edit-textarea-' + answerId).data('editor');
-                if (editor) {
-                    editor.destroy().then(() => {
-                        console.log('Editor destroyed for answer:', answerId);
-                        $('#edit-textarea-' + answerId).data('editor', null);
-                    });
-                }
             });
 
-            // Handle edit form submissions
+            // Edit form submission
             $('.edit-answer-form form').on('submit', function(e) {
-                console.log('Edit form submission started');
-
                 var answerId = $(this).find('input[name="id"]').val();
-                var editor = $('#edit-textarea-' + answerId).data('editor');
+                var quill = $('#editor-edit-' + answerId).data('quill');
 
-                // Update textarea with CKEditor content before submitting
-                if (editor) {
-                    editor.updateSourceElement();
-                    $('#edit-textarea-' + answerId).val(editor.getData()); // Double sync
-                    console.log('Edit form content:', $('#edit-textarea-' + answerId).val());
-                }
+                if (quill) {
+                    const content = quill.root.innerHTML;
+                    $('#edit-textarea-' + answerId).val(content);
 
-                // Validate content
-                if (!$('#edit-textarea-' + answerId).val().trim()) {
-                    console.warn('Validation failed: Empty answer');
-                    e.preventDefault();
-                    return false;
+                    if (!content || content === '<p><br></p>' || content === '<p></p>') {
+                        alert('Please provide content before saving.');
+                        e.preventDefault();
+                        return false;
+                    }
                 }
-                console.log('Edit form submitted successfully');
                 return true;
             });
 
-            // Remove confirmation dialogs from delete forms
+            // Image modal functionality
+            function openImageModal(src) {
+                document.getElementById('imageModal').style.display = 'block';
+                document.getElementById('modalImage').src = src;
+            }
+
+            function closeImageModal() {
+                document.getElementById('imageModal').style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                const modal = document.getElementById('imageModal');
+                if (event.target === modal) {
+                    closeImageModal();
+                }
+            }
+
+            // Delete form submission (without confirmation)
             $('form[action*="/delete"]').on('submit', function(e) {
-                console.log('Delete form submitted');
-                // No confirmation dialog will be shown
                 return true;
             });
+
+            // Bookmark star hover effect
+            $('.bookmark-button').hover(
+                function() {
+                    if (!$(this).find('.star').hasClass('filled')) {
+                        $(this).find('.star').css('color', '#f4c150');
+                    }
+                },
+                function() {
+                    if (!$(this).find('.star').hasClass('filled')) {
+                        $(this).find('.star').css('color', '#ccc');
+                    }
+                }
+            );
         });
     </script>
 </section>

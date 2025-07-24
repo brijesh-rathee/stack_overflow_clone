@@ -30,6 +30,9 @@ public class Answer {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "answer_image_url")
+    private String url;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

@@ -5,10 +5,12 @@ import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.AnswerRepository;
 import com.stackclone.stackoverflow_clone.service.AnswerService;
+import com.stackclone.stackoverflow_clone.service.CloudinaryService;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,9 +21,14 @@ public class AnswerServiceImpl implements AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
 
     @Override
-    public void createAnswer(Answer answer) {
+    public void createAnswer(Answer answer, MultipartFile file) {
+        if(file != null && !file.isEmpty()) {
+            String imageurl = cloudinaryService.uploadImageToCloudinary(file);
+            answer.setUrl(imageurl);
+        }
         answerRepository.save(answer);
     }
 

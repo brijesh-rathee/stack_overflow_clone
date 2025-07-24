@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -69,6 +70,7 @@ public class AnswerController {
     @PostMapping("/save/{questionId}")
     public String saveOrUpdateAnswer(@PathVariable Long questionId,
                                      @ModelAttribute("newAnswer") Answer answer,
+                                     @RequestParam(name = "mediaFile", required = false) MultipartFile file,
                                      Principal principal) {
         if (answer.getId() != null) {
             Answer existing = answerService.getAnswerById(answer.getId());
@@ -81,7 +83,7 @@ public class AnswerController {
             Question question = questionService.getQuestionById(questionId);
             answer.setQuestion(question);
             answer.setUser(userService.getLoggedInUser());
-            answerService.createAnswer(answer);
+            answerService.createAnswer(answer,file);
         }
 
         return "redirect:/questions/" + questionId;
