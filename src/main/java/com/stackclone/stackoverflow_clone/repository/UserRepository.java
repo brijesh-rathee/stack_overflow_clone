@@ -1,6 +1,7 @@
 package com.stackclone.stackoverflow_clone.repository;
 
 import com.stackclone.stackoverflow_clone.entity.User;
+import com.stackclone.stackoverflow_clone.enums.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     Page<User> findByUsernameContainingIgnoreCase(String keyword, Pageable pageable);
+
+    Page<User> findByRole(UserRole role, Pageable pageable);
 }

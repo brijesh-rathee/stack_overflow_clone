@@ -536,13 +536,27 @@
 
         <aside class="sidebar">
             <ul>
+                <li sec:authorize="hasAuthority('ADMIN')">
+                    <a th:href="@{/admin}"><i class="fa-solid fa-user-shield"></i><span>Admin</span></a>
+                </li>
+
                 <li><a th:href="@{/}"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
                 <li><a th:href="@{/tags}"><i class="fa-solid fa-tags"></i><span>Tags</span></a></li>
                 <li><a th:href="@{/users}"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
                 <li><a th:href="@{/questionslist}"><i class="fa-solid fa-clipboard-question"></i><span>Questions</span></a></li>
-                <li  sec:authorize="isAuthenticated()"><a th:href="@{/users/{userId}/bookmarks(userId=${#authentication.principal.id})}"><i class="fa-solid fa-bookmark"></i><span>Saves</span></a></li>
-                <li  sec:authorize="!isAuthenticated()"><a th:href="@{/users/bookmarks}"><i class="fa-solid fa-bookmark"></i><span>Saves</span></a></li>
+
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/users/{userId}/bookmarks(userId=${#authentication.principal.id})}">
+                        <i class="fa-solid fa-bookmark"></i><span>Saves</span>
+                    </a>
+                </li>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/users/bookmarks}">
+                        <i class="fa-solid fa-bookmark"></i><span>Saves</span>
+                    </a>
+                </li>
             </ul>
+
         </aside>
 
         <main class="content" >
@@ -587,9 +601,8 @@
                             <a th:href="@{/questions/{id}(id=${question.id})}" class="question-title">
                                 <h2 th:text="${question.title}">Question Title</h2>
                             </a>
-                            <p class="question-excerpt" th:text="${#strings.abbreviate(question.content, 200)}">Question description...</p>
+                            <p class="question-excerpt" th:utext="${#strings.abbreviate(question.content, 200)}">Question description...</p>
 
-                            <!-- Tags -->
                             <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
                                 <a th:each="tag : ${question.tags}"
                                    th:href="@{/tags/{tag}(tag=${tag.name})}"

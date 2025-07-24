@@ -139,6 +139,15 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    @Override
+    public Page<Question> getQuestionsWithVoteLessThan(int threshold, PageRequest pageRequest) {
+        return questionRepository.findByVoteCountLessThan(threshold, pageRequest);
+    }
+
+    @Override
+    public Page<Question> getAllQuestionsPage(PageRequest pageRequest) {
+        return questionRepository.findAll(pageRequest);
+    }
 
 }
 

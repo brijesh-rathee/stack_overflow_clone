@@ -137,4 +137,9 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+    @Override
+    public Page<Tag> getAllTagsPage(PageRequest pageRequest) {
+        return tagRepository.findAll(pageRequest);
+    }
+
 }

@@ -4,6 +4,8 @@ import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -30,4 +32,8 @@ public interface QuestionService {
     Page<Question> searchQuestions(String keyword, int page, int size);
 
     Page<Question> getFilteredAndSortedQuestions(int page, int size, Long tagId, String sort);
+
+    Page<Question> getQuestionsWithVoteLessThan(int i, PageRequest of);
+
+    Page<Question> getAllQuestionsPage(PageRequest of);
 }

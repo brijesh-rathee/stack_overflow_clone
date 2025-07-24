@@ -252,7 +252,7 @@
                     <div class="tag-desc"
                          th:if="${tag.description != null and !tag.description.isEmpty()}"
                          th:with="words=${#strings.listSplit(tag.description, ' ')}"
-                         th:text="${words.size() > 20} ? ${#strings.arrayJoin(words.subList(0, 20).toArray(), ' ')} + '...' : tag.description">
+                         th:text="${#lists.size(words) > 20} ? ${#strings.arrayJoin(#lists.listSubList(words, 0, 20).toArray(), ' ')} + '...' : ${tag.description}">
                     </div>
                     <div class="tag-desc"
                          th:if="${tag.description == null or tag.description.isEmpty()}">

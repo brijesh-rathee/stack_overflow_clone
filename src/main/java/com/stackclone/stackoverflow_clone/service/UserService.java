@@ -4,7 +4,9 @@ import com.stackclone.stackoverflow_clone.entity.Badge;
 import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
+import com.stackclone.stackoverflow_clone.enums.UserRole;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,4 +36,8 @@ public interface UserService {
     User getUserByUsername(String name);
 
     Page<User> getAllPaginatedUsers(int page, int size, String sortField, String sortDir, String keyword);
+
+    Page<User> getUsersByRoleWithPagination(UserRole role, PageRequest of);
+
+    Page<User> getAllUsersWithPagination(PageRequest of);
 }

@@ -4,6 +4,7 @@ import com.stackclone.stackoverflow_clone.entity.Badge;
 import com.stackclone.stackoverflow_clone.entity.Bookmark;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.entity.Vote;
+import com.stackclone.stackoverflow_clone.enums.UserRole;
 import com.stackclone.stackoverflow_clone.repository.UserRepository;
 import com.stackclone.stackoverflow_clone.service.CloudinaryService;
 import com.stackclone.stackoverflow_clone.service.UserService;
@@ -128,4 +129,16 @@ public  class UserServiceImpl implements UserService {
             return userRepository.findByUsernameContainingIgnoreCase(keyword, pageable);
         }
     }
+
+
+    @Override
+    public Page<User> getAllUsersWithPagination(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Page<User> getUsersByRoleWithPagination(UserRole role, PageRequest pageRequest) {
+        return userRepository.findByRole(role, pageRequest);
+    }
+
 }

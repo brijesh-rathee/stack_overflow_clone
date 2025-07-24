@@ -34,4 +34,6 @@ public interface TagService {
     Set<String> getFollowedTagNames(Long userId);
 
     Page<Tag> getTagsFilteredAndSorted(String keyword, String sort, Pageable pageable);
+
+    Page<Tag> getAllTagsPage(PageRequest of);
 }

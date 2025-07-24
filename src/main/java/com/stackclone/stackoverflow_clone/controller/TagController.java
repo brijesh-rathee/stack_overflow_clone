@@ -83,7 +83,7 @@ public class TagController {
             redirectAttributes.addFlashAttribute("error", exception.getMessage());
         }
 
-        return "redirect:/tags";
+        return "redirect:/admin/tags";
     }
 
     @GetMapping("/{id}/edit")
@@ -95,7 +95,7 @@ public class TagController {
         return "tag/form";
     }
 
-    @PostMapping("/{id}/edit")
+    @PostMapping("/edit/{id}")
     public String updateTag(@PathVariable Long id, @ModelAttribute Tag tag, RedirectAttributes redirectAttributes) {
         try {
             tagService.updateTag(id, tag);
@@ -104,10 +104,10 @@ public class TagController {
             redirectAttributes.addFlashAttribute("error", exception.getMessage());
         }
 
-        return "redirect:/tags";
+        return "redirect:/admin/tags";
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping("/delete/{id}")
     public String deleteTag(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             tagService.deleteTag(id);
@@ -116,7 +116,7 @@ public class TagController {
             redirectAttributes.addFlashAttribute("error", exception.getMessage());
         }
 
-        return "redirect:/tags";
+        return "redirect:/admin/tags";
     }
 
     @GetMapping("/{tagName}")
