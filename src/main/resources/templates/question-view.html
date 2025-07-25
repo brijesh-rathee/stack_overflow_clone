@@ -368,7 +368,7 @@
                             </button>
                         </form>
                         <div class="action-links">
-                            <button class="edit-answer" th:data-answer-id="${answer.id}">Edit</button> |
+                            <button class="edit-answer" th:data-answer-id="${answer.id}" th:if="${#authentication.name == answer.user.username}">Edit</button>
                             <form th:action="@{'/answers/' + ${answer.id} + '/delete'}" method="post" style="display:inline;">
                                 <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit">Delete</button>
