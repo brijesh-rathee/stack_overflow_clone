@@ -4,6 +4,7 @@
       layout:decorate="~{home-page}">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{icon.webp}" />
     <title th:text="${tag != null} ? 'Questions tagged [' + ${tag.name} + ']' : 'Tag Not Found'">Questions by Tag</title>
     <style>
         .questions-container { width: 90%; margin: 0 auto; }

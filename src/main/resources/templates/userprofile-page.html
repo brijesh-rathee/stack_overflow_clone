@@ -4,6 +4,7 @@
       layout:decorate="~{home-page}">
 <head>
     <title>Profile - [[${user.username}]]</title>
+    <link rel="icon" type="image/png" th:href="@{icon.webp}" />
     <style>
         .sec-container { width: 90%; }
         .profile-header {
@@ -196,7 +197,6 @@
             font-size: 16px;
         }
 
-        /* Edit Button Styling */
         .edit-button-container {
             text-align: center;
             margin: 20px 0;
@@ -772,7 +772,7 @@
             </div>
         </div>
         <div th:if="${activeTab == 'profile'}">
-                <button onclick="
+                <button  th:if="${isCurrentUser}" onclick="
                                 const form = document.getElementById('editForm');
                                 if (form.style.display === 'none' || form.style.display === '') {
                                   form.style.display = 'block';
@@ -781,7 +781,7 @@
                                 }
                               " style="border:none;padding:0.5rem;">Edit Profile
                 </button>
-            <button type="button"  style="border:none; padding:0.5rem;">Network profile</button>
+
         </div>
 
     </div>

@@ -37,8 +37,7 @@ public class UserController {
     @GetMapping({"/{userId}", "/{userId}/activity", "/{userId}/summary"})
     public String viewUserById(@PathVariable Long userId, Model model) {
         User user = userService.getUserById(userId);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = auth.getName();
+        String loggedInUsername = userService.getLoggedInUser().getUsername();
         boolean isCurrentUser = user.getUsername().equals(loggedInUsername);
 
         List<Question> allQuestions = user.getQuestions();
@@ -87,6 +86,7 @@ public class UserController {
             answerCounts.put(question.getId(), count);
         }
 
+        model.addAttribute("hometab", "saves");
         model.addAttribute("user", user);
         model.addAttribute("bookmarks", userService.getAllBookMarks(userId)); // Optional
         model.addAttribute("activeTab", "saves");
@@ -107,6 +107,8 @@ public class UserController {
                                Model model) {
 
         Page<User> usersPage = userService.getAllPaginatedUsers(page, size, sortField, sortDir, keyword);
+
+        model.addAttribute("hometab", "users");
         model.addAttribute("allUsers", usersPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usersPage.getTotalPages());
@@ -133,6 +135,7 @@ public class UserController {
         List<Question> questions = questionService.getQuestionsByUser(userId);
         User user = userService.getUserById(userId);
 
+        model.addAttribute("questionCount", questions.size());
         model.addAttribute("user", user);
         model.addAttribute("questions", questions);
         model.addAttribute("tab", "questions");

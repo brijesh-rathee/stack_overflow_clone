@@ -38,6 +38,7 @@ public class TagController {
 
         Page<Tag> tagPage = tagService.getTagsFilteredAndSorted(tagKeyword, sort, PageRequest.of(page, size));
 
+        model.addAttribute("hometab", "tags");
         model.addAttribute("tags", tagPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", tagPage.getTotalPages());

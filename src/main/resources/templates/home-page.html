@@ -178,10 +178,6 @@
             width: 100%;
         }
 
-        .sidebar a:hover {
-            background-color: #d0d0d0;
-            color: black;
-        }
        .sidebar a.active-link {
             background-color: var(--active-color);
             color: white;
@@ -494,6 +490,12 @@
             flex: 1;
         }
 
+         .active a{
+            color: white !important;
+            background-color: #f48024;
+            border-radius: 6px;
+        }
+
     </style>
 </head>
 <body>
@@ -536,16 +538,16 @@
 
         <aside class="sidebar">
             <ul>
-                <li sec:authorize="hasAuthority('ADMIN')">
+                <li sec:authorize="hasAuthority('ADMIN')" th:classappend="${hometab == 'admin'} ? 'active'">
                     <a th:href="@{/admin}"><i class="fa-solid fa-user-shield"></i><span>Admin</span></a>
                 </li>
 
-                <li><a th:href="@{/}"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
-                <li><a th:href="@{/tags}"><i class="fa-solid fa-tags"></i><span>Tags</span></a></li>
-                <li><a th:href="@{/users}"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
-                <li><a th:href="@{/questionslist}"><i class="fa-solid fa-clipboard-question"></i><span>Questions</span></a></li>
+                <li th:classappend="${hometab == 'home'} ? 'active'"><a th:href="@{/}" ><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li th:classappend="${hometab == 'tags'} ? 'active'"><a th:href="@{/tags}"><i class="fa-solid fa-tags"></i><span>Tags</span></a></li>
+                <li th:classappend="${hometab == 'users'} ? 'active'"><a th:href="@{/users}"><i class="fa-solid fa-users"></i><span>Users</span></a></li>
+                <li th:classappend="${hometab == 'questions'} ? 'active'"><a th:href="@{/questionslist}"><i class="fa-solid fa-clipboard-question"></i><span>Questions</span></a></li>
 
-                <li sec:authorize="isAuthenticated()">
+                <li sec:authorize="isAuthenticated()" th:classappend="${hometab == 'saves'} ? 'active'">
                     <a th:href="@{/users/{userId}/bookmarks(userId=${#authentication.principal.id})}">
                         <i class="fa-solid fa-bookmark"></i><span>Saves</span>
                     </a>

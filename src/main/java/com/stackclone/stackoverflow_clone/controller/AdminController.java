@@ -32,6 +32,7 @@ public class AdminController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<User> userPage = userService.getAllUsersWithPagination(pageRequest);
 
+        model.addAttribute("hometab", "admin");
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
@@ -51,6 +52,7 @@ public class AdminController {
                 ? userService.getUsersByRoleWithPagination(role, PageRequest.of(page, size))
                 : userService.getAllUsersWithPagination(PageRequest.of(page, size));
 
+        model.addAttribute("hometab", "admin");
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usersPage.getTotalPages());
@@ -94,6 +96,7 @@ public class AdminController {
                 questionPage = questionService.getAllQuestionsPage(PageRequest.of(page, size));
         }
 
+        model.addAttribute("hometab", "admin");
         model.addAttribute("questions", questionPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", questionPage.getTotalPages());
@@ -110,6 +113,7 @@ public class AdminController {
 
         Page<Tag> tagPage = tagService.getAllTagsPage(PageRequest.of(page, size));
 
+        model.addAttribute("hometab", "admin");
         model.addAttribute("tags", tagPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", tagPage.getTotalPages());

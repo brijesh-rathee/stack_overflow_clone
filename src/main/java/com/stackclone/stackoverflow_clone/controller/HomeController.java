@@ -49,6 +49,7 @@ public class HomeController {
             answerCounts.put(question.getId(), count);
         }
 
+        model.addAttribute("hometab", "home");
         model.addAttribute("questions", questions);
         model.addAttribute("answerCounts", answerCounts);
         model.addAttribute("currentPage", page);
@@ -72,6 +73,7 @@ public class HomeController {
             answerCounts.put(question.getId(), count);
         }
 
+        model.addAttribute("hometab", "questions");
         model.addAttribute("questions", paginatedQuestions.getContent());
         model.addAttribute("tags", tags);
         model.addAttribute("tagId", tagId);

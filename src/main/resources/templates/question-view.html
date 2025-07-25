@@ -307,7 +307,7 @@
                     <a th:href="@{/questions/update/{id}(id=${question.id})}">Edit</a> |
                     <form th:action="@{/questions/delete/{id}(id=${question.id})}" method="post" style="display:inline;">
                         <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <button type="submit">Delete</button>
+                        <button sec:authorize="hasAuthority('ADMIN')" type="submit">Delete</button>
                     </form>
                 </div>
                 <ul class="comment-list" th:if="${questionComments}">
