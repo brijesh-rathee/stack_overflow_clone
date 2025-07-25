@@ -326,7 +326,6 @@
             </div>
         </div>
 
-        <!-- Answers Section -->
         <div class="answer">
             <h2 th:text="'Answers (' + ${#lists.size(answers)} + ')'">Answers</h2>
             <div th:each="answer : ${answers}" th:classappend="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id} ? 'accepted-answer'" style="margin-bottom: 30px;">
@@ -343,11 +342,9 @@
                         </form>
                     </div>
                     <div class="content-box">
-                        <!-- Display mode -->
                         <div class="answer-content" th:id="'answer-content-' + ${answer.id}">
                             <div th:utext="${answer.content}"></div>
                         </div>
-                        <!-- Edit mode (hidden by default) -->
                         <div class="edit-answer-form" th:id="'edit-form-' + ${answer.id}">
                             <form th:action="@{'/answers/save/' + ${question.id}}" method="post">
                                 <input type="hidden" name="id" th:value="${answer.id}">
@@ -370,7 +367,7 @@
                                     th:text="${question.acceptedAnswer != null and question.acceptedAnswer.id == answer.id} ? 'Unaccept Answer' : 'Accept Answer'">
                             </button>
                         </form>
-                        <div class="action-links" th:if="${#authentication.name == answer.user.username}">
+                        <div class="action-links">
                             <button class="edit-answer" th:data-answer-id="${answer.id}">Edit</button> |
                             <form th:action="@{'/answers/' + ${answer.id} + '/delete'}" method="post" style="display:inline;">
                                 <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -398,7 +395,6 @@
             </div>
         </div>
 
-        <!-- Answer Submission Form -->
         <div class="form-area">
             <h3>Your Answer</h3>
             <form id="answer-form" th:action="@{'/answers/save/' + ${question.id}}" enctype="multipart/form-data" method="post">
