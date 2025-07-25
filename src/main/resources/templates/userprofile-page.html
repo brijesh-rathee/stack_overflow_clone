@@ -857,24 +857,20 @@
             </div>
             <div th:if="${totalPages > 1}" class="pagination">
                 <ul>
-                    <!-- Previous Page -->
                     <li th:if="${currentPage > 0}">
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage - 1}, size=${5})}">‹ Prev</a>
                     </li>
 
-                    <!-- Always show first page -->
                     <li>
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=0, size=${5})}"
                            th:classappend="${0 == currentPage} ? 'active-page'"
                            th:text="1">1</a>
                     </li>
 
-                    <!-- Ellipsis if needed -->
                     <li th:if="${currentPage > 2}">
                         <span>...</span>
                     </li>
 
-                    <!-- Surrounding pages (current -1, current, current +1) -->
                     <li th:each="i : ${#numbers.sequence(
             (currentPage > 1 ? currentPage - 1 : 1),
             (currentPage < totalPages - 2 ? currentPage + 1 : totalPages - 2)
@@ -884,19 +880,16 @@
                            th:text="${i + 1}"></a>
                     </li>
 
-                    <!-- Ellipsis if needed -->
                     <li th:if="${currentPage < totalPages - 3}">
                         <span>...</span>
                     </li>
 
-                    <!-- Always show last page if more than 1 page -->
                     <li th:if="${totalPages > 1}">
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${totalPages - 1}, size=${5})}"
                            th:classappend="${(totalPages - 1) == currentPage} ? 'active-page'"
                            th:text="${totalPages}"></a>
                     </li>
 
-                    <!-- Next Page -->
                     <li th:if="${currentPage < totalPages - 1}">
                         <a th:href="@{'/users/' + ${user.id} + '/bookmarks'(page=${currentPage + 1}, size=${5})}">Next ›</a>
                     </li>
@@ -1147,7 +1140,7 @@
                                 <div class="tag-desc"
                                      th:if="${tag.description != null and !tag.description.isEmpty()}"
                                      th:with="words=${#strings.listSplit(tag.description, ' ')}"
-                                     th:text="${words.size() > 20} ? ${#strings.arrayJoin(words.subList(0, 20).toArray(), ' ')} + '...' : tag.description">
+                                     th:text="${words.size() > 20} ? ${#strings.arrayJoin(words.subList(0, 20).toArray(), ' ')} + '...' : ${tag.description}">
                                 </div>
 
                                 <div class="tag-desc" th:if="${tag.description == null or tag.description.isEmpty()}">
