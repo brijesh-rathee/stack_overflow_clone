@@ -1,140 +1,207 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{home-page}">
 <head>
     <style>
-        .ask-question-form {
-            max-width: 800px;
-            margin: 40px;
-            padding: 30px;
-            background-color: #ffffff;
-            border: 1px solid #d6d9dc;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
+        Expand
+        message.txt
+        14 KB
+        ﻿
+        <!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org"
+              xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+              layout:decorate="~{home-page}">
+        <head>
+            <style>
+                * {
+                    box-sizing: border-box;
+                }
 
-        .ask-question-form h1 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 24px;
-            color: #2d2d2d;
-        }
+                .ask-question-form {
+                    max-width: 800px;
+                    margin: 40px;
+                    padding: 30px;
+                    background-color: #ffffff;
+                    border: 1px solid #d6d9dc;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                }
 
-        .ask-question-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
+                .ask-question-form h1 {
+                    font-size: 1.8rem;
+                    font-weight: bold;
+                    margin-bottom: 24px;
+                    color: #2d2d2d;
+                }
 
-        .ask-question-form input[type="text"],
-        .ask-question-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-            background-color: #fff;
-        }
+                .ask-question-form label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 600;
+                    color: #333;
+                }
 
-        .ask-question-form textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
+                .ask-question-form input[type="text"],
+                .ask-question-form textarea {
+                    width: 100%;
+                    padding: 12px;
+                    margin-bottom: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    font-size: 1rem;
+                    background-color: #fff;
+                    transition: border-color 0.2s ease-in-out;
+                }
 
-        /* Image upload section styles */
-        .image-upload-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px dashed #d6d9dc;
-            border-radius: 4px;
-            background-color: #f8f9fa;
-        }
+                .ask-question-form input[type="text"]:focus,
+                .ask-question-form textarea:focus {
+                    outline: none;
+                    border-color: #0a95ff;
+                    box-shadow: 0 0 0 2px rgba(10, 149, 255, 0.1);
+                }
 
-        .image-upload-section label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
+                .ask-question-form input[type="text"]:invalid {
+                    border-color: #d73a49;
+                }
 
-        .image-upload-section label:hover {
-            color: #0a95ff;
-        }
+                .ask-question-form textarea {
+                    resize: vertical;
+                    min-height: 150px;
+                }
 
-        .image-upload-section input[type="file"] {
-            display: none;
-        }
+                /* Image upload section styles */
+                .image-upload-section {
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    border: 1px dashed #d6d9dc;
+                    border-radius: 4px;
+                    background-color: #f8f9fa;
+                }
 
-        .upload-icon {
-            font-size: 1.2rem;
-            color: #0a95ff;
-        }
+                .image-upload-section label {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    cursor: pointer;
+                    transition: color 0.2s ease-in-out;
+                }
 
-        .file-info {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #6a737c;
-        }
+                .image-upload-section label:hover {
+                    color: #0a95ff;
+                }
 
-        .file-name {
-            font-weight: normal;
-            color: #2d2d2d;
-            margin-left: 5px;
-        }
-        /* Tag selection styles */
-        .ask-question-form .tag-select-box {
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid #D9D9D9;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 20px;
-            background-color: #fefefe;
-        }
+                .image-upload-section input[type="file"] {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    margin: -1px;
+                    overflow: hidden;
+                    clip: rect(0,0,0,0);
+                    white-space: nowrap;
+                    border: 0;
+                }
 
-        .tag-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
+                .upload-icon {
+                    font-size: 1.2rem;
+                    color: #0a95ff;
+                }
 
-        .tag-option input[type="checkbox"] {
-            margin-right: 10px;
-        }
+                .file-info {
+                    margin-top: 10px;
+                    font-size: 0.9rem;
+                    color: #6a737c;
+                }
 
-        .ask-question-form button {
-            background-color: #0a95ff;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
+                .file-name {
+                    font-weight: normal;
+                    color: #2d2d2d;
+                    margin-left: 5px;
+                }
 
-        .ask-question-form button:hover {
-            background-color: #0074cc;
-        }
+                /* Tag selection styles */
+                .ask-question-form .tag-select-box {
+                    max-height: 150px;
+                    overflow-y: auto;
+                    border: 1px solid #D9D9D9;
+                    border-radius: 4px;
+                    padding: 10px;
+                    margin-bottom: 20px;
+                    background-color: #fefefe;
+                }
 
-        /* Quill Editor Styles */
-        .ql-container {
-            min-height: 200px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 1rem;
-        }
+                .tag-option {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 8px;
+                }
 
-        .ql-toolbar {
-            border: 1px solid #ccc;
-            border-bottom: none;
-            border-radius: 4px 4px 0 0;
-            background-color: #f8f9fa;
-        }
+                .tag-option input[type="checkbox"] {
+                    margin-right: 10px;
+                }
+
+                .ask-question-form button {
+                    background-color: #0a95ff;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    font-size: 1rem;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease-in-out;
+                }
+
+                .ask-question-form button:hover {
+                    background-color: #0074cc;
+                }
+
+                .ask-question-form button:disabled {
+                    background-color: #ccc;
+                    cursor: not-allowed;
+                }
+
+                /* Quill Editor Styles */
+                .editor-container {
+                    margin-bottom: 20px;
+                }
+
+                .ql-container {
+                    min-height: 200px;
+                    border: 1px solid #ccc;
+                    border-radius: 0 0 4px 4px;
+                    font-size: 1rem;
+                }
+
+                .ql-toolbar {
+                    border: 1px solid #ccc;
+                    border-bottom: none;
+                    border-radius: 4px 4px 0 0;
+                    background-color: #f8f9fa;
+                }
+
+                .ql-editor:focus {
+                    outline: none;
+                }
+
+                .ql-container.ql-snow {
+                    border-color: #0a95ff;
+                }
+
+                /* Error styles */
+                .error-message {
+                    color: #d73a49;
+                    font-size: 0.875rem;
+                    margin-top: -15px;
+                    margin-bottom: 15px;
+                }
+
+                /* Loading state */
+                .loading {
+                    opacity: 0.7;
+                    pointer-events: none;
+                }
     </style>
     <!-- Use Quill 1.3.7 for compatibility -->
     <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
@@ -149,83 +216,206 @@
           th:object="${question}"
           method="post"
           enctype="multipart/form-data"
-          onsubmit="syncQuillContent()">
+          onsubmit="return handleFormSubmit(event)">
 
         <h1 th:text="${question.id} != null ? 'Edit Your Question' : 'Ask a Public Question'">Ask a Public Question</h1>
 
         <label for="title">Title</label>
-        <input type="text" id="title" th:field="*{title}" placeholder="e.g. How do I solve a NullPointerException in Java?" required />
+        <input type="text"
+               id="title"
+               th:field="*{title}"
+               placeholder="e.g. How do I solve a NullPointerException in Java?"
+               required
+               maxlength="200"
+               aria-describedby="title-help" />
+        <div id="title-help" class="file-info">Be specific and concise (max 200 characters)</div>
 
         <div class="image-upload-section">
-            <label for="file">
-                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <label for="file" tabindex="0"
+                   role="button"
+                   aria-describedby="file-help"
+                   onkeydown="handleLabelKeydown(event)">
+                <i class="fas fa-cloud-upload-alt upload-icon" aria-hidden="true"></i>
                 <span>Upload image (optional)</span>
             </label>
-            <input type="file" id="file" name="mediaFile" accept="image/*" onchange="displayFileName(this)">
-            <div class="file-info">
-                Supported formats: JPG, PNG, GIF
+            <input type="file"
+                   id="file"
+                   name="mediaFile"
+                   accept="image/jpeg,image/png,image/gif"
+                   onchange="displayFileName(this)"
+                   aria-describedby="file-help">
+            <div id="file-help" class="file-info">
+                Supported formats: JPG, PNG, GIF (max 5MB)
                 <div id="fileNameDisplay" class="file-name"></div>
             </div>
         </div>
 
         <label for="content">What are the details of your problem?</label>
-        <!-- Quill Editor Container -->
-        <div id="editor"></div>
-        <!-- Hidden input to store Quill content -->
-        <input type="hidden" id="content" name="content" th:field="*{content}" />
+        <div class="editor-container">
+            <!-- Quill Editor Container -->
+            <div id="editor" role="textbox" aria-label="Question details"></div>
+            <!-- Hidden input to store Quill content -->
+            <input type="hidden" id="content" name="content" th:field="*{content}" />
+        </div>
 
         <label>Tags</label>
-        <div class="tag-select-box">
+        <div class="tag-select-box" role="group" aria-label="Select relevant tags">
             <div class="tag-option" th:each="tag : ${tags}">
-                <input type="checkbox" name="tagIds"
+                <input type="checkbox"
+                       name="tagIds"
                        th:value="${tag.id}"
+                       th:id="'tag-' + ${tag.id}"
                        th:checked="${question.tags != null and question.tags.contains(tag)}" />
-                <span th:text="${tag.name}">Java</span>
+                <label th:for="'tag-' + ${tag.id}" th:text="${tag.name}">Java</label>
             </div>
         </div>
 
         <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-        <button type="submit" th:text="${question.id} != null ? 'Update Your Question' : 'Post Your Question'">Post Your Question</button>
+        <button type="submit"
+                id="submitBtn"
+                th:text="${question.id} != null ? 'Update Your Question' : 'Post Your Question'">
+            Post Your Question
+        </button>
     </form>
 
     <!-- Use Quill 1.3.7 -->
     <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.js"></script>
     <script th:inline="javascript">
-        const quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline'],
-                    ['code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['clean']
-                ]
-            },
-            placeholder: 'Describe your problem in detail...'
+        let quill;
+        let isSubmitting = false;
+
+        // Initialize Quill editor
+        document.addEventListener('DOMContentLoaded', function() {
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        ['code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Describe your problem in detail...'
+            });
+
+            // Load initial content safely
+            const initialContent = /*[[${question.content != null ? question.content : ''}]]*/ "";
+            if (initialContent && initialContent.trim() !== '') {
+                try {
+                    quill.root.innerHTML = initialContent;
+                } catch (e) {
+                    console.warn('Could not load initial content:', e);
+                }
+            }
+
+            // Sync content on text change
+            quill.on('text-change', function() {
+                syncQuillContent();
+            });
         });
 
-        const initialContent = /*[[${#strings.escapeJavaScript(question.content)}]]*/ "";
-        if (initialContent) {
-            quill.root.innerHTML = initialContent;
+        // Handle label keyboard interaction for accessibility
+        function handleLabelKeydown(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                document.getElementById('file').click();
+            }
         }
 
-        // Display selected file name
+        // Display selected file name with validation
         function displayFileName(input) {
             const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const fileHelp = document.getElementById('file-help');
+
             if (input.files.length > 0) {
-                fileNameDisplay.textContent = input.files[0].name;
+                const file = input.files[0];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+
+                if (file.size > maxSize) {
+                    fileNameDisplay.innerHTML = '<span style="color: #d73a49;">File too large (max 5MB)</span>';
+                    input.value = ''; // Clear the input
+                    return;
+                }
+
+                fileNameDisplay.textContent = file.name;
             } else {
                 fileNameDisplay.textContent = '';
             }
         }
 
-        // Sync content before form submission
+        // Sync Quill content to hidden input
         function syncQuillContent() {
-            const contentInput = document.getElementById('content');
-            contentInput.value = quill.root.innerHTML;
-            console.log('Content synced:', contentInput.value);
+            if (quill) {
+                const contentInput = document.getElementById('content');
+                contentInput.value = quill.root.innerHTML;
+            }
         }
+
+        // Handle form submission with proper validation
+        function handleFormSubmit(event) {
+            if (isSubmitting) {
+                event.preventDefault();
+                return false;
+            }
+
+            // Sync content before validation
+            syncQuillContent();
+
+            const content = document.getElementById('content').value;
+            const title = document.getElementById('title').value.trim();
+
+            // Basic validation
+            if (!title) {
+                alert('Please enter a title for your question.');
+                event.preventDefault();
+                return false;
+            }
+
+            if (!content || content.trim() === '<p><br></p>' || content.trim() === '') {
+                alert('Please provide details about your problem.');
+                event.preventDefault();
+                return false;
+            }
+
+            // Prevent double submission
+            isSubmitting = true;
+            const submitBtn = document.getElementById('submitBtn');
+            const form = event.target;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            form.classList.add('loading');
+
+            // Re-enable form if submission fails (network error, etc.)
+            setTimeout(() => {
+                if (isSubmitting) {
+                    isSubmitting = false;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = /*[[${question.id} != null ? 'Update Your Question' : 'Post Your Question']]*/ 'Post Your Question';
+                    form.classList.remove('loading');
+                }
+            }, 10000); // 10 second timeout
+
+            return true;
+        }
+
+        // Re-enable form on page show (back button)
+        window.addEventListener('pageshow', function() {
+            isSubmitting = false;
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.querySelector('.ask-question-form');
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = /*[[${question.id} != null ? 'Update Your Question' : 'Post Your Question']]*/ 'Post Your Question';
+            }
+
+            if (form) {
+                form.classList.remove('loading');
+            }
+        });
     </script>
 </section>
 </body>
