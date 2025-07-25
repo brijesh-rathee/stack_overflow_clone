@@ -254,6 +254,20 @@
 .pagination li a:hover {
     background-color: #e6f0ff;
 }
+        .question-excerpt {
+            word-wrap: break-word;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .question-excerpt pre {
+            white-space: pre-wrap;
+            background: #f5f5f5;
+            padding: 5px;
+            border-radius: 3px;
+            margin: 5px 0;
+            overflow-x: auto;
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -307,11 +321,8 @@
                        th:text="${question.title != null ? question.title : 'Untitled'}">
                         Question Title
                     </a>
-
-                    <p class="excerpt"
-                       th:utext="${question.content != null ? #strings.abbreviate(question.content, 100) : 'No content available'}">
-                        Question excerpt...
-                    </p>
+                    <div class="question-excerpt"
+                         th:utext="${#strings.abbreviate(question.content, 200)}"></div>
                     <div class="tags" th:if="${question.tags != null && !question.tags.isEmpty()}">
                         <a th:each="tag : ${question.tags}"
                            th:href="@{/tags/{tag}(tag=${tag.name})}"

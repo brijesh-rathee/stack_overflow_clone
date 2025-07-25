@@ -170,6 +170,20 @@
             background-color: #0077cc;
             color: white;
         }
+        .question-excerpt {
+            word-wrap: break-word;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .question-excerpt pre {
+            white-space: pre-wrap;
+            background: #f5f5f5;
+            padding: 5px;
+            border-radius: 3px;
+            margin: 5px 0;
+            overflow-x: auto;
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -230,7 +244,8 @@
 
                     <div class="question-content-wrapper" style="flex: 1;">
                         <a class="question-title" th:href="@{'/questions/' + ${question.id}}" th:text="${question.title}">Question Title</a>
-                        <p class="excerpt" th:text="${question.content != null ? #strings.abbreviate(question.content, 200) : 'No content'}">Content</p>
+                        <div class="question-excerpt"
+                             th:utext="${#strings.abbreviate(question.content, 200)}"></div>
 
                         <div class="tags">
                             <a th:each="tag : ${question.tags}"
