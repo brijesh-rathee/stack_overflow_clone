@@ -1,5 +1,6 @@
 package com.stackclone.stackoverflow_clone.controller;
 
+import com.fasterxml.jackson.annotation.OptBoolean;
 import com.stackclone.stackoverflow_clone.entity.*;
 
 import com.stackclone.stackoverflow_clone.enums.VoteType;
@@ -13,12 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/questions")
@@ -60,6 +60,8 @@ public class QuestionController {
             currentQuestion = questionService.getQuestionById(id);
         }
 
+        User user = userService.getLoggedInUser();
+        boolean isFollowed = questionService.isFollowedByUser(id, user.getId());
         List<Answer> answers = answerService.getAllAnswersByQuestionId(id);
         List<Comment> comments = commentService.getCommentByQuestionId(id);
 
@@ -69,7 +71,6 @@ public class QuestionController {
         }
 
         Map<Long, List<Comment>> answerCommentsMap = commentService.getCommentsGroupedByAnswerIds(new ArrayList<>(answerScores.keySet()));
-
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answers",answers);
         model.addAttribute("questionScore", questionScore);
@@ -78,6 +79,7 @@ public class QuestionController {
         model.addAttribute("isBookmarkedByUser", isBookmarkedByUser);
         model.addAttribute("answerCommentsMap", answerCommentsMap);
         model.addAttribute("newAnswer", new Answer());
+        model.addAttribute("isFollowed", isFollowed);
 
         return QUESTION_INFO_VIEW;
     }
@@ -154,6 +156,22 @@ public class QuestionController {
     @PostMapping("/downvote/{id}")
     public String downvoteQuestion(@PathVariable Long id) {
         voteService.voteQuestion(id, VoteType.DOWN);
+        return "redirect:/questions/" + id;
+    }
+
+    @PostMapping("/{id}/follow")
+    public String followQuestion(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        User user = userService.getLoggedInUser();
+        questionService.followQuestion(id, user.getId());
+
+        return "redirect:/questions/" + id;
+    }
+
+    @PostMapping("/{id}/unfollow")
+    public String unFollowQuestion(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        User user = userService.getLoggedInUser();
+        questionService.unfollowQuestion(id, user.getId());
+
         return "redirect:/questions/" + id;
     }
 

@@ -81,6 +81,14 @@
         )
         private Set<Tag> followedTags = new HashSet<>();
 
+        @ManyToMany(fetch = FetchType.EAGER)
+        @JoinTable(
+                name = "user_questions",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "question_id")
+        )
+        private Set<Question> followedQuestions = new HashSet<>();
+
         @ManyToMany
         @JoinTable(
                 name = "user_badges",

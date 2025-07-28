@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +29,7 @@ public class UserController {
     private final AnswerService answerService;
     private final BookmarkService bookmarkService;
     private final TagService tagService;
+    private final NotificationService notificationService;
 
     private static final String USER_PROFILE_VIEW = "userprofile-page";
 
@@ -199,5 +198,14 @@ public class UserController {
         model.addAttribute("activeTab", "activity");
 
         return USER_PROFILE_VIEW;
+    }
+    @GetMapping("/notifications")
+    public String viewNotifications(Model model) {
+        User user = userService.getLoggedInUser();
+        List<Notification> notifications = notificationService.getAndMarkNotificationsAsRead(user);
+
+        model.addAttribute("notifications", notifications);
+
+        return "notification-page";
     }
 }

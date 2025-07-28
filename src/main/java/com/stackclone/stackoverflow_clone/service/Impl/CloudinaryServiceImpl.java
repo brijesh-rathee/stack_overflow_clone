@@ -24,7 +24,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                             "transformation", new Transformation().width(220).height(220)
                                     .crop("fill").gravity("face")
                     ));
-            System.out.println("Upload result: " + uploadResult);  // Add this line
+
             return uploadResult.get("secure_url").toString();
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload image to Cloudinary", e);

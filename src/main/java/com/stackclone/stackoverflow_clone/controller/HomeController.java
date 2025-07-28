@@ -1,11 +1,10 @@
 package com.stackclone.stackoverflow_clone.controller;
 
+import com.stackclone.stackoverflow_clone.entity.Notification;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
-import com.stackclone.stackoverflow_clone.service.AnswerService;
-import com.stackclone.stackoverflow_clone.service.QuestionService;
-import com.stackclone.stackoverflow_clone.service.TagService;
-import com.stackclone.stackoverflow_clone.service.UserService;
+import com.stackclone.stackoverflow_clone.entity.User;
+import com.stackclone.stackoverflow_clone.service.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +25,8 @@ public class HomeController {
     private final QuestionService questionService;
     private final TagService tagService;
     private final AnswerService answerService;
+    private final NotificationService notificationService;
+    private final UserService userService;
 
     private static final String HOME_VIEW = "home-page";
 
@@ -47,6 +48,11 @@ public class HomeController {
         for (Question question : questions) {
             int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
             answerCounts.put(question.getId(), count);
+        }
+        User user = userService.getLoggedInUser();
+        if(user != null){
+            long unreadCount = notificationService.countUnreadNotifications(user);
+            model.addAttribute("notificationCount", unreadCount);
         }
 
         model.addAttribute("hometab", "home");
@@ -84,6 +90,5 @@ public class HomeController {
         model.addAttribute("answerCounts", answerCounts);
 
         return "questionslistpage";
-
     }
 }

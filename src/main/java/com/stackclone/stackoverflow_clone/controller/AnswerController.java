@@ -2,6 +2,7 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Question;
+import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.enums.VoteType;
 import com.stackclone.stackoverflow_clone.service.Impl.AnswerServiceImpl;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
@@ -76,7 +77,7 @@ public class AnswerController {
             Question question = questionService.getQuestionById(questionId);
             answer.setQuestion(question);
             answer.setUser(userService.getLoggedInUser());
-            answerService.createAnswer(answer,file);
+            answerService.createAnswer(answer,file, question);
         }
 
         return "redirect:/questions/" + questionId;

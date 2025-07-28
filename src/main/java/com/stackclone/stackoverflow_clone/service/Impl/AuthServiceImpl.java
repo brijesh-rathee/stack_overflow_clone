@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void signUpRequest(SignUpRequest signUpRequest) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())){
-            throw new RuntimeException("User allready registered");
+            throw new RuntimeException("User already registered");
         }
 
         User user = new User();

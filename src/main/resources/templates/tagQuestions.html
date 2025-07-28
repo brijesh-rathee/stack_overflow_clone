@@ -190,37 +190,30 @@
 <section layout:fragment="content">
     <div class="questions-container">
 
-        <!-- Case: tag is null -->
         <div th:if="${tag == null}" class="tag-not-found">
             <h2>Tag not found</h2>
             <p>The tag you’re looking for doesn’t exist.</p>
         </div>
 
-        <!-- Case: tag is present -->
         <div th:if="${tag != null}">
 
-            <!-- Tag Name -->
             <div class="tag-name-header">
                 <h1 th:text="${tag.name}">Tag Name</h1>
             </div>
 
-            <!-- Tag Description -->
             <div th:if="${tag.description != null}" class="tag-description-box">
                 <h3>Description</h3>
                 <p th:text="${tag.description}">Tag description goes here.</p>
             </div>
 
-            <!-- Section Header -->
             <div class="questions-section-header">
                 <h2>Questions tagged with this tag</h2>
             </div>
 
-            <!-- No Questions -->
             <div th:if="${questions.isEmpty()}" class="no-questions-message">
                 <p>No questions found for this tag.</p>
             </div>
 
-            <!-- Questions List -->
             <div th:each="question : ${questions}" class="question-box">
                 <div class="question-container">
                     <div class="stats">
@@ -270,7 +263,6 @@
                 </div>
             </div>
 
-            <!-- Pagination -->
             <div th:if="${totalPages > 1}" class="pagination">
                 <ul>
                     <li th:if="${currentPage > 0}">

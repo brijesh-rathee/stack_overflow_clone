@@ -7,7 +7,6 @@
     <title>All Questions</title>
     <link rel="icon" type="image/png" th:href="@{icon.webp}" />
     <style>
-        /* Make sure these styles override the base template */
         .content {
             padding: 20px;
             width: 100%;
@@ -18,7 +17,6 @@
             margin: 0 auto;
         }
 
-        /* Updated question box to match home page styling */
         .question-box {
             background-color: #ffffff;
             border: 1px solid #cccccc;
@@ -58,7 +56,6 @@
             display: block;
         }
 
-        /* Green answer count styling like home page */
         .answer-count {
             border: 1px solid #5eba7d;
             border-radius: 4px;
@@ -67,12 +64,10 @@
             display: inline-block;
         }
 
-        /* Question content wrapper */
         .question-content-wrapper {
             flex: 1;
         }
 
-        /* Updated question title styling */
         .question-title {
             color: #1da1f2;
             font-size: 25px;
@@ -87,7 +82,6 @@
             text-decoration: none;
         }
 
-        /* Updated excerpt styling */
         .excerpt {
             color: #3b4045;
             font-size: 14px;
@@ -95,7 +89,6 @@
             line-height: 1.4;
         }
 
-        /* Updated tags styling to match home page */
         .tags {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -141,11 +134,11 @@
         .user-info .reputation {
             font-weight: bold;
             color: #535a60;
-            margin-right: 12px; /* small space between reputation and timestamp if needed */
+            margin-right: 12px;
         }
 
         .user-info .timestamp {
-            margin-left: auto; /* pushes timestamp to far right */
+            margin-left: auto;
             color: #999;
             font-style: italic;
         }
@@ -192,7 +185,6 @@
             background-color: #0069d9;
         }
 
-        /* Responsive design */
         @media (max-width: 768px) {
             .filter-container {
                 flex-direction: column;
@@ -217,43 +209,44 @@
             }
         }
         .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-.pagination ul {
-    list-style: none;
-    display: flex;
-    gap: 10px;
-    padding-left: 0;
-    margin: 0; /* Remove default margin */
-    align-items: center; /* Vertically center items */
-}
+        .pagination ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            padding-left: 0;
+            margin: 0;
+            align-items: center;
+        }
 
-.pagination li {
-    display: inline-block; /* Ensure list items stay in line */
-}
+        .pagination li {
+            display: inline-block;
+        }
 
-.pagination li a,
-.pagination li span {
-    padding: 8px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #0077cc;
-    border: 1px solid #ccc;
-    display: inline-block; /* Ensure consistent sizing */
-}
+        .pagination li a,
+        .pagination li span {
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #0077cc;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
 
-.pagination .active-page {
-    background-color: #0077cc;
-    color: white;
-    font-weight: bold;
-}
+        .pagination .active-page {
+            background-color: #0077cc;
+            color: white;
+            font-weight: bold;
+        }
 
-.pagination li a:hover {
-    background-color: #e6f0ff;
-}
+        .pagination li a:hover {
+            background-color: #e6f0ff;
+        }
+
         .question-excerpt {
             word-wrap: break-word;
             overflow: hidden;

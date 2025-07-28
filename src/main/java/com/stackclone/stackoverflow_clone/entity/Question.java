@@ -83,6 +83,9 @@ public class Question {
     @JoinColumn(name = "accepted_answer_id")
     private Answer acceptedAnswer;
 
+    @ManyToMany(mappedBy = "followedQuestions")
+    private Set<User> followers = new HashSet<>();
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
