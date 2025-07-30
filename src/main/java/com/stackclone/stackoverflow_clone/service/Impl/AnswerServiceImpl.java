@@ -5,7 +5,6 @@ import com.stackclone.stackoverflow_clone.entity.Notification;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.AnswerRepository;
-import com.stackclone.stackoverflow_clone.repository.NotificationRepository;
 import com.stackclone.stackoverflow_clone.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,6 @@ public class AnswerServiceImpl implements AnswerService {
     private final QuestionService questionService;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
-    private final NotificationRepository notificationRepository;
-    private final EmailService emailService;
 
     @Override
     public void createAnswer(Answer answer, MultipartFile file, Question question) {
@@ -38,9 +35,6 @@ public class AnswerServiceImpl implements AnswerService {
             notification.setMessage("New answer on question: " + question.getTitle());
             notification.setQuestion(question);
 
-            notificationRepository.save(notification);
-
-            emailService.sendNotificationEmail(follower.getEmail(), question.getTitle());
         }
     }
 

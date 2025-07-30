@@ -11,8 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "answers")
 public class Answer {
 

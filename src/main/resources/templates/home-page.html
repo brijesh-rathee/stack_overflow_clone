@@ -553,10 +553,10 @@
                 <a th:href="@{/auth/signup}" class="btn">SignUp</a>
             </div>
             <div class="auth-buttons" sec:authorize="isAuthenticated()">
-                <a th:href="@{/users/notifications}" class="notification-link">
-                    <i class="fa fa-bell"></i>
-                    <span th:if="${notificationCount > 0}" class="notification-badge" th:text="${notificationCount}"></span>
-                </a>
+<!--                <a th:href="@{/users/notifications}" class="notification-link">-->
+<!--                    <i class="fa fa-bell"></i>-->
+<!--                    <span th:if="${notificationCount > 0}" class="notification-badge" th:text="${notificationCount}"></span>-->
+<!--                </a>-->
                 <a th:href="@{/users/{userId}(userId=${#authentication.principal.id})}" class="profile-icon">
                     <i class="fa-regular fa-user"></i>
                 </a>

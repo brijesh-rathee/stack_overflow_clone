@@ -37,7 +37,7 @@ public class AdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
         model.addAttribute("activeTab", "users");
-        model.addAttribute("role", null); // No role filter applied
+        model.addAttribute("role", null);
 
         return "admin-page";
     }

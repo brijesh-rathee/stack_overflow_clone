@@ -257,7 +257,7 @@
                        name="tagIds"
                        th:value="${tag.id}"
                        th:id="'tag-' + ${tag.id}"
-                       th:checked="${question.tags != null and question.tags.contains(tag)}"  required/>
+                       th:checked="${question.tags != null and question.tags.contains(tag)}"/>
                 <label th:for="'tag-' + ${tag.id}" th:text="${tag.name}">Java</label>
             </div>
         </div>

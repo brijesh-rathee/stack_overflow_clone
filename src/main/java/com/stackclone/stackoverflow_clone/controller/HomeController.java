@@ -25,7 +25,6 @@ public class HomeController {
     private final QuestionService questionService;
     private final TagService tagService;
     private final AnswerService answerService;
-    private final NotificationService notificationService;
     private final UserService userService;
 
     private static final String HOME_VIEW = "home-page";
@@ -51,8 +50,6 @@ public class HomeController {
         }
         User user = userService.getLoggedInUser();
         if(user != null){
-            long unreadCount = notificationService.countUnreadNotifications(user);
-            model.addAttribute("notificationCount", unreadCount);
         }
 
         model.addAttribute("hometab", "home");
