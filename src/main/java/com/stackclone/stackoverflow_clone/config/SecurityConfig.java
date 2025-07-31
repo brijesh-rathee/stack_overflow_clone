@@ -13,23 +13,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
 
 @Configuration
-@EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final CustomUserDetailService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(configurer ->
                         configurer
                                 .requestMatchers("/auth/**","/", "/home", "/tags/**").permitAll()
                                 .requestMatchers("/user/**").hasAnyAuthority(UserRole.USER.name())
-                                .requestMatchers("/moderator/**").hasAnyAuthority(UserRole.ADMIN.name(),UserRole.MODERATOR.name())
                                 .requestMatchers("/admin/**").hasAnyAuthority(UserRole.ADMIN.name())
                                 .anyRequest().authenticated()
                 )
@@ -45,18 +40,9 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                )
-                .userDetailsService(userDetailsService);
+                );
 
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
     }
 
     @Bean

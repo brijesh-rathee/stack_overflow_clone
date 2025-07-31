@@ -2,7 +2,7 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.service.AnswerService;
-import com.stackclone.stackoverflow_clone.service.Impl.CommentServiceImpl;
+import com.stackclone.stackoverflow_clone.service.Impl.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentServiceImpl commentServiceImpl;
+    private final CommentService commentServiceImpl;
     private final AnswerService answerService;
 
     @PostMapping("/add")
@@ -25,12 +25,10 @@ public class CommentController {
         if (questionId != null) {
             commentServiceImpl.addCommentToQuestion(questionId, comment);
             return "redirect:/questions/" + questionId;
-        } else if (answerId != null) {
+        } else {
             Answer answer = answerService.getAnswerById(answerId);
             commentServiceImpl.addCommentToAnswer(answerId, comment);
             return "redirect:/questions/" + answer.getQuestion().getId();
         }
-
-        throw new IllegalArgumentException("Either questionId or answerId must be provided.");
     }
 }

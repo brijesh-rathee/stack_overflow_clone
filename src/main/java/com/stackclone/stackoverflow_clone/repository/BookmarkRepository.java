@@ -18,9 +18,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     List<Bookmark> findAllByUser(User user);
 
-    void deleteByUserAndQuestion(User user, Question question);
-
     Optional<Bookmark> findByUserAndQuestion(User user, Question question);
 
-    Page<Bookmark> findByUser(User user, Pageable pageable);
+    @Query("SELECT b.question FROM Bookmark b WHERE b.user = :user")
+    Page<Question> findQuestionByUser(User user,Pageable pageable);
 }

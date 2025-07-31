@@ -86,8 +86,8 @@ public class QuestionController {
     @PostMapping("/submit")
     public String createQuestion(@ModelAttribute Question question,
                                  @RequestParam List<Long> tagIds ,
-                                 @RequestParam(value = "mediaFile", required = false) MultipartFile file,
-                                  HttpServletRequest request) {
+                                 @RequestParam(value = "mediaFile", required = false) MultipartFile file
+                                 ) {
         questionService.createQuestion(question, tagIds,file);
 
         return REDIRECT_HOME_VIEW;
@@ -159,7 +159,7 @@ public class QuestionController {
     }
 
     @PostMapping("/{id}/follow")
-    public String followQuestion(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String followQuestion(@PathVariable Long id) {
         User user = userService.getLoggedInUser();
         questionService.followQuestion(id, user.getId());
 
@@ -167,7 +167,7 @@ public class QuestionController {
     }
 
     @PostMapping("/{id}/unfollow")
-    public String unFollowQuestion(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String unFollowQuestion(@PathVariable Long id) {
         User user = userService.getLoggedInUser();
         questionService.unfollowQuestion(id, user.getId());
 

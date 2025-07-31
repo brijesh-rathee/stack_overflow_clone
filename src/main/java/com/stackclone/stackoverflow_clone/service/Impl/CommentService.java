@@ -1,12 +1,9 @@
 package com.stackclone.stackoverflow_clone.service.Impl;
 
-import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Comment;
 import com.stackclone.stackoverflow_clone.entity.Question;
-import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.CommentRepository;
 import com.stackclone.stackoverflow_clone.service.AnswerService;
-import com.stackclone.stackoverflow_clone.service.CommentService;
 
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
@@ -18,7 +15,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService {
+public class CommentService implements com.stackclone.stackoverflow_clone.service.CommentService {
 
     private final UserService userService;
     private final QuestionService questionService;

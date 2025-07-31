@@ -9,7 +9,9 @@ import com.stackclone.stackoverflow_clone.service.BadgeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +21,17 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public void awardBadgeToUser(User user, String badgeName) {
-        boolean alreadyHasBadge = user.getBadges().stream()
-                .anyMatch(b -> b.getName().equalsIgnoreCase(badgeName));
+        boolean alreadyHasBadge = false;
+
+        for (Badge badge : user.getBadges()) {
+            if (badge.getName().equalsIgnoreCase(badgeName)) {
+                alreadyHasBadge = true;
+                break;
+            }
+        }
 
         if (!alreadyHasBadge) {
-            Badge badge = badgeRepository.findByNameIgnoreCase(badgeName).orElseThrow();
+            Badge badge = badgeRepository.findByNameIgnoreCase(badgeName).orElse(null);
             user.getBadges().add(badge);
             userRepository.save(user);
         }
@@ -31,7 +39,12 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public List<Badge> getUserBadges(User user) {
-        return List.copyOf(user.getBadges());
+        Set<Badge> setBadges = user.getBadges();
+        ArrayList<Badge> badgeArrayList = new ArrayList<>();
+        for(Badge b : setBadges){
+            badgeArrayList.add(b);
+        }
+        return badgeArrayList;
     }
 
     @Override

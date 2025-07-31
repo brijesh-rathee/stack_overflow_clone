@@ -1,9 +1,11 @@
 package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
+import com.stackclone.stackoverflow_clone.entity.Comment;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.enums.VoteType;
+import com.stackclone.stackoverflow_clone.service.AnswerService;
 import com.stackclone.stackoverflow_clone.service.Impl.AnswerServiceImpl;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
@@ -25,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/answers")
 public class AnswerController {
 
-    private final AnswerServiceImpl answerService;
+    private final AnswerService answerService;
     private final QuestionService questionService;
     private final UserService userService;
     private final VoteService voteService;
@@ -52,7 +54,7 @@ public class AnswerController {
         }
         model.addAttribute("answerScores", answerScores);
 
-        Map<Long, List<?>> answerCommentsMap = new HashMap<>();
+        Map<Long, List<Comment>> answerCommentsMap = new HashMap<>();
         for (Answer ans : question.getAnswers()) {
             answerCommentsMap.put(ans.getId(), ans.getComments());
         }
@@ -64,22 +66,17 @@ public class AnswerController {
     @PostMapping("/save/{questionId}")
     public String saveOrUpdateAnswer(@PathVariable Long questionId,
                                      @ModelAttribute("newAnswer") Answer answer,
-                                     @RequestParam(name = "mediaFile", required = false) MultipartFile file,
-                                     Principal principal) {
+                                     @RequestParam(name = "mediaFile", required = false) MultipartFile file) {
         if (answer.getId() != null) {
-            Answer existing = answerService.getAnswerById(answer.getId());
-            if (!existing.getUser().getUsername().equals(principal.getName())) {
-                throw new SecurityException("Unauthorized");
-            }
-            existing.setContent(answer.getContent());
-            answerService.updateAnswer(existing, existing.getId());
+            Answer existingAnswer = answerService.getAnswerById(answer.getId());
+            existingAnswer.setContent(answer.getContent());
+            answerService.updateAnswer(existingAnswer, existingAnswer.getId());
         } else {
             Question question = questionService.getQuestionById(questionId);
             answer.setQuestion(question);
             answer.setUser(userService.getLoggedInUser());
             answerService.createAnswer(answer,file, question);
         }
-
         return "redirect:/questions/" + questionId;
     }
 
@@ -110,5 +107,4 @@ public class AnswerController {
         Long questionId = answerService.getAnswerById(answerId).getQuestion().getId();
         return "redirect:/questions/" + questionId;
     }
-
 }

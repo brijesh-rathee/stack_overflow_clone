@@ -57,8 +57,6 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public Page<Question> getBookmarkedQuestions(User user, Pageable pageable) {
-        Page<Bookmark> bookmarksPage = bookmarkRepository.findByUser(user, pageable);
-        return bookmarksPage.map(Bookmark::getQuestion);
+        return bookmarkRepository.findQuestionByUser(user, pageable);
     }
-
 }

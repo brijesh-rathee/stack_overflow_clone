@@ -1,6 +1,5 @@
 package com.stackclone.stackoverflow_clone.controller;
 
-import com.stackclone.stackoverflow_clone.entity.Notification;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
 import com.stackclone.stackoverflow_clone.entity.User;
@@ -41,15 +40,14 @@ public class HomeController {
             model.addAttribute("keyword", keyword);
         } else {
             paginatedQuestions = questionService.getPaginatedQuestions(page, size);
-        }        List<Question> questions = paginatedQuestions.getContent();
+        }
 
+        List<Question> questions = paginatedQuestions.getContent();
         Map<Long, Integer> answerCounts = new HashMap<>();
+
         for (Question question : questions) {
             int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
             answerCounts.put(question.getId(), count);
-        }
-        User user = userService.getLoggedInUser();
-        if(user != null){
         }
 
         model.addAttribute("hometab", "home");

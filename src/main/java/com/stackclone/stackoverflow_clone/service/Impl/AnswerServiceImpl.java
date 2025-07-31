@@ -1,7 +1,6 @@
 package com.stackclone.stackoverflow_clone.service.Impl;
 
 import com.stackclone.stackoverflow_clone.entity.Answer;
-import com.stackclone.stackoverflow_clone.entity.Notification;
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.repository.AnswerRepository;
@@ -28,14 +27,6 @@ public class AnswerServiceImpl implements AnswerService {
             answer.setUrl(imageurl);
         }
         answerRepository.save(answer);
-
-        for (User follower : question.getFollowers()) {
-            Notification notification = new Notification();
-            notification.setRecipient(follower);
-            notification.setMessage("New answer on question: " + question.getTitle());
-            notification.setQuestion(question);
-
-        }
     }
 
     @Override

@@ -63,10 +63,7 @@ public class QuestionServiceImpl implements QuestionService {
             } catch (Exception e) {
                 System.err.println("Failed to upload image: " + e.getMessage());
             }
-        } else {
-            System.out.println("No file uploaded or file is empty");
         }
-
         String content = question.getContent() != null ? question.getContent() : "";
         question.setContent(content);
 
@@ -79,9 +76,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question getQuestionById(Long id) {
-        Optional<Question> optionalQuestion = questionRepository.findById(id);
+        Question question = questionRepository.findById(id).orElse(null);
 
-        return optionalQuestion.get();
+        return question;
     }
 
     @Override
@@ -138,8 +135,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Page<Question> getQuestionsWithVoteLessThan(int threshold, PageRequest pageRequest) {
-        return questionRepository.findByVoteCountLessThan(threshold, pageRequest);
+    public Page<Question> getQuestionsWithVoteLessThan(int voteCount, PageRequest pageRequest) {
+        return questionRepository.findByVoteCountLessThan(voteCount, pageRequest);
     }
 
     @Override
@@ -164,6 +161,7 @@ public class QuestionServiceImpl implements QuestionService {
         user.getFollowedQuestions().remove(question);
         userService.registerUser(user);
     }
+
     public boolean isFollowedByUser(Long questionId, Long userId) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found"));

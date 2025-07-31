@@ -27,7 +27,7 @@
         @Column(name = "username", nullable = false)
         private String username;
 
-        @Column(name = "email",nullable = false)
+        @Column(name = "email", nullable = false)
         private String email;
 
         @Column(name = "password", nullable = false)
@@ -55,22 +55,22 @@
         @Column(name = "created_at", nullable = false)
         private LocalDateTime createdAt;
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<Question> questions = new ArrayList<>();
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<Answer> answers = new ArrayList<>();
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<Comment> comments = new ArrayList<>();
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<Vote> votes = new ArrayList<>();
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<QuestionView> questionViews = new ArrayList<>();
 
-        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
         private List<Bookmark> bookmarks = new ArrayList<>();
 
         @ManyToMany(fetch = FetchType.EAGER)
@@ -97,17 +97,6 @@
         )
         private Set<Badge> badges = new HashSet<>();
 
-        @ManyToMany
-        @JoinTable(
-                name = "user_following",
-                joinColumns = @JoinColumn(name = "follower_id"),
-                inverseJoinColumns = @JoinColumn(name = "following_id")
-        )
-        private Set<User> following = new HashSet<>();
-
-        @ManyToMany(mappedBy = "following")
-        private Set<User> followers = new HashSet<>();
-
         @PrePersist
         protected void onCreate() {
             this.createdAt = LocalDateTime.now();
@@ -116,25 +105,5 @@
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             return List.of(new SimpleGrantedAuthority(role.name()));
-        }
-
-        @Override
-        public boolean isAccountNonExpired() {
-            return true;
-        }
-
-        @Override
-        public boolean isAccountNonLocked() {
-            return true;
-        }
-
-        @Override
-        public boolean isCredentialsNonExpired() {
-            return true;
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return true;
         }
     }

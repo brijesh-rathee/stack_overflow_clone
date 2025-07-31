@@ -198,10 +198,4 @@ public class UserController {
 
         return USER_PROFILE_VIEW;
     }
-    @GetMapping("/notifications")
-    public String viewNotifications(Model model) {
-        User user = userService.getLoggedInUser();
-
-        return "notification-page";
-    }
 }
