@@ -44,7 +44,6 @@ public class AnswerController {
 
         int questionScore = voteService.getQuestionScore(question);
         model.addAttribute("questionScore", questionScore);
-
         model.addAttribute("questionComments", question.getComments());
 
         Map<Long, Integer> answerScores = new HashMap<>();

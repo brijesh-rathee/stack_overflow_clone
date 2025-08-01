@@ -14,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -124,7 +122,7 @@ public class AdminController {
 
     @GetMapping("/tags/edit/{id}")
     public String showEditTagForm(@PathVariable Long id, Model model) {
-        Tag tag = tagService.getTagById(id); // or repository.findById(id)
+        Tag tag = tagService.getTagById(id);
         model.addAttribute("tag", tag);
         model.addAttribute("activeTab", "tags");
         model.addAttribute("isEdit", true);
@@ -136,6 +134,5 @@ public class AdminController {
         tagService.updateTag(id, tag);
         return "redirect:/admin/tags";
     }
-
 }
 
