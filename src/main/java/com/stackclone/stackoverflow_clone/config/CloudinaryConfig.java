@@ -2,28 +2,24 @@ package com.stackclone.stackoverflow_clone.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class CloudinaryConfig {
+    private static final String CLOUD_NAME = "cloud_name";
+    private static final String API_KEY = "api_key";
+    private static final String API_SECRET = "api_secret";
 
-    @Value("${cloudinary.cloud-name}")
-    private String cloudName;
-
-    @Value("${cloudinary.api-key}")
-    private String apiKey;
-
-    @Value("${cloudinary.api-secret}")
-    private String apiSecret;
+    private final CloudinaryConfigProperties cloudinaryConfigProperties;
 
     @Bean
-    public Cloudinary cloudinary() {
+    public Cloudinary getCloudinary() {
         return new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", cloudName,
-                "api_key", apiKey,
-                "api_secret", apiSecret));
+                CLOUD_NAME, cloudinaryConfigProperties.getCloudName(),
+                API_KEY, cloudinaryConfigProperties.getApiKey(),
+                API_SECRET, cloudinaryConfigProperties.getApiSecret()));
     }
 }
