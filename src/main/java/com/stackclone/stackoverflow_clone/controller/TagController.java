@@ -110,11 +110,11 @@ public class TagController {
                                     @PathVariable String tagName,
                                     Model model) {
         Tag tag = tagService.findByName(tagName);
-
         Page<Question> paginatedQuestions = questionService.getPaginatedQuestionsByTag(tag, page, size);
         List<Question> questions = paginatedQuestions.getContent();
 
         Map<Long, Integer> answerCounts = new HashMap<>();
+
         for (Question question : questions) {
             int count = question.getAnswers() != null ? question.getAnswers().size() : 0;
             answerCounts.put(question.getId(), count);
@@ -147,5 +147,4 @@ public class TagController {
 
         return "redirect:/tags";
     }
-
 }

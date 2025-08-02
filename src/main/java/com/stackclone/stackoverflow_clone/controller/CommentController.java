@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentController {
-
     private final CommentService commentServiceImpl;
     private final AnswerService answerService;
 
@@ -21,13 +20,14 @@ public class CommentController {
     public String addComment(@RequestParam(required = false) Long questionId,
                              @RequestParam(required = false) Long answerId,
                              @RequestParam String comment) {
-
         if (questionId != null) {
             commentServiceImpl.addCommentToQuestion(questionId, comment);
+
             return "redirect:/questions/" + questionId;
         } else {
             Answer answer = answerService.getAnswerById(answerId);
             commentServiceImpl.addCommentToAnswer(answerId, comment);
+
             return "redirect:/questions/" + answer.getQuestion().getId();
         }
     }

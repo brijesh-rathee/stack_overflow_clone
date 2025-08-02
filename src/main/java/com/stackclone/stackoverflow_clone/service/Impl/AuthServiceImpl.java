@@ -14,6 +14,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+    private static final String DEFAULT_IMAGE_URL =
+            "https://res.cloudinary.com/dx9zbuld9/image/upload/v1753347401/l9xivdngn5jjf33glmwo.jpg";
 
     private final  UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -29,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRole(UserRole.USER);
-        user.setUrl("https://res.cloudinary.com/dx9zbuld9/image/upload/v1753347401/l9xivdngn5jjf33glmwo.jpg");
+        user.setUrl(DEFAULT_IMAGE_URL);
 
         userRepository.save(user);
     }

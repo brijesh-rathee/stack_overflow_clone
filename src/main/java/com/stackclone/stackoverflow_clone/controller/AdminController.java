@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-
     private final UserService userService;
     private final QuestionService questionService;
     private final TagService tagService;
@@ -65,7 +64,6 @@ public class AdminController {
                              @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "10") int size,
                              @RequestParam(required = false) UserRole role) {
-
         userService.deleteUser(id);
 
         String redirectUrl = "/admin/users?page=" + page + "&size=" + size;
@@ -100,6 +98,7 @@ public class AdminController {
         model.addAttribute("totalPages", questionPage.getTotalPages());
         model.addAttribute("filter", filter);
         model.addAttribute("activeTab", "questions");
+
         return "admin-page";
     }
 
@@ -123,16 +122,19 @@ public class AdminController {
     @GetMapping("/tags/edit/{id}")
     public String showEditTagForm(@PathVariable Long id, Model model) {
         Tag tag = tagService.getTagById(id);
+
         model.addAttribute("tag", tag);
         model.addAttribute("activeTab", "tags");
         model.addAttribute("isEdit", true);
+
         return "admin-page";
     }
+
     @PostMapping("/admin/tags/edit/{id}")
     public String updateTag(@PathVariable Long id, @ModelAttribute("tag") Tag tag) {
         tag.setId(id);
         tagService.updateTag(id, tag);
+
         return "redirect:/admin/tags";
     }
 }
-

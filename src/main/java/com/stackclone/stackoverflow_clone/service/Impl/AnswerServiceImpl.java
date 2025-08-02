@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class AnswerServiceImpl implements AnswerService {
-
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final UserService userService;
@@ -37,13 +36,13 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public List<Answer> getAllAnswersByQuestionId(Long questionId) {
         Question question = questionService.getQuestionById(questionId);
+
         return question.getAnswers();
     }
 
     public int getAnswerCountByQuestionId(Long questionId) {
         return answerRepository.countByQuestionId(questionId);
     }
-
 
     @Override
     public void updateAnswer(Answer answer, Long answerId) {
@@ -64,6 +63,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public List<Answer> getAnswerByUserId(Long userId) {
         User user = userService.getUserById(userId);
+
         return user.getAnswers();
     }
 }

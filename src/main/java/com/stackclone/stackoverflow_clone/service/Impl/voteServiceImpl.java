@@ -16,13 +16,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class voteServiceImpl implements VoteService {
-
     private final VoteRepository voteRepository;
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final UserService userService;
     private final BadgeService badgeService;
-
 
     @Override
     @Transactional
@@ -100,6 +98,7 @@ public class voteServiceImpl implements VoteService {
     public int getAnswerScore(Answer answer) {
         long upvotes = voteRepository.countByAnswerAndVoteType(answer, VoteType.UP);
         long downvotes = voteRepository.countByAnswerAndVoteType(answer, VoteType.DOWN);
+
         return (int) (upvotes - downvotes);
     }
 
@@ -107,7 +106,7 @@ public class voteServiceImpl implements VoteService {
     public int getQuestionScore(Question currentQuestion) {
         long upvotes = voteRepository.countByQuestionAndVoteType(currentQuestion, VoteType.UP);
         long downvotes = voteRepository.countByQuestionAndVoteType(currentQuestion, VoteType.DOWN);
+
         return (int) (upvotes - downvotes);
     }
-
 }

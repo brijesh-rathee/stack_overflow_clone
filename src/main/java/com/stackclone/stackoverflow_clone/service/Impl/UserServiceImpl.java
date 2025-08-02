@@ -28,12 +28,10 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public  class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
     private final CloudinaryService cloudinaryService;
 
     public User getUserById(Long id){
-
         return userRepository.findById(id).orElseThrow();
     }
 
@@ -41,7 +39,6 @@ public  class UserServiceImpl implements UserService {
     public void registerUser(User user) {
         userRepository.save(user);
     }
-
 
     @Override
     public void updateUser(User user, Long userId, boolean removeProfile, MultipartFile file) {
@@ -127,5 +124,4 @@ public  class UserServiceImpl implements UserService {
     public Page<User> getUsersByRoleWithPagination(UserRole role, PageRequest pageRequest) {
         return userRepository.findByRole(role, pageRequest);
     }
-
 }

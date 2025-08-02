@@ -16,7 +16,6 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class CommentService implements com.stackclone.stackoverflow_clone.service.CommentService {
-
     private final UserService userService;
     private final QuestionService questionService;
     private final CommentRepository commentRepository;
@@ -64,5 +63,4 @@ public class CommentService implements com.stackclone.stackoverflow_clone.servic
 
         return answerCommentsMap;
     }
-
 }

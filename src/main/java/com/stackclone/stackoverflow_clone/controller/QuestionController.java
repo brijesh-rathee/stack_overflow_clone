@@ -24,6 +24,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/questions")
 @RequiredArgsConstructor
 public class QuestionController {
+    private static final String HOME_VIEW = "home-page";
+    private static final String QUESTION_VIEW = "question-page";
+    private static final String QUESTION_INFO_VIEW = "question-view";
+    private static final String REDIRECT_HOME_VIEW = "redirect:/";
 
     private final QuestionService questionService;
     private final TagService tagService;
@@ -33,11 +37,6 @@ public class QuestionController {
     private final BookmarkService bookmarkService;
     private final CommentService commentService;
     private final VoteService voteService;
-
-    private static final String HOME_VIEW = "home-page";
-    private static final String QUESTION_VIEW = "question-page";
-    private static final String QUESTION_INFO_VIEW = "question-view";
-    private static final String REDIRECT_HOME_VIEW = "redirect:/";
 
     @GetMapping("/ask")
     public String showAskQuestionForm(Model model) {
@@ -65,6 +64,7 @@ public class QuestionController {
         List<Comment> comments = commentService.getCommentByQuestionId(id);
 
         Map<Long, Integer> answerScores = new HashMap<>();
+
         for (Answer answer : answers) {
             answerScores.put(answer.getId(), voteService.getAnswerScore(answer));
         }
@@ -109,6 +109,7 @@ public class QuestionController {
                                  @PathVariable Long id,
                                  @RequestParam List<Long> tagIds) {
         questionService.updateQuestion(question, id, tagIds);
+
         return REDIRECT_HOME_VIEW;
     }
 
@@ -135,12 +136,12 @@ public class QuestionController {
         if (!question.getUser().getUsername().equals(principal.getName())) {
             return "redirect:/questions/" + questionId;
         }
+
         if (question.getAcceptedAnswer() != null && question.getAcceptedAnswer().getId().equals(answerId)) {
             question.setAcceptedAnswer(null);
         } else {
             question.setAcceptedAnswer(answer);
         }
-
         questionService.saveQuestion(question);
 
         return "redirect:/questions/" + questionId;
@@ -149,12 +150,14 @@ public class QuestionController {
     @PostMapping("/upvote/{id}")
     public String upvoteQuestion(@PathVariable Long id) {
         voteService.voteQuestion(id, VoteType.UP);
+
         return "redirect:/questions/" + id;
     }
 
     @PostMapping("/downvote/{id}")
     public String downvoteQuestion(@PathVariable Long id) {
         voteService.voteQuestion(id, VoteType.DOWN);
+
         return "redirect:/questions/" + id;
     }
 
@@ -173,5 +176,4 @@ public class QuestionController {
 
         return "redirect:/questions/" + id;
     }
-
 }

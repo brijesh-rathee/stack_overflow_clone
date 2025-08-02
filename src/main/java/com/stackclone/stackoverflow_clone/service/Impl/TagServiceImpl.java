@@ -21,7 +21,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
-
     private final TagRepository tagRepository;
     private final UserService userService;
 
@@ -35,6 +34,7 @@ public class TagServiceImpl implements TagService {
         if (tagRepository.findByNameIgnoreCase(tag.getName()).isPresent()) {
             throw new RuntimeException("Tag with this name already exist");
         }
+
         return tagRepository.save(tag);
     }
 
@@ -106,6 +106,7 @@ public class TagServiceImpl implements TagService {
         for(Tag tag : followedTags) {
             tagNames.add(tag.getName());
         }
+
         return tagNames;
     }
 
@@ -136,5 +137,4 @@ public class TagServiceImpl implements TagService {
     public Page<Tag> getAllTagsPage(PageRequest pageRequest) {
         return tagRepository.findAll(pageRequest);
     }
-
 }

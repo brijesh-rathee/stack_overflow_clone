@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-
     private final UserService userService;
     private final TagService tagService;
     private final CloudinaryService cloudinaryService;
@@ -93,6 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Page<Question> getPaginatedQuestions(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
         return questionRepository.findAll(pageable);
     }
 
@@ -104,12 +104,14 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Page<Question> getPaginatedQuestionsByTag(Tag tag, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
         return questionRepository.findByTagsContaining(tag, pageable);
     }
 
     @Override
     public Page<Question> searchQuestions(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+
         return questionRepository.searchByTitleTagOrAnswer(keyword, pageable);
     }
 
@@ -173,6 +175,3 @@ public class QuestionServiceImpl implements QuestionService {
         return user.getFollowedQuestions().contains(question);
     }
 }
-
-
-

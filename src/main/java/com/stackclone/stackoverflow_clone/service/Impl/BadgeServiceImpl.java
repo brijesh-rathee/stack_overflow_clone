@@ -41,9 +41,11 @@ public class BadgeServiceImpl implements BadgeService {
     public List<Badge> getUserBadges(User user) {
         Set<Badge> setBadges = user.getBadges();
         ArrayList<Badge> badgeArrayList = new ArrayList<>();
+
         for(Badge b : setBadges){
             badgeArrayList.add(b);
         }
+
         return badgeArrayList;
     }
 
@@ -71,6 +73,7 @@ public class BadgeServiceImpl implements BadgeService {
                 badge.getName().equals("Legend") ||
                         badge.getName().equals("Expert") ||
                         badge.getName().equals("Contributor"));
+
         userRepository.save(user);
     }
 }

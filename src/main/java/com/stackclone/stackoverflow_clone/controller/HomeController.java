@@ -2,7 +2,6 @@ package com.stackclone.stackoverflow_clone.controller;
 
 import com.stackclone.stackoverflow_clone.entity.Question;
 import com.stackclone.stackoverflow_clone.entity.Tag;
-import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.service.*;
 
 import lombok.RequiredArgsConstructor;
@@ -20,12 +19,11 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
+    private static final String HOME_VIEW = "home-page";
 
     private final QuestionService questionService;
     private final TagService tagService;
     private final AnswerService answerService;
-
-    private static final String HOME_VIEW = "home-page";
 
     @GetMapping({"/", "/home"})
     public String showHomePage(@RequestParam(defaultValue = "0") int page,
@@ -59,15 +57,16 @@ public class HomeController {
     }
 
     @GetMapping("/questionslist")
-    public String getQusestionsList(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "5") int size,
-                                    @RequestParam(required = false) Long tagId,
-                                    @RequestParam(defaultValue = "newest") String sort,
-                                    Model model){
+    public String getQuestionList(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  @RequestParam(required = false) Long tagId,
+                                  @RequestParam(defaultValue = "newest") String sort,
+                                  Model model){
         Page<Question> paginatedQuestions = questionService.getFilteredAndSortedQuestions(page, size, tagId, sort);
         List<Tag> tags = tagService.getAllTags();
 
         Map<Long, Integer> answerCounts = new HashMap<>();
+
         for (Question question : paginatedQuestions.getContent()) {
             int count = answerService.getAnswerCountByQuestionId(question.getId());
             answerCounts.put(question.getId(), count);

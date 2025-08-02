@@ -14,6 +14,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CloudinaryServiceImpl implements CloudinaryService {
+    private static final int IMAGE_MAX_WIDTH = 220;
+    private static final int IMAGE_MAX_HEIGHT = 220;
 
     private final Cloudinary cloudinary;
 
@@ -21,7 +23,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         try {
             Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
                     ObjectUtils.asMap(
-                            "transformation", new Transformation().width(220).height(220)
+                            "transformation", new Transformation().width(IMAGE_MAX_WIDTH).height(IMAGE_MAX_HEIGHT)
                                     .crop("fill").gravity("face")
                     ));
 
@@ -30,5 +32,4 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             throw new RuntimeException("Failed to upload image to Cloudinary", e);
         }
     }
-
 }

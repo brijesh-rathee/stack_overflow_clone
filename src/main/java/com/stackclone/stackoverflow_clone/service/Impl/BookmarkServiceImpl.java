@@ -17,7 +17,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookmarkServiceImpl implements BookmarkService {
-
     private final BookmarkRepository bookmarkRepository;
 
     @Override
@@ -57,6 +56,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public Page<Question> getBookmarkedQuestions(User user, Pageable pageable) {
+
         return bookmarkRepository.findQuestionByUser(user, pageable);
     }
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @RequestMapping("/votes")
 public class VoteController {
-
     private final VoteService voteService;
     private final AnswerService answerService;
 

@@ -17,7 +17,6 @@ public class QuestionViewServiceImpl implements QuestionViewService {
     private final QuestionRepository questionRepository;
     private final BadgeService badgeService;
 
-
     @Override
     public void recordView(User user, Question question) {
         boolean alreadyViewed = questionViewRepository.existsByUserAndQuestion(user, question);

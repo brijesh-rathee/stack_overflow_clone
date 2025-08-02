@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/bookmarks")
 public class BookmarkController {
-
     private final BookmarkService bookmarkService;
     private final QuestionService questionService;
     private final UserService userService;
@@ -29,6 +28,7 @@ public class BookmarkController {
         User user = userService.getLoggedInUser();
         Question question = questionService.getQuestionById(questionId);
         bookmarkService.toggleBookmark(user, question);
+
         return "redirect:/questions/" + questionId;
     }
 

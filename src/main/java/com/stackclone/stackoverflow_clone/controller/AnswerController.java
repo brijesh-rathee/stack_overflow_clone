@@ -3,21 +3,17 @@ package com.stackclone.stackoverflow_clone.controller;
 import com.stackclone.stackoverflow_clone.entity.Answer;
 import com.stackclone.stackoverflow_clone.entity.Comment;
 import com.stackclone.stackoverflow_clone.entity.Question;
-import com.stackclone.stackoverflow_clone.entity.User;
 import com.stackclone.stackoverflow_clone.enums.VoteType;
 import com.stackclone.stackoverflow_clone.service.AnswerService;
-import com.stackclone.stackoverflow_clone.service.Impl.AnswerServiceImpl;
 import com.stackclone.stackoverflow_clone.service.QuestionService;
 import com.stackclone.stackoverflow_clone.service.UserService;
 import com.stackclone.stackoverflow_clone.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +22,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/answers")
 public class AnswerController {
-
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final UserService userService;
@@ -47,6 +42,7 @@ public class AnswerController {
         model.addAttribute("questionComments", question.getComments());
 
         Map<Long, Integer> answerScores = new HashMap<>();
+
         for (Answer ans : question.getAnswers()) {
             int score = voteService.getAnswerScore(ans);
             answerScores.put(ans.getId(), score);
@@ -54,6 +50,7 @@ public class AnswerController {
         model.addAttribute("answerScores", answerScores);
 
         Map<Long, List<Comment>> answerCommentsMap = new HashMap<>();
+
         for (Answer ans : question.getAnswers()) {
             answerCommentsMap.put(ans.getId(), ans.getComments());
         }
@@ -76,6 +73,7 @@ public class AnswerController {
             answer.setUser(userService.getLoggedInUser());
             answerService.createAnswer(answer,file, question);
         }
+
         return "redirect:/questions/" + questionId;
     }
 
@@ -97,6 +95,7 @@ public class AnswerController {
     public String upvoteAnswer(@PathVariable Long answerId) {
         voteService.voteAnswer(answerId, VoteType.UP);
         Long questionId = answerService.getAnswerById(answerId).getQuestion().getId();
+
         return "redirect:/questions/" + questionId;
     }
 
@@ -104,6 +103,7 @@ public class AnswerController {
     public String downvoteAnswer(@PathVariable Long answerId) {
         voteService.voteAnswer(answerId, VoteType.DOWN);
         Long questionId = answerService.getAnswerById(answerId).getQuestion().getId();
+
         return "redirect:/questions/" + questionId;
     }
 }

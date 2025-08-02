@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-
     private final AuthService authService;
 
     @GetMapping("/login")
@@ -27,6 +26,7 @@ public class AuthController {
     @GetMapping("/signup")
     public String showSignupForm(Model model) {
         model.addAttribute("signUpRequest", new SignUpRequest());
+
         return "signup-page";
     }
 
@@ -34,10 +34,12 @@ public class AuthController {
     public String registerUser(@ModelAttribute SignUpRequest signUpRequest, Model model) {
         try {
             authService.signUpRequest(signUpRequest);
+
             return "redirect:/auth/login";
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("signUpRequest", signUpRequest);
+
             return "signup-page";
         }
     }

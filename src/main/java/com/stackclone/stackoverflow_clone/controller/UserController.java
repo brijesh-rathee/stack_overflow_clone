@@ -22,6 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+    private static final String USER_PROFILE_VIEW = "userprofile-page";
 
     private final UserService userService;
     private final BadgeService badgeService;
@@ -29,8 +30,6 @@ public class UserController {
     private final AnswerService answerService;
     private final BookmarkService bookmarkService;
     private final TagService tagService;
-
-    private static final String USER_PROFILE_VIEW = "userprofile-page";
 
     @GetMapping({"/{userId}", "/{userId}/activity", "/{userId}/summary"})
     public String viewUserById(@PathVariable Long userId, Model model) {
@@ -56,6 +55,7 @@ public class UserController {
 
         return USER_PROFILE_VIEW;
     }
+
     @GetMapping("/{id}/profile")
     public String getProfilePage(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
@@ -152,6 +152,7 @@ public class UserController {
         model.addAttribute("answerCount", answers.size());
         model.addAttribute("tab", "answers");
         model.addAttribute("activeTab", "activity");
+
         return USER_PROFILE_VIEW;
     }
 
